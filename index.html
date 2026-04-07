@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Splendor">
+<meta name="theme-color" content="#0e0c0a">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="manifest" href="data:application/manifest+json;base64,eyJuYW1lIjogIlx1NWI5ZFx1NzdmM1x1MzA2ZVx1NzE0Y1x1MzA4MVx1MzA0ZCBcdTc2ZTRcdTk3NjJcdTUxNjVcdTUyOWIiLCAic2hvcnRfbmFtZSI6ICJTcGxlbmRvciIsICJkZXNjcmlwdGlvbiI6ICJcdTViOWRcdTc3ZjNcdTMwNmVcdTcxNGNcdTMwODFcdTMwNGRcdTMwNmVcdTc2ZTRcdTk3NjJcdTMwOTJcdTMwYWZcdTMwZWRcdTMwZmNcdTMwYzlcdTMwNmJcdTRmMWRcdTMwNDhcdTMwOGJcdTMwNWZcdTMwODFcdTMwNmVcdTUxNjVcdTUyOWJcdTMwZDVcdTMwYTlcdTMwZmNcdTMwZTAiLCAic3RhcnRfdXJsIjogIi4iLCAiZGlzcGxheSI6ICJzdGFuZGFsb25lIiwgImJhY2tncm91bmRfY29sb3IiOiAiIzBlMGMwYSIsICJ0aGVtZV9jb2xvciI6ICIjMGUwYzBhIiwgImljb25zIjogW3sic3JjIjogImRhdGE6aW1hZ2UvcG5nO2Jhc2U2NCxpVkJPUncwS0dnb0FBQUFOU1VoRVVnQUFBTUFBQUFEQUNBWUFBQUJTM0d3SEFBQU1YMGxFUVZSNG5PMmR2MnBreVJXSHp3d2JOVTAveEV4Z0o4dXk0SEF4Wm1Bd2JtV0dIbGlZelFiMEFPdDh0UG5vQVJvbXM4RXdnczFheXlJWWxrV2h3UmduZGlBOWhCQktad05SbzlidHFsdW43cTFUZFU3Vjd3dWJWdC9xMjkrdnpxbjdUMCtvTXF2bDRsUHRNWUI2M056ZVBhbTUvZUliaC9CZ2pOS0JLTEl4U0ErbVVDSU1vaHVBK0NBSGtrRVErZUJVOFMvZXY1QVlCbERPeXpjZms5NHZFWVNzSDhnVkg4SURIOXhBNUF4Q2xnL2lpQS9wUVFxY01PUUl3dXdQR0pNZjBvTWNqSVZoYmdobS9YRXUrVk43UWRBR3VSeVpFNEpKZnpoWGZBZ1BmTXgxWjBvUWt2OWdxdnlRSHFRdzFhWFVFQ1M5T1NRL3hBZFNUSEVySlFUc042YktEL0ZCVGxJOTQ0YmdLZWROa0IvVUp1UlV5RUh1T1NsV0FGSTJEUG1CRktraDRCQXRFNzRrK1RZSThVRkp1QTdHV3FIUkNnRDVnVlo4enZuY2pMVkN3UUJBZnFDZEhDSDRJdmNBd0RqZmZIOFdmYy9sNmFiQVNOcmc1WnVQK2RjQW1QM3p3UkUrQmdJeHpwejFBQ3NBa0QrZEhPSVBRUkRDY0J4bEJZQXorMFArTUJMaUQwRVEvSEE4SFlZZ2VoNEE4dk1wSVgvSjdWaGo2Q1puYmZBb0RXaDlwbEZUU0ZTRHg2UzJRa2xuZ2lIL0liVm40OXJiMTBhcW81OERnQ2M0cEtORlBpM2pzTUsrNjhFS2dONS9IRzNTYVJ0UFRWTFdBcE12aHVzWnJiSnBIWmRtbmhLaC9XbUptOXU3NDlwanNJQnozbHNCMFA2RTBUN0xydC91dGdnQnZ3MmFkUzFRYjB5UmYzZXlmamw4N2Vqay9DTExnQUtzMys2Mk9EektBMnNBUVh6eWo3MmVFMVFCSGsvUi8vTkluZjFqa2t1SEFLMVFuTlZ5OGVtZ0FxRC9udzlYN2hLVm9HYzQ2d0MwUUF4U1p2OVVxU1ZEZ0NvUUJ3RUFYWU1BZEFDcVFCZ0VBSFFOQWhCQis0bXZHT3UzdTIzdE1XZ0dBY2hNNmtrdTZaTmlZQndFUUFDdTFDWGx4enJBRHdJZ1JFeHV6UHc2UUFBRUNVa08rZlZnN21LNGYvL252OUgzZlAzVmx3Vkd3cU0xMmI4NStXdjBQWmNuUHhZWVNSN1VCNEFqZk94dk5BWENHaHpoWTMrak9SQnFBekJGL05obklRaDhwb2dmK3l5TlFWQVhnSnppaHo0YlFRaVRVL3pRWjJzS2dxcEZzS1Q4VTdkai9jYVM4eCtPMkljL0plV3ZzUjBPS2lwQUtmRjkyMFExcUNPa2xtcFF2UUxVa0YvVDlrdXhXaTY4bDBUVW5vMXJiNzlxQUxUSXAyVWNwYWt0bjZQbU9Lb0ZRSnQwWStPeHVnNFk2LysxeU8rb05aNHFBZEFtdjBQcnVIS2pUWDVIalhGVlh3Tm9JM1RSbUxVcXNELzdoL3AvalpTK2FLOTRBTFRQc2xkWFYwM2ZSNnQxOW5lczM3MHV1ditMSGdhZEl2K3paODhPYmhxL3ZyNFd2YjdtNnVwcTZ6czhlbm02TVhHRFRHajJueUwvN3Z1L0h6N1k2L1E3MlFkN3ZYdTlMWFY0VkhVTDVKTi83UFdjV0cyRlVrNTh4ZkRKUC9aNlRrcFZnV0lCU0ozOVk1SkxoNkNGVm1qTzdCK1RYRG9FcFZvaGxSV0FLM2VKU3VCRGF4WEl0ZkRseWwyaUVraFRKQUFwczMrcTFKSWhHS3NDMmtLUTY1aC9xdFNTSVNoUkJWUldBQ3RvQ2NGUWZrdUhQV3VEQURBWW00VnFoNkFIK1NXcmdJcXJRYTF6ZWJxaG05dTc0NUxQNFBHMVBDM0tMNDE0QmRCKzRpdkcxZFVWUzZyVmNySE5lUWh5akJUNXRaLzRpckYrOTFvMDFPcGFvTlNUWE5JbnhWSllMUmZieTlOTjFtUHgrNXovY0hUc2EzbHl6dnlwSjdta1Q0cEpveTRBUkh5cFM4cWYwb2U2YXBBckNLSFBrbXA1dUZLWGxGOXFIYUIyRFhCOWZYMHhkb2hUMDh6dnc4azVGSmV6VG9nRnAwU3ZmM1Q2M2NYWUlVN3JNNzlEYlFDSXdpSFFMdjgrVGxZM2c4MnBDcVVYdWFFUXRDSS9rZklBRU5tU2ZZeWh2SnlTcnVHb1RrdXkrMUFmZ0ZiUklEZFF1Z2dHb0JRSUFPZ2E4UUJZZis3TzgrZlBUVjhTWGZ1NU8zTTUvOXMvY0RFY0FGSWdBRXl3YUsyTDFQNUhBRURYRkFtQTFYV0E5ZjdmWVhVZElOMy9FNkVDZ000cEZnQnJWV0IvOW0raC83ZFdCZlpuZjhuOWp3b0F1cVpvQUt4VWdkWm1mNGVWS2xCcTlpZXFVQUcwaDZDVmhXOEk3U0Vvc2ZEZEJ5M1FDQzNOL2hZcHNmK3JCRUJyRldpMTlSbWl0UXFVYkgwYzFTcUF0aEMwM3ZvTTBSYUMwcTJQbzJvTHBDVUVRL2xibnYzMzBSS0NvZndsOTMvMU5VRHRFUFFxdjZOMkNHcktUNlRranJDdnYvcVNibTd2anJuUDRNbUJyK1hwVFg3SDVjbVA5dy8yRW40R3p6NitscWZHL3E5ZUFSeXI1V0picWcrSC9JZXNsb3R0cVQ1Y2kveEVTaXFBWTdWY2JDV3JBY1FmWjdWY2JDV3JnU2J4SGFvQzROaXZCam1DRUtvc3RYZStWdmFyUVk0Z2hDcUxodjJ2TWdCRUR6dG5LQzhuRUxGV1NzT08xODduQjNzTjVPVUVJdFpLYWRyL2FnUGdHRDVZYXM0NlFkT090OExCZzcxbXJCTTA3bi8xQVhCWWZiQlVLN1M2LzgwRVlJaUZuZHN5cmV4L3N3SEl3VC8vK0tmb2U3Nzk5UmZ4Y1VqeTU3OGNSZC96ODArN0FpUFJTVmNCNEFnZit4dnRnZUFJSC91Ym5nTFJSUUNtaUIvN0xHMUJtQ0orN0xONkNFTFRBY2dwZnVpemF3Y2hwL2loejI0NUNHb3VoY2lOcFB3MXR1TkRVdjRhMjZsQmN4V2docENscTBFTklWdXRCazFWZ0pxemNhbnQxNTZOYTI4L044MEVvTGI4RHNseGFKRlB5emh5MEVRQXRNanZrQmlQTnVtMGpXY3E1Z09nVFg1SHpuRnBsVTNydUZJd0h3RE5TUDF2VzAxWS80Nm1BNkIxOW5mczF1dnRYRUcwejdLYnpXYjJkNnlKMmNPZ1UrUmY3M1lILy9QMi9PaEk5TitBN3RicjdkVERvMVBrLy9EaHc4RjNmUFhxbGVoMzNHdzJXNnVIUjAxWGdCUjg4bys5bnBOU002UlAvckhYYzJLMUNwZ01RT3JzSDVOY09nUlRXcUhVMlQ4bXVYUUlyTFpDSmdPUUFsZnVFcFZBQ3E3Y0pTcUJOY3dGSUdYMlQ1VmFNZ1FwVlNCbDlrK1ZXaklFRnF1QXVRQUFrQk1Fb0REV1pzZ3BXUHFPQ0FEb0dsTUIwSDdpSzhadXZZN2VTSzc5eEZlTXpXWmo2bVo1VXdGSUpmVWtsL1JKTVFsU1QzSkpueFN6UnRNQklPSkxYVkwrM0QweVYrcVM4bHRaQnpRZkFLSzQzQlpuL2lFeHVUSHorK2tpQUVSaHlWdVEzeEdTSFBLSE1Yc3gzQlJha2owRVpFK2ptd29BZ0E4RUFIUU5BZ0M2eGxRQWFqK0ZiUzVINStmUlE0TldieXh4bkoyZG1Uajg2VEFWQUFCeWd3QlVvSlZuNjQ5aDVUc2lBS0JyekFYQTZqcUEwLzg3cks0RHJQWC9SQVlEQUVCT1RBYkFXaFhZbi8yNXZiRzFLckEvKzF2cC80bU1CZ0NBWEpnTmdKVXFNR1gyZDFpcEFsWm5meUxEQVNEU0g0S1VoVzhJN1NHd3VQRGR4M1FBTEdGdFpweUN4ZTlvUGdCYXE4Q2MxbWVJMWlwZ3VmVnhtQThBa2I0UTVHaDlobWdMZ2ZYV3g5RkVBSWowaEdBb2Y4NlpVVXNJaHZKYm5mMkpHZ29BVWYwUVNNcnZxQjJDbHVRbmF2Q1d5RzkvL1lWdWJ1K09PYy9neVlXdjVaRVU0K2VmZG5SemUzZGM4aGs4dnBiSHV2eEVEUWFBNlA2SE9Uby9MeEtDVlBrdjNyK0lmdWJMTngrajcxa3RGOXV6czdNaUlXaFZmcUpHQTBCMC93TkpWb01VOFRuU2g5NC9Gb2JWY3JHVnJBWXRpKzlvTmdBT1Z3MkllSThtakJFNnd1TVRJMVY4SCs0ellrRndzdVlJUXVnSVQydnlFM1VRQUtLSEgyNG9MeWNRc1VPYXVXYjlHQmZ2WDBSRFFIUW9MeWNRc1VPYUxZcnZlTEphTGo3dHZ6RDg0VGo5cURWeVBMYXZsUGcrT0wrSjVIZTBSTXpuTGlyQWtPRVB5NUdGSTBNSitkMTJZaUdRK282dDBXVUFodVQ0NFV2SnY3KzlsT3Jjbzl3Y21qb1JWb3ZTOHRmZWJrc2dBS0JyRUlDWjFKNkZhMi9mT2xnRHpDQkZ2dC85L2crUEZxSC8vOSsvc3ZYa3Flc0I4QUFxUUFHRzhvZGVBK1ZCQUNiQ25mM0hSTThaQXJSQzAwQUFCT0VJamtwUUZ3UUFkQTBDTUFHdDdZYldjV2tHQVFCZGd3QUl3am5VbWZOd0tFZ0hBUkJtVEhESVg1K0RBQXhQcUtDdm5JOVBkTWd2RCtmUy9pOXVidThPN2drQStZSHcrcmk1dlh1Q0ZnaDBEUUlBdXNZYkFLd0RnSFc0dC9ZK0picnZoZVNIMUE1YXI3elVPaTZOT09mUkFvR3VDUVlBYlJDd1NzcVRUVDRIQUcxUUd0cmFEVzNqMGN5KzYwa3RFS29BMEU2cW80OENNS3dDbUZYRzBiSi90SXhESThOOU0zUThXZ0d3RmhpbnRueTF0NitKS1U4MVBBZ0FaeTJBRUFCdGNKejB1YzFhQS9pU2hCQThVR3NXeHV4L2o4OUY3cjd4QnNDWEZPenNjVXJ2SC93ZVlYejdKdFRaekRvUmhpcndtRkpTUXY0SDVqbzQydS83THBPZVUyNTZRbUp5d0g1K0ROZkZzWFh0YUFYZ3RrS29CSWZrbGhYeVB5YUgvRVNSQ3VEZ1ZvTFFJSHBuemdTQi9mbVlGTzg0UnpRbkJ5QjFNT0NlWFA4bHNrZFNmY3NXQUNLRUFOUkZRbjZpaEFBUXBZZUFDRUVBODVqaVZzcUZuY2xYZ0k3ZFFJOGdnRnhNZFNuMXF1WkpsMEJQRFlFRFlRQSs1cm96NVpMK1dmY0F6QTJDQTRIb2sxeU96TG1YWmZaTk1MbENBRUFJS2ZtSk1nU0FhRHdFRG9RQnBNRDhaK0N6L2MxNkd5VDNDWE1JQS9EQmJZVnozcjRyY2g5dzZxTVdFWWcrU1YzN1NkeTNMbm9qUEo0NUNuSWcrY0NHSWsrQ1FCREFGRW84cWFUNG8xQVFCakJHNmNmelZIOFdFQUxSTjdXZlIvVWJJVndiWFpLVkVlMEFBQUFBU1VWT1JLNUNZSUk9IiwgInNpemVzIjogIjE5MngxOTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifSwgeyJzcmMiOiAiZGF0YTppbWFnZS9wbmc7YmFzZTY0LGlWQk9SdzBLR2dvQUFBQU5TVWhFVWdBQUFnQUFBQUlBQ0FZQUFBRDBlTlQ2QUFBaHFFbEVRVlI0bk8zZHphb2sxN2ttNENXajBXYXpMOElhZEUrTU1mVFFOSTJnT0hUVnJLRUVCbnNtcUF2d21WdWVXeGRRb05rNTBDQ0JaMVhHRkFoak5HeG9tcDUwRDZTTEtJcWE2Z3pLWVdWbDVWOUVyUC92ZWFaUzdSMDdNaVBmTjc2MU12T2pSRlVQOTNjL3RqNEdnQjY5ZnZQMm85YkhFSW1UWFlDUUI4aExPY2pQQ2QxSjJBTzBvUlRzNCtTdEpQQUIrcVFRck9OazNVRG9BNHhGR2JqT0NUcEI0QVBNUlNINGtCTnlRUEFEekUwUitFbjRFeUgwQVdLS1hnYkMvdkdDSDRDVTRoYUJjSCswNEFmZ2xHaEZJTVFmSy9RQldDTkNHWmo2RHhUOEFPd3hjeEdZOWcvck9meGZmZlZwNjBNQTZNcWp6Nzl0ZlFobnpWb0NwdnVqZWdsK0lRK1FSeS9sWUxZaU1NMGYwekw0aFQxQVhTMUx3U3hGWVBnL29sWHdDMzJBUHJRcUE2TVhnYUVQdm1iNEMzeUFNZFFzQkNPWGdDRVBYUEFEY0kwaWNObHdCMXdqL0lVK3dGeHFsSUhSU3NCUUIxczYvQVUvd054S0Y0R1JTc0FRQjFveStJVStRRXdseThBSVJhRDdBeXdWL29JZmdKVEtGWUhlUzBEWEIxY2kvQVUvQUtlVUtBSTlsNEF1RDB6d0E5QktsQ0xRM1FGRkNmOWVQdG9Tb0xVb3I5RzlsWUN1RGlaMytMZCtVZ2w1Z0gxbWV4M3ZxUVIwY3lBemhML0FCeWhyaHRmMlhrcEFGd2VSTS94clBqa0VQa0Jibzc3bTkxQUNtaC9BYU9FdjlBSDZORm9HdEM0QlRYOTVydkFmN1VFSG9KeVJNcUZsQ1dqMmkwY0lmNkVQTUxZUk1xSlZDV2p5UzNzUGY4RVBNSmZlODZKRkNhaitDM09FZis4UEpBQjk2amsvYXBlQXFyK3MxL0FYL0FDeDlKb2xOVXRBdFYvVVkvZ0xmb0RZZXN5VldpV2d5aS9wTGZ3RlB3Q0hlc3VZR2lYZ1o2Vi9nZkFIb0hjNXN5RkhacFg0WHB4alJSdEdUK0V2K0FHNFJVKzVVM0lTVUh3Q3NFZFBEd0lBTWVUS2pOWmZaSFJOc1FLdzkrNWYrQVBRU2k4bG9PUlNRSkhSUWcvaEwvZ0J5S0dIVENxeEZKQjlBaUQ4QVpoSmprenBjUkxRMVI0QTRROUFqM29vQWJsbExRQjdHb3J3QjZCbnJVdEE3aWxBdGpXRmx1RXYrQUdvcVdWdTVkb1BrR1VDSVB3QmlHUnY5dlF3Q2ZnNHh3OXBSZmpEWmIvKy9UZTdmOFozWHo3TmNDUXduMGVmZjl2ZHV2NGF1OGNJcmU3K2hUKzhMMGZZMzBvcGdKKzB5cks5U3dHNy9ySHdoM1pxQnY0MUNnSFJqVmdDbWhRQTRRL3I5UlQ0MXlnRVJOUWkyL1lVZ00xN0FHcDhVeEV3VnZBdmxtTldCS0NzaC91N0g3ZVdnTTNOd2QwL2xETmk2RitqREJEQlNGT0FUZjlJK0VNWk13Yi9NVVdBMlkxU0FvWjRHNkR3WjNZUmduOWhlWURaamZMMndOV05vZmJkdi9CblpwR0MveHhGZ0ZuVnpyMjFVNEJWLzdQUlArUWgrRCtrQ0RDYjNwY0N1dm8yd0dQQ254a0ovOU9jRjJiVGU0YmQzQlNNL21FZkFYYzcwd0JtMHV0U1FORUpnUENIZDRUL09zNFhNOW1hYWFVM0VuYTlCQUF6RUdiYk9HOVExazFqZ2kzamYzZi9SQ2ZBOHJFa3dBeHE1dUl0eXdCZFRRQ0VQN01RL25rNW44eWd0NHk3V2dCcTN2M0RESVJWR2M0clVXM0oxRnV5dTVzSlFHL05DTFlRVW1VNXY0eXVwNnk3V0FEYy9jUHRoRk1kempNUmxaZ0NkREVCNktrUndSWkNxUzdubTVIMWtubGRGQUFZbVRCcXczbUhmYzRXZ0Zyai8xNmFFR3doaE5weS9oblZsdXpMdlF4Z0FnQWJDWjgrZUJ4Z201TUZ3TjAvWENaMCt1THhZRVN0cHdBbUFMQ1NzT21UeHdYV2FWWUEzUDB6SWlIVE40OFBvMm1aaFZrS2dQZitBNzE0L2VidHM5YkhBQ1hseXR3UENzQ1c5WCtJd04zbEdCNy80Y1Z6SlFEZWR5cmJQL2kyb0xVRndPWS9JaEQrNC9FTmdveWtScFllZjBPZ1RZQndoZkFmazhjTkxudXZBTlFZLzd2N0IycXhGTUFvYW1UamNjYWJBTUFGN2lMSFpqOEFuTGVyQU5qOXo4eUUveHdlLytIRjg5YkhBQ1hzemVDUE14M0hUWXovWVo4WFh6eCtkT20vUC9uaTVhdGF4ektTMTIvZVBudTR2MU1FNk5xano3K3RlbVA5endMZzdYL3drNTd1L3ErRi9ybi9WeG40eWVNL3ZIais4bzlQbEFEQ2U3aS8rM0Y1TjhEbUNZRHhQNVMxSnZndi9YdEZBT2IxNnF0UE4wL1hiUUtFSXozYy9lOE4vMUkvYTJRMkJNTDdxaFVBNi85d214S0JyUVRBR0dwbXBRa0FIR2g5OTE4eXFKVUFVd0E0OUxPVWJBQ0VIdFFJYUNVQVdESi8wd1RBQmtCbTFQTHV2Mll3Unk4QnBnRE1abXNtVjFrQ3NQNFA1N1VJNU9nbEFIcFdLelB0QVFCQ01nVWdPZ1VBVXJ2eGY4czc4Y2hUQUI4UERBb0FBSVNrQUJCZTY3ZiswWWJOZ0VUM00yOEJoRFo2R01IM2NBeEFmUS8zZHordW5nQjRDeUF3RTFNQVpyQWxtNHN2QVhnTElBQ3NVeU03N1FFZ05Pdi9zWGszQUpFcEFBQVFrQUlBaEdjZkFCRXBBQUFRa0FKQVdOYi9TY2srQU9KU0FLQ1JKMSs4Zk9VWWdGWVVBSUJrSHdEeEtBQUFFSkFDQUEyMUhNRWIvME5zQ2dBaDJRRElJUnNCaVVnQmdNWmEzSW03K3djVUFPaEF6VUFXL3VmWkNFZ2tDZ0Iwb2tZd0MzOWdvUUJBUjBvR3RQQUhEaWtBMEprU1FTMzhnV01LQUhRb1oyQUxmK0NVajFzZkFIRGFFdHd2dm5qOGFNKy9CemhGQVlET0hRYjV0VElnOUlGYktRQ1QrOS8vNS8vdS9obS8rdVV2TWh3Sk9RaDQxdmoxRi85ajk4LzQ3b3MvWnpnU2VxUUFUQ1JIMk4vNmM1VUM2RXVPc0wvMTV5b0ZjMUFBQmxZcThMZjhib1VBNmlvVitGdCt0MEl3SmdWZ0lDMEQveHFGQU1wcUdmalhLQVJqVWdBRzBIUHduN01jc3lJQSsvUWMvT2NzeDZ3STlFMEI2TlNJb1gvSzRkK2hETUJ0Umd6OVV3Ny9EbVdnUHdwQVoyWUovbE5NQmVDeVdZTC9GRk9CL2lnQW5aZzUrSThwQXZDK21ZUC9tQ0xRRHdXZ3NVakJmNnhsRWZqdXk2ZnAxNy8vcHZydnBVOHYvL2lreWRjQVJ3citZNHBBZXdwQUk1R0QvNWlKQU5GRUR2NWppa0E3dmd5b0FlRi9tdk5DYXcvM2Q4OUwvdzdoZjVyelVwOEpRRVVDN2pyVEFHWWw0SzR6RGFqTEJLQVM0YitPODhWTWhQODZ6bGNkQ2tBRndteWIwdWZ0dXkrZkZ2MzVqS0gwQmtCaHRvM3pWcDRsZ0lJRS8zNldCQmlWQU52UGtrQlpKZ0NGQ1ArOG5FOUt5N2tCVVBqbjVYeVdvUUFVSUt6S2NGNFpnYkFxdzNuTlR3SElURWlWbGZ2ODJnY1FXKzcxZnlGVmx2T2Jsd0tRa2ZDdnczbW1SOEtwRHVjNUh3VWdFNkZVbC9OTlRudlgvNFZTWGM1M0hncEFCc0tvRGVlZEhnaWpOcHozL1JTQW5ZUlFXem5PdjMwQU1lVlkveGRDYlRuLyt5Z0FPd2ovUG5nY2FFSDQ5TUhqc0owQ3NKSFE2Y3ZleDhNVUlKYkR1Lzh0Ni85Q3B5OGVqMjBVZ0EyRWY1ODhMdFFnYlBya2NWbFBBVmhKeVBUTjQ4TWFhKy8raFV6ZlBEN3JLQUJNNS9XYnQ1czJkMWtHaUtIMGwvL1ExdGJyUHlJRllBVjNsMlA0L3Z2dm4zc1JJRGQzbDJONC9LZmZ1djV2cEFEY1NQaVA1ZnZ2djkvMHdTNm1BSFBidXZsUCtJL2w4WjkrbSsyTG5XYW1BTnhBK0kvSjQwWU93bjlNSHJmckZBQ210bVVVYUFvd3A3MXYvV004bGdJdVV3Q3VjQmM1TnZzQjJNTmQ1TmpzQjdoTUFiaEErTTloeTM0QVU0QzViTG43Ri81enNCL2d2STliSHdEci9Qem5QMzkwNmIvLzhNTVByMm9keTBoZXYzbjd6TmlYMGIzNC9iOWR2UDZmZlBrNzEvOEpydi9UUG5xNHYvdHh6VDk0OWRXbnEzN0JvOCsvWGZYLzk2S251Lzlyb1grT012QytUejc1WlBXTHdLOS8vMDJwdzZHUzBlLytyNFgrT2NyQSsxNys2NzhQVndKSzU2MEpRTWUyQnYveHYxY0V0dnZ1eTZkS3dNQkcvdENmcmNGLy9POFZBYzZ4QitDRUh1Nys5NFovcVo4MU1oc0NZeHZwN245ditKZjZXU096SWZCRENrQ0hTZ1MyRXJDZERZRmpHdlZ0ZnlVQ1d3bmdGQVhnU091Ny81SkJyUVJzbndJb0FXUFpPdnB2ZmZkZk1xaVZBRk9BWXdwQVIyb0V0Qkt3blJJd2h1UHdIK1h1djBaQUt3RWNVZ0FPdEx6N3J4bk0wVXVBdlFCeGpQSjUveldET1hvSk1BWDRpUUxRZ1JhQkhMMEViR1VLMExjUjEvMWJCSEwwRXNBN0NnQmhiYjBMVUFMNk5QSmIvcWpQRkVBQitLZFc0LytXZCtLUnB3QmJ2eTU0b1FUMFplKzZmNnZ4ZjhzNzhjaFRBQjhQL0k0Q0FCc3BBWDBZZGRNZnRLWUFwUFp2L2FPTkhKc0JsWUMyY29SLzY3ZiswWWJOZ0FwQVV6Mk00SHM0aHRFcEFXMk1mdWZmd3dpK2gyT2dIUVdBOEhMY0JTZ0JkWTBlL3ZRajhoUkFBWUJNbElBNmhEL2tFYjRBV1ArUGJlKzdBWTRwQVdYbERuL3IvN0ZGZnpkQStBSUF1U2tCWmJqemg3d1VBRWo1MXdHVmdMeUVQeVZGM1Fmd2Nlc0RnRmw5OStYVDlQck4yMmVQLy9CQ1dHMTA2dFA5aEQva0VYb0NZUDJmbFBMdkF6ajBjSC8zM0VmVWJsTTYvSzMvazFMc2ZRQ2hDMEJyUC96d3d5dkhNTCtIKzd2bmxnVFdPVFh5biszTy84bVh2MnQrN2ZWd0RMU2pBTUEvbEY0SC9PN0xwNzZ3NW9xWGYzenl6SG8vTFVUY0I2QUFRRVdXQk02ejNnOTFLUUNOdFJ6QkcvKzNzU3dKS0FMdm5MdnJqeEQrTFVmd3h2K0VMUUEyQUhLbzVFYkFjNVpwUU5RaWNPNXZyeEg4TmdCeUtPcEdRRzhEN01BUFAvendxdmFYOHJqNzc4TVNka3NRUm5qTDRMbkNFK0dPLzVRblgvN3VWZTB2NVhIM1QwcUJKd0M5cVJuSXd2KzhWaHVCbHBIM3pCT0JTM2Y4VWNOL1VUT1FoZjk1MFRZQ21nQjBwTVlrUVBqMzdYZ2lrTkxZVTRGTFpTWjY2QityTVFrUS9od3lBZWhNeVlBVy91TTR2Q3NlY1NwdzZaamQ4WjlYTXFDRlA4ZE1BRHBVWWhJZy9NZDBHSlRIZ2RyVFpPQmFRUkg0dHlzeENSRCtuS0lBZENwbkNSRCtjMWhDZEZtbmJGa0licDFJQ1A1dGNwWUE0Yzg1Q2tESGx1RGVXZ1FFLzV5T1EvVmNJVWdwVHlsWXMvd2c4UE5aZ250ckVSRDhYS01BRE9Bd3lLK1ZBYUVmejdsQ2tOSzY4TTd4dThudk1NaXZsUUdoenhvS3dHQUVQTmVjQ3VVY2IyOFM5dTBKZUhKU0FDQUE0UTBjOHpaQUFBaElBUUNBZ0JRQUFBaElBUUNBZ0JRQUFBaElBUUNBZ01JV2dGLzk4aGV0RDRHT2ZQTEpKME45MlE3N2ZQZkZuMXNmQWgxNSthLy9Idkw2RDFzQUFDQXlCUUFPK01BY2lDdmE5YThBQUVCQUNnQUFCQlM2QU5nSVNFbzJBRVpsSXlBcHhkMEFtRkx3QWdBQVVTa0E4QS9STmdBQlA0bDQvU3NBQUJCUStBSmdIMEJzMXY5anN3OGd0c2pyL3lrcEFBQVFrZ0lBS2ViNkgvQk8xT3RmQVFDQWdCU0FaQjlBVk5iL1NjaytnS2lpci8rbnBBQUFRRWdLd0QrWUFzUnllUGNmZGYyUG41Z0N4SEo0OXgvNStsY0FBQ0FnQllEUUlyZC9pQzc2OWE4QUhMQU1FSVBOZjV4aUdTQUdtLzkrb2dBQVFFQUt3QkZUZ0xuWi9NY2xwZ0J6cy9udmZRb0FBQVNrQUp4Z0NqQW5kLy9jd2hSZ1R1NytQNlFBQUVCQUNzQVpwZ0J6Y2ZmUEdxWUFjM0gzZjVvQ0FBQUJLUUFYbUFMTXdkMC9XNWdDek1IZC8za0t3QlZLd05oODZBOTdLQUZqODZFL2x5a0FoS0g5UTF5dS93OHBBRGN3QlJpVDBUODVtQUtNeWVqL09nWGdSa3JBV0l6K3lVa0pHSXZSLzIwVWdCV1VnREVjaDcvMlR3NUt3QmlPdzkvMWY1NEN3TlJjL0JDWDYvOHlCV0FsVTRDK1dmZW5KRk9BdmxuM1gwY0IyRUFKNkpOMWYycFFBdnBrM1g4OUJXQWpKYUF2MXYycFNRbm9pM1gvYlJTQUhaU0FQZ2gvV2xBQytpRDh0MU1BZGxJQzJoTCt0S1FFdENYODkxRUFNbEFDMmhEKzlFQUphRVA0NzZjQVpLSUUxQ1g4NllrU1VKZnd6ME1CeUVnSnFFUDQweU1sb0E3aG40OENrSmtTVUpid3AyZEtRRm5DUHk4Rm9BQWxvQXpoendpVWdES0VmMzRLUUNGS1FGN0NuNUVvQVhrSi96SStibjBBTS92VkwzK1JYcjk1Kyt6Nzc3LzNaTjNvMUtmN3VmZ1p3WGRmL0RtOWZ2UDIyZU0vL2RiemRhTlRuKzduK3MvSEJLQ3doL3U3NXo2aWRodmh6K2dlN3UrZSs0amFiWVIvZVFwQUJRLzNkODh0Q2F4emF1VHY0bWRFRC9kM3p5MEpySE5xNU8vNno4OFNRRVdXQks1ejE4K3NMQWxjNTY2L0xoT0F5aXdKbkNmOG1aMGxnZk9FZjMwbUFBMHNTd0ttQWU4SWZpSlpsZ1JNQTk0Ui9PMG9BQTBkVGdNaUZvRnpreEFYUHhFY1RnTWlGb0Z6a3hEWGZ6MEtRR1BMa3oxU0VSRDg4TTd5bkk5VUJBUi9QeFNBVGtRb0FvSWZUb3RRQkFSL2Z4U0F6aHdYZ1pUR0xnT1hOank2OE9GOXgwVWdwYkhMd0tVTmo2Ny85aFNBVGkwWHgrczNiNStOT0JVUS9MRGQ0ZlUvNGxSQThJOUJBZWpjNGNWeUhLbzlGWUpyYjIxMDBjTjZoOWZOY2FqMlZBaXV2YlhSOWQ4bkJXQWdoM2NGS2JVdEJMZCtsb0VMSC9JNHZ2NWJGb0piUDh2QTlkODNCV0JBeHhmVnVVS1FVcDVTc09hRGkxendVTmE1Ni85VUtPY29CV3MrdU1qMVB4WUZZQUxuWGhCU1doZmVPWDQzVU5lbDY3LzBwdzY2L3NlbUFFem8xRVY1K0tLUTgrY0NmWEg5Y3lzRklBZ1hMOFRsK3VjVVh3WUVBQUVwQUFBUWtDVUFodkUvLyt0LzIvMHpmdlAzdiszK0djenJYLzc3azkwLzQ2OS9lWkhoU0tBOEJZQXU1UWo3VzMrdVVoQlRqckMvOWVjcUJmUklBYUFMcFFKL3krOVdDT1pVS3ZDMy9HNkZnQjRvQURUUk12Q3ZVUWptMERMd3IxRUk2SUVDUUZVOUIvODV5ekVyQW1Qb09malBXWTVaRWFBbUJZRGlSZ3o5VXc3L0RtV2dMeU9HL2ltSGY0Y3lRR2tLQU1YTUV2eW5tQXIwWVpiZ1A4VlVnTklVQUxLYk9maVBLUUp0ekJ6OHh4UUJTbEVBeUNaUzhCOVRCT3FJRlB6SEZBRnlVd0RZTFhMd0gxTUV5b2djL01jVUFYTHhVY0RzSXZ4UGMxN3lFZjZuT1Mvc1pRTEFKZ0x1T3RPQWZRVGNkYVlCN0dFQ3dHckNmeDNuYXozaHY0N3p4UllLQUtzSXMyMmN0OXNKczIyY045YXlCTUJOQk5oK2xnUXVFMkQ3V1JKZ0RSTUFyaEwrZVRtZkh4TCtlVG1mM0VJQjRDSmhWWWJ6K2hOaFZZYnp5alVLQUdjSnFiS2NYeUZWbXZQTEpRb0FKd21uT2lLZlorRlVoL1BNT1FvQUg0Z2NTaTFFUE45Q3FTN25tMU1VQU40VE1ZeDZFT204QzZNMm5IZU9LUUQ4VTZRUTZsR0U4eStFMm5MK09hUUFrRktLRVQ0am1QbHhFRDU5OERpd1VBQ1lPblJHTk9QaklYVDY0dkVnSlFVZ3ZCbkRaZ1l6UFM3Q3BrOGVGeFNBd0dZS21Sbk44UGdJbWI1NWZHSlRBS0JqcjkrOGZkYjZHSmliNTFoY0NrQlFNOXhkUnZEaThlUG5vNzVBdTdzY3c5T25UNGQ5anJHUEFoQ1E4Qi9MaThlUG43YytocldFLzFpZVBuMDYzSE9NL1JTQVlJVC9tRVo2M0lUL21EeHU4U2dBTUFoaldrcnpISXRGQVFoa3BMdElQalRDZmdCM2tXT3pIeUFXQlNBSTRUK0hudmNEQ1A4NTJBOFF4OGV0RDRDNEhyOTQ4ZWpTZjMvNTVNbXJXc2N5a3RkdjNqNTd1TC96SW4yRHI3LysrdUp6N0xQUFB2TWNPOEZ6TElhUEh1N3ZmbHp6RDE1OTllbXFYL0RvODI5WC9mL2sxOVBkLzdYUVAwY1plTitUbHkrN2VvSHU2ZTcvV3VpZm93eTg3NXR2dnVucU9SWlI2YncxQWFDS3JjRi8vTzhWQWM3Wkd2ekgvMTRSSUFwN0FDYlh3OTMvM3ZBdjliTkcxdE9Hd0I3dS92ZUdmNm1mTlRJYkF1ZW5BRkJVaWNCV0FqaFVJckNWQUNKUUFDYlcrdTYvWkZBckFYMU1BVnJmL1pjTWFpWEFGR0IyQ2dCRjFBaG9KU0MyR2dHdEJEQXpCV0JTTGUvK2F3Wno5QkxRY2dyUTh1Ni9aakJITHdHbUFQTlNBTWlxUlNCSEx3SFJ0QWprNkNXQU9Ta0FNQUYzYUpUbU9UWWZCV0JDcmNiL0xlL0VJMDhCV253OGNLdnhmOHM3OGNoVEFCOFBQQ2NGQUFBQ1VnQW0wL3F0ZjdSUmN6Tmc2N2YrMFliTmdQTlJBTWlpaHhGOEQ4ZEFPVDJNNEhzNEJzaEZBWUNKdUVPak5NK3hlU2dBQUJDUUFqQVI2Lyt4MVhnM2dQWC8yTHdiWUM0S0FBQUVwQURBWkt6UlVwcm4yQndVQUFBSVNBR1loUFYvVWlxN0Q4RDZQeW5aQnpBVEJZQXNYajU1OHNveFVOSm5uMzNXL1BIdDRSZ2dGd1VBSm1TTmx0STh4OGFuQUFCQVFBb0EyYlFjd1J2L3g5QnlCRy84ejJ3VWdBbllBTWloRWhzQmJRRGtrSTJBYzFBQXlLckZuYmk3LzFoYTNJbTcrMmRHQ2dEWjFReGs0WC9lekp1MGFnYXk4RDl2NXVkWUJBb0FSZFFJWnVFZlc0MWdGdjdNVEFHZ21KSUJMZnhKcVd4QUMzOW1wd0JRVkltZ0Z2NGNLaEhVd3A4SUZBQ0t5eG5Zd3A5VGNnYTI4Q2VLajFzZkFERXN3ZjM0eFl0SGUvNDluTE1FOTlkZmY3M3BPU2I0aVVZQm9LckRJTDlXQm9RK1d4d0crYlV5SVBTSlRBR2dHUUZQYVFJZXpyTUhBQUFDVWdBQUlDQUZBQUFDVWdBQUlDQUZBQUFDVWdBQUlDQUZBQUFDVWdBbThKdS8vNjMxSWRDUkp5OWZaditLMXIvKzVVWHVIOG5BdnZubUcxOERQQUVGQUFBQ1VnQmdVZy8zZDg5Ykh3Tno4eHdibXdJQUFBRXBBQUFRa0FJd0NSc0JTYW5NQnNDRmpZQ2taQVBnVEJRQUFBaElBWUFKMlp4RmFaNWo0MU1BQUNBZ0JXQWk5Z0hFVm5MOWYyRWZRR3pXLytlaUFBQkFRQW9BVE1iYUxLVjVqczFCQVFDQWdCU0F5ZGdIRUZPTjlmK0ZmUUF4V2YrZmp3SUFBQUVwQUJNeUJZamw4TzYvMXRxc0tVQXNoM2YvMXYvbm9RQUFRRUFLQUV6Q25SbWxlWTdOUlFHWWxHV0FHR3B1L2p0bUdTQUdtLy9tcFFBQVFFQUt3TVJNQWViV1l2UGZNVk9BdWRuOE56Y0ZBQUFDVWdBbVp3b3dweDd1L2hlbUFITnk5ejgvQlFBQUFsSUFBakFGbUV0UGQvOExVNEM1dVB1UFFRRUFnSUFVZ0NCTUFlYlE0OTMvd2hSZ0R1Nys0MUFBQWxFQ3h0YnlRMzl1cFFTTXpZZit4S0lBd0lEY21WR2E1OWo4RklCZ1RBSEcxUFBvLzVncHdKaU0vdU5SQUFKU0FzWXl3dWovbUJJd0ZxUC9tQlNBb0pTQU1SeUgvMGgzWmtyQUdJN0RmNlRuR1Bzb0FEQUlMOHlVNWprV2l3SVFtQ2xBMzBaYTl6L0hGS0J2MXYxalV3Q0NVd0w2Tk9LNi96bEtRSitzKzZNQW9BUjBadVIxLzNPVWdMNVk5eWNsQllCL1VBTDZNR1A0TDVTQVBnaC9GZ29BLzZRRXREVnorQytVZ0xhRVA0Y1VBTjZqQkxRUklmd1hTa0Fid3A5akNnQWZVQUxxaWhUK0N5V2dMdUhQS1FvQUp5a0JkVVFNLzRVU1VJZnc1eHdGZ0xPVWdMSWloLzlDQ1NoTCtIT0pBc0JGU2tBWnd2OG5Ta0Fad3A5ckZBQ3VVZ0x5RXY0ZlVnTHlFdjdjNHVQV0I4QVlmdlAzdjZYWGI5NCtlL0g0c1JlU2pVNTl1cDhYNXAvODlTOHYwdXMzYjU4OWZmclVPZG5vMUtmN2VZNXhqZ2tBTjN1NHYzcyswMGZVMWlUOGIvTndmL2ZjUjlSdUkveFpTd0ZnbFlmN3UrZVdCTlk1TmZMM3duemV3LzNkYzBzQzY1d2ErWHVPY1kwbEFEYXhKSEJkTDNmOXI3NzZkUE8vZmZUNXR4bVBaQjFMQXRlNTYyY1BCWURObGlVQkplQkRyY0ovVDlqZit2TnFsb0psU1VBSitKRHdaeThGZ0YyV0pRSFRnSGRhQkgvdTBGL3orMnFVZ1dWSndEVGdIY0ZQTGdvQVdSeHVFSXhZQk01dGppejF3bHc3OU0rcFdRWU9Od2hHTEFMbk5rY0tmN1pTQU1obWVTR0tWQVNpQnY4cHk3R1ZMQUxMZVkxVUJBUS9wU2dBWkJlaENOUU0vcDVELzVRYVU0RUlSVUR3VTVvQ1FESEhSU0Nsc2N2QXBjOUFpSGpIZjR0WFgzMWFkU0tRMHRobDROSm5JQWgrY3Z2bzRmN3V4elgvWU8wTFVzdTNFZEdYMTIvZURsa0VCSDhlTlY0TERwOWpJeFVCd2M4cHBmUFdCSUJxRGwvSWprTzFwMEp3N2RNT1M3NGd6eGo4aTVwN0JGTDZNRlI3S2dUWFB1MVE2Rk9EQ1FCTkhkNnhIYXBaQ0c3OWVPUFozczdYVXMzWGhYUFBzWnFGNE5hUE54YjhIQ3FkdHdvQVhUbjNZcDFTbmxLdzVyc01hcjRZUndyL1Jhdlhoa3ZQc1J5bFlNMTNHUWg4TGxFQUNPM1NpM1Z1bzMxTTd5eGF2MGJNL2h4alhQWUFFTnFwRjh3Y0w5Zzl2QkFMLzNkS3YxUGdtcG1mWTNDSkFzQndabmhoRmY3dmExMENqczN3SElOcmZCMHdWQ2I4VDNOZW9DNEZBQ29TY3BjNVAxQ1BBZ0NWQ0xmYk9FOVFod0lBRlFpMWRad3ZLRThCZ01LRTJUYk9HNVNsQUVCQlFtd2Y1dy9LVVFBQUlDQUZBQXB4OTVxSDh3aGxLQUJRZ05ES3kvbUUvQlFBeUV4WWxlRzhRbDRLQUFBRXBBQkFSdTVTeTNKK0lSOWZCZ1NEKzAvLytiK2MvT2E2Ly8vLy9wY3Z0QUhPVWdBZ2s1cDNwK2RDLzl6L00xTVo2TzJiQTJGVWxnQWdnOTdDUDhlLzZabWxBTmpQQkFBR3NUZkVsMzgvMHpRQTJNNEVBQWFROHc1K3Rta0FzSTBDQURzWlI3Zmh2TU0rQ2dCMHJzUWR1eWtBb0FEQURxWHZRa3NHOVF3bHdCUUF0bE1BQUNBZ0JRQUFBbElBWUtPUngvODFmMGRwbGdGZ0d3VUFBQUpTQUFBZ0lBVUFOakIyN292SEE5WlRBQUFnSUFVQUFBSlNBS0JUTmI2MHh4Y0RRVndLQUFBRXBBREFTamFjOWNuakF1c1VMd0F1U3RpdTVJamUrQi82VlNNN1Z4ZUFSNTkvVytJNGdETktCTFh3aDdsc3llYWZ2WDd6OXFNQ3h3SUFkT3IxbTdjZjJRTUFBOGg1eCs3dUgwZ3BwWTliSHdCd215VzR0MzZCaitBSERwa0F3R0MyQkxud0I0NlpBTUNBRGdQOTNFUkE2QU9YVkNrQXI3NzYxTHNIb0JCQkQzT3A5ZmI1VFVzQXdod0ErckExazMrVzBydTNBMlE5R2dDZ1Mwdm0yd1FJQUFGVkt3QStFaGdBTHF1WmxTWUFBQkRRNWdKZ0l5QUF0TFVuaS85WkFHd0VoTnNvdjMzeXVNQjFoMWxmZFFuQVBnQUFPSzEyUnU0cUFCbzNBTFN4TjROdEFnU0FnTjRyQURYMkFWZ0dBSUQzMWNqRzQ0dzNBWUFOTEgvMXhlTUI2KzB1QUZzdVBGTUFBSGhuU3libUtMMGZGQUJ2QndTQXVaeks5aXhMQU1adlJPUjUzd2VQQTlIa2VzNDMyd05nR1FDQTZGcG1vVTJBQUJEUXlRS3daUitBellCRVpQemNsdlBQeUdwdC9qdVg2U1lBQUJEUTJRSmdDZ0MzY1JmYWh2UE95RnJmL2Fka0FnQUFJWFZSQUV3QkFJaWlsOHk3V0FCcUxRUEE2RHp2NjNLK2lTYjMrRCtsVGlZQUtmWFRpR0Fyb1ZTSDg4ekllc3E2cXdYQUZBQUEyaWx4OTU5U1J4T0FsUHBxUnJDRjhsdVc4OHZJZXN1NG13cEF6U2xBYnljSUFQYmFtbTJsN3Y1VDZtd0NBRE53bDFxRzh3cDVGUzBBcGdCRUphenljajRaV2MyNy96VnVMZ0JibGdGU1VnS0lTMmpsNFR3eXN0cmh2eWFydTE0Q1VBSUFHRlh2R2JhcUFOU2VBc0RvUFBmM2NmNklxTWJkZjBvYkpnQ1dBbUFkSWJhTjg4YkllaDc5TDdwZUFsZ29BWXhPbUszamZER3lVVEpyVXdGb3NSUXd5Z21GYzRUYWJad25ScllucTJyZS9hZlVZQUtnQkJDWmNMdk0rV0ZrTGNKL2o4MEZZR3ZqZ09pRTNHbk9DNnkzSjR1YjdBRXdCU0E2WWZjKzU0UFJqWGIzbjlMT0FyQ25lU2dCUkNmMDNuRWVHRjJyOE44N2ljOHl4bis0di90eDY3OGRzVFZCYmhGTHJldVhHWXdhL2lrTjhqYkFjeUsrYURLbmFHRVk3ZTlsVHFOblVKWUMwR29wSUtYeEh3QllSQW5GS0g4bmM5dWJQYTN2L2xQS3RBU3dhTFVVc1BEQ3dpeG1MTGF1VDJiUU9xdHl2Z012KzF2NWxBRElaNFlpNEpwa0ZxMHpLdmZiNzd2YUE1RGpoV0tHRjB4WWpCNmVveDgvTEZxSGZ3bEZQc3huenhRZ3BUbFBOT1F3UXNGMTdUR2JIaktweElmdkZmczB2eDVLUUVwZWpKaFRqMFhBdGNac2VzbWhVcCs4Vy9UamZKVUFLSzlsR1hCdE1hdGU4cWZreCs1M1hRQlM2dWRCZ0JIVUtBT3VKV2JYVSs0TVd3QlM2cXNFcE9URmkzaDgyaWJjcHJlc0tmMmxlMVcrMFU4SkFLQm52V1ZNalcvY3JmYVZ2cjJWZ0pRVUFZRG9lc3lWR3VHZlVzVUNrRktmSlNBbFJRQWdtbDZ6cEZiNHAxUzVBS1RVYndsSVNSRUFtRjNQK1ZFei9GTnFVQUJTeWxNQ1V1cjdnUVNnSDczblJlM3dUNmxSQVVpcC94S1FraUlBTUxvUk1xSkYrS2ZVc0FDa05FWUpXQ2dEQUdNWUtSTmFoWDlLalF0QVN2bEtRRXBqUGVnQTVEVmFCclFNLzVRNktBQXBqVmNDRnNvQVFGdWp2dWEzRHYrVU9pa0FLZVV0QVNtMStYeDBoUUNnckJsZTIzc0kvNVE2S2dBcHpWRUNEaWtFQVB2TTlqcmVTL2luMUZrQlNDbC9DVWlwL1JQb0ZPVUE0SjBvcjlFOWhYOUtIUmFBbE9LVUFBRDZFeUg4VStxMEFDd1VBUUJxaVJMOGkyNFBiRkdpQktTa0NBRHdUcWtsMlo3RFA2VUJDa0JLNVVwQVNvb0FRRlFsOTJMMUh2NHBEVklBRmlXTFFFcktBTURzU20vQUhpSDRGOE1jNktKMENVaEpFUUNZVFkxM1hvMFUvaWtOV0FCU3FsTUNGc29Bd0pocXZ0MTZ0UEJQYWRBQ3NGQUVBRGdtK0c4ejdJRXZhcGFBUXdvQlFCOWFmYkRheU9HZjBnUUZZTkdxQ0tTa0RBRFUxdkxUVkVjUC9zVVVmOFNobGtYZ2tGSUFrRWN2SDUwK1MvQXZwdnBqRHZWU0JFNVJEZ0RlMTB2SW56SmI4QyttL0tNV1BaY0FBUG8zYS9pbk5Ia0JXQ2dDQUt3eGMvQXZwdjhEanlrREFKd1NJZlFQaGZwakR5a0NBS1FVTC9nWElmL29RNG9BUUV4UmczOFIrbzgvcGd3QXpDMTY2Qjl5SWs1UUJBRG1JdmcvNUlUY1FDRUFHSXZBdjg0Sldra1pBT2lUMEYvSHlkcEpJUUJvUStEdjQrUVZvQlFBNUNYczgzTkNLMU1PQUU0VDhuWDlCMm5BZDlWNW1lQ3BBQUFBQUVsRlRrU3VRbUNDIiwgInNpemVzIjogIjUxMng1MTIiLCAidHlwZSI6ICJpbWFnZS9wbmcifV19">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>宝石の煌めき 盤面入力</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+JP:wght@300;400;500&display=swap');
+
+:root {
+–bg: #0e0c0a;
+–surface: #1a1712;
+–surface2: #221f1a;
+–border: #3a3228;
+–gold: #c9a84c;
+–gold2: #f0d080;
+–text: #e8dcc8;
+–text2: #9a8c78;
+–white: #f5f0e8;
+–blue: #4a7fb5;
+–green: #4a8c5c;
+–red: #b54a4a;
+–black: #2a2a2a;
+–ruby: #c0392b;
+}
+
+- { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+background: var(–bg);
+color: var(–text);
+font-family: ‘Noto Sans JP’, sans-serif;
+font-weight: 300;
+min-height: 100vh;
+padding: 12px;
+max-width: 480px;
+margin: 0 auto;
+}
+
+h1 {
+font-family: ‘Cinzel’, serif;
+font-size: 1.3rem;
+color: var(–gold);
+text-align: center;
+letter-spacing: 0.08em;
+margin-bottom: 4px;
+}
+
+.subtitle {
+text-align: center;
+font-size: 0.72rem;
+color: var(–text2);
+margin-bottom: 20px;
+letter-spacing: 0.05em;
+}
+
+.section {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 10px;
+padding: 14px;
+margin-bottom: 14px;
+}
+
+.section-title {
+font-family: ‘Cinzel’, serif;
+font-size: 0.75rem;
+color: var(–gold);
+letter-spacing: 0.1em;
+margin-bottom: 12px;
+display: flex;
+align-items: center;
+gap: 8px;
+}
+
+.section-title::after {
+content: ‘’;
+flex: 1;
+height: 1px;
+background: var(–border);
+}
+
+/* GEM TOKENS */
+.gems-grid {
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+gap: 8px;
+}
+
+.gem-item {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 5px;
+}
+
+.gem-icon {
+width: 36px;
+height: 36px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 1rem;
+font-weight: bold;
+border: 2px solid rgba(255,255,255,0.15);
+position: relative;
+box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.gem-icon.white  { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
+.gem-icon.blue   { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
+.gem-icon.green  { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
+.gem-icon.red    { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
+.gem-icon.black  { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
+.gem-icon.gold   { background: radial-gradient(circle at 35% 35%, #ffe080, #c08020); color: #5a3a00; }
+
+.gem-label {
+font-size: 0.6rem;
+color: var(–text2);
+text-align: center;
+}
+
+.gem-input {
+width: 44px;
+height: 32px;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 6px;
+color: var(–text);
+text-align: center;
+font-size: 0.9rem;
+font-family: ‘Noto Sans JP’, sans-serif;
+-webkit-appearance: none;
+appearance: none;
+padding: 0 2px;
+}
+
+.card-gem-input {
+width: 100%;
+background: var(–bg);
+border: 1px solid var(–border);
+border-radius: 4px;
+color: var(–text);
+text-align: center;
+font-size: 0.8rem;
+padding: 5px 0;
+font-family: ‘Noto Sans JP’, sans-serif;
+-webkit-appearance: none;
+appearance: none;
+}
+
+/* CARDS */
+.cards-tier {
+margin-bottom: 12px;
+}
+
+.tier-label {
+font-size: 0.65rem;
+color: var(–text2);
+margin-bottom: 6px;
+letter-spacing: 0.05em;
+}
+
+.cards-row {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 8px;
+}
+
+.card-box {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 8px;
+padding: 10px 8px;
+display: flex;
+flex-direction: column;
+gap: 6px;
+}
+
+.card-box select, .card-box input {
+width: 100%;
+background: var(–bg);
+border: 1px solid var(–border);
+border-radius: 5px;
+color: var(–text);
+font-size: 0.78rem;
+padding: 6px 7px;
+font-family: ‘Noto Sans JP’, sans-serif;
+}
+
+.card-box select option { background: #1a1712; }
+
+.card-gem-row {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 3px;
+}
+
+.gem-hint {
+font-size: 0.55rem;
+color: var(–text2);
+text-align: center;
+margin-top: 1px;
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 3px;
+}
+
+.gem-hint span { text-align: center; }
+
+.points-row {
+display: flex;
+align-items: center;
+gap: 5px;
+}
+
+.points-row label { font-size: 0.65rem; color: var(–text2); white-space: nowrap; }
+
+/* NOBLES */
+.nobles-grid {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
+}
+
+.noble-box {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 8px;
+padding: 8px;
+display: flex;
+flex-direction: column;
+gap: 4px;
+}
+
+.noble-box .card-gem-row { grid-template-columns: repeat(5, 1fr); }
+
+/* PLAYER */
+.player-tabs {
+display: flex;
+gap: 6px;
+margin-bottom: 12px;
+flex-wrap: wrap;
+}
+
+.tab-btn {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 20px;
+color: var(–text2);
+font-size: 0.72rem;
+padding: 5px 12px;
+cursor: pointer;
+font-family: ‘Noto Sans JP’, sans-serif;
+transition: all 0.2s;
+}
+
+.tab-btn.active {
+background: var(–gold);
+color: var(–bg);
+border-color: var(–gold);
+font-weight: 500;
+}
+
+.player-panel { display: none; }
+.player-panel.active { display: block; }
+
+.player-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 10px;
+margin-bottom: 10px;
+}
+
+.field-label {
+font-size: 0.65rem;
+color: var(–text2);
+margin-bottom: 4px;
+}
+
+.field-input {
+width: 100%;
+background: var(–bg);
+border: 1px solid var(–border);
+border-radius: 6px;
+color: var(–text);
+font-size: 0.85rem;
+padding: 6px 8px;
+font-family: ‘Noto Sans JP’, sans-serif;
+}
+
+.cards-owned {
+display: grid;
+grid-template-columns: repeat(5, 1fr);
+gap: 6px;
+margin-bottom: 10px;
+}
+
+.color-owned {
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 4px;
+}
+
+.color-dot {
+width: 28px;
+height: 28px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+font-size: 0.65rem;
+font-weight: 500;
+box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+
+.color-dot.white  { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
+.color-dot.blue   { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
+.color-dot.green  { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
+.color-dot.red    { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
+.color-dot.black  { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
+
+/* OUTPUT */
+.output-box {
+background: var(–bg);
+border: 1px solid var(–gold);
+border-radius: 10px;
+padding: 14px;
+font-size: 0.75rem;
+line-height: 1.7;
+color: var(–text);
+white-space: pre-wrap;
+word-break: break-all;
+min-height: 80px;
+font-family: monospace;
+margin-bottom: 10px;
+}
+
+.btn {
+width: 100%;
+padding: 13px;
+border: none;
+border-radius: 10px;
+font-size: 0.9rem;
+font-family: ‘Cinzel’, serif;
+letter-spacing: 0.08em;
+cursor: pointer;
+transition: all 0.2s;
+margin-bottom: 10px;
+}
+
+.btn-generate {
+background: linear-gradient(135deg, var(–gold), var(–gold2));
+color: var(–bg);
+font-weight: 700;
+}
+
+.btn-copy {
+background: var(–surface2);
+color: var(–gold);
+border: 1px solid var(–gold);
+}
+
+.btn:active { transform: scale(0.97); }
+
+.player-name-input {
+background: var(–bg);
+border: 1px solid var(–border);
+border-radius: 6px;
+color: var(–text);
+font-size: 0.85rem;
+padding: 5px 8px;
+font-family: ‘Noto Sans JP’, sans-serif;
+width: 120px;
+}
+
+.player-header {
+display: flex;
+align-items: center;
+gap: 8px;
+margin-bottom: 10px;
+}
+
+.copy-toast {
+display: none;
+text-align: center;
+color: var(–gold);
+font-size: 0.8rem;
+padding: 6px;
+animation: fadeout 2s forwards;
+}
+
+@keyframes fadeout {
+0% { opacity: 1; }
+70% { opacity: 1; }
+100% { opacity: 0; }
+}
+
+.num-players-row {
+display: flex;
+align-items: center;
+gap: 10px;
+margin-bottom: 14px;
+justify-content: center;
+}
+
+.np-btn {
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 20px;
+color: var(–text2);
+font-size: 0.8rem;
+padding: 5px 14px;
+cursor: pointer;
+font-family: ‘Noto Sans JP’, sans-serif;
+transition: all 0.2s;
+}
+
+.np-btn.active {
+background: var(–gold);
+color: var(–bg);
+border-color: var(–gold);
+}
+</style>
+
+</head>
+<body>
+
+<h1>✦ SPLENDOR ✦</h1>
+<p class="subtitle">盤面情報入力フォーム</p>
+
+<!-- プレイヤー人数 -->
+
+<div class="section">
+  <div class="section-title">プレイヤー人数</div>
+  <div class="num-players-row" id="npRow">
+    <button class="np-btn active" onclick="setPlayers(2,this)">2人</button>
+    <button class="np-btn" onclick="setPlayers(3,this)">3人</button>
+    <button class="np-btn" onclick="setPlayers(4,this)">4人</button>
+  </div>
+</div>
+
+<!-- 場の宝石トークン -->
+
+<div class="section">
+  <div class="section-title">場の宝石トークン（残り枚数）</div>
+  <div class="gems-grid">
+    <div class="gem-item">
+      <div class="gem-icon white">♦</div>
+      <div class="gem-label">白</div>
+      <select class="gem-input" id="tk_white"></select>
+    </div>
+    <div class="gem-item">
+      <div class="gem-icon blue">♦</div>
+      <div class="gem-label">青</div>
+      <select class="gem-input" id="tk_blue"></select>
+    </div>
+    <div class="gem-item">
+      <div class="gem-icon green">♦</div>
+      <div class="gem-label">緑</div>
+      <select class="gem-input" id="tk_green"></select>
+    </div>
+    <div class="gem-item">
+      <div class="gem-icon red">♦</div>
+      <div class="gem-label">赤</div>
+      <select class="gem-input" id="tk_red"></select>
+    </div>
+    <div class="gem-item">
+      <div class="gem-icon black">♦</div>
+      <div class="gem-label">黒</div>
+      <select class="gem-input" id="tk_black"></select>
+    </div>
+    <div class="gem-item">
+      <div class="gem-icon gold">★</div>
+      <div class="gem-label">金(ワイルド)</div>
+      <select class="gem-input" id="tk_gold"></select>
+    </div>
+  </div>
+</div>
+
+<!-- 場のカード -->
+
+<div class="section">
+  <div class="section-title">場のカード</div>
+  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">コスト: 白・青・緑・赤・黒の順。ボーナス宝石色も選択してください。</p>
+
+  <div class="cards-tier">
+    <div class="tier-label">▶ Tier 3（高級・10点満点）</div>
+    <div class="cards-row" id="tier3"></div>
+  </div>
+  <div class="cards-tier">
+    <div class="tier-label">▶ Tier 2（中級）</div>
+    <div class="cards-row" id="tier2"></div>
+  </div>
+  <div class="cards-tier">
+    <div class="tier-label">▶ Tier 1（初級）</div>
+    <div class="cards-row" id="tier1"></div>
+  </div>
+</div>
+
+<!-- 貴族タイル -->
+
+<div class="section">
+  <div class="section-title">貴族タイル</div>
+  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">必要ボーナス数（白・青・緑・赤・黒）を入力</p>
+  <div class="nobles-grid" id="noblesGrid"></div>
+</div>
+
+<!-- プレイヤー情報 -->
+
+<div class="section">
+  <div class="section-title">プレイヤー情報</div>
+  <div class="player-tabs" id="playerTabs"></div>
+  <div id="playerPanels"></div>
+</div>
+
+<!-- 出力 -->
+
+<div class="section">
+  <div class="section-title">クロードへ貼り付けるテキスト</div>
+  <button class="btn btn-generate" onclick="generate()">✦ テキストを生成する</button>
+  <div class="output-box" id="outputBox">← ボタンを押すと生成されます</div>
+  <button class="btn btn-copy" onclick="copyText()">コピーする</button>
+  <div class="copy-toast" id="copyToast">✓ コピーしました！</div>
+</div>
+
+<script>
+let numPlayers = 2;
+const gemColors = ['white','blue','green','red','black'];
+const gemJP = ['白','青','緑','赤','黒'];
+
+// 0〜max の select HTML を生成
+function sel(id, max=7, cls='gem-input', style='') {
+  const opts = Array.from({length: max+1}, (_,i) => `<option value="${i}"${i===0?' selected':''}>${i}</option>`).join('');
+  return `<select id="${id}" class="${cls}"${style?` style="${style}"`:''}>${opts}</select>`;
+}
+
+function setPlayers(n, btn) {
+  numPlayers = n;
+  document.querySelectorAll('.np-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNobles();
+  renderPlayers();
+}
+
+function cardHTML(tier, idx) {
+  return `
+  <div class="card-box">
+    <div class="points-row">
+      <label>勝利点</label>
+      ${sel(`c${tier}_${idx}_pts`, 5, 'gem-input', 'width:52px')}
+    </div>
+    <select id="c${tier}_${idx}_bonus">
+      <option value="">ボーナス色</option>
+      <option value="白">⬜ 白</option>
+      <option value="青">🔵 青</option>
+      <option value="緑">🟢 緑</option>
+      <option value="赤">🔴 赤</option>
+      <option value="黒">⬛ 黒</option>
+    </select>
+    <div class="card-gem-row">
+      ${gemColors.map((c,i) => sel(`c${tier}_${idx}_${c}`, 7, 'card-gem-input')).join('')}
+    </div>
+    <div class="gem-hint">
+      ${gemJP.map(j=>`<span>${j}</span>`).join('')}
+    </div>
+  </div>`;
+}
+
+function nobleHTML(idx) {
+  return `
+  <div class="noble-box">
+    <div style="font-size:0.62rem;color:var(--text2);">貴族${idx+1}</div>
+    <div class="card-gem-row">
+      ${gemColors.map((c,i) => sel(`n${idx}_${c}`, 7, 'card-gem-input')).join('')}
+    </div>
+    <div class="gem-hint">
+      ${gemJP.map(j=>`<span>${j}</span>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderNobles() {
+  const count = numPlayers + 1;
+  const g = document.getElementById('noblesGrid');
+  g.innerHTML = '';
+  for(let i=0;i<count;i++) g.innerHTML += nobleHTML(i);
+}
+
+function renderPlayers() {
+  const tabs = document.getElementById('playerTabs');
+  const panels = document.getElementById('playerPanels');
+  tabs.innerHTML = '';
+  panels.innerHTML = '';
+
+  for(let p=0;p<numPlayers;p++) {
+    const isMe = p === 0;
+    const label = isMe ? '自分' : `相手${p}`;
+    tabs.innerHTML += `<button class="tab-btn${p===0?' active':''}" onclick="switchTab(${p})">${label}</button>`;
+
+    panels.innerHTML += `
+    <div class="player-panel${p===0?' active':''}" id="panel_${p}">
+      <div class="player-header">
+        <span style="font-size:0.65rem;color:var(--text2);">名前:</span>
+        <input class="player-name-input" id="pname_${p}" placeholder="${isMe?'自分':'相手'+p}">
+        <span style="font-size:0.65rem;color:var(--text2);margin-left:auto;">勝利点:</span>
+        ${sel(`pvp_${p}`, 25, 'gem-input', 'width:56px')}
+      </div>
+
+      <div class="field-label">持っているトークン（各色）</div>
+      <div class="gems-grid" style="margin-bottom:12px;">
+        <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div>${sel(`pt_${p}_white`,7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon blue">♦</div><div class="gem-label">青</div>${sel(`pt_${p}_blue`,7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon green">♦</div><div class="gem-label">緑</div>${sel(`pt_${p}_green`,7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon red">♦</div><div class="gem-label">赤</div>${sel(`pt_${p}_red`,7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon black">♦</div><div class="gem-label">黒</div>${sel(`pt_${p}_black`,7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div>${sel(`pt_${p}_gold`,5,'gem-input')}</div>
+      </div>
+
+      <div class="field-label">取得済みカードのボーナス数（色別）</div>
+      <div class="cards-owned" style="margin-bottom:12px;">
+        ${gemColors.map((c,i)=>`
+        <div class="color-owned">
+          <div class="color-dot ${c}">${gemJP[i]}</div>
+          ${sel(`pb_${p}_${c}`,7,'gem-input')}
+        </div>`).join('')}
+      </div>
+
+      <div class="field-label">予約済みカード（最大3枚）</div>
+      <div class="cards-row" style="grid-template-columns:repeat(3,1fr);gap:6px;">
+        ${[0,1,2].map(r=>`
+        <div class="card-box">
+          <div class="points-row">
+            <label>VP</label>
+            ${sel(`pr_${p}_${r}_pts`,5,'gem-input','width:48px')}
+          </div>
+          <select id="pr_${p}_${r}_bonus">
+            <option value="">ボーナス</option>
+            <option value="白">⬜ 白</option>
+            <option value="青">🔵 青</option>
+            <option value="緑">🟢 緑</option>
+            <option value="赤">🔴 赤</option>
+            <option value="黒">⬛ 黒</option>
+          </select>
+          <div class="card-gem-row">
+            ${gemColors.map((c,i)=>sel(`pr_${p}_${r}_${c}`,7,'card-gem-input')).join('')}
+          </div>
+          <div class="gem-hint">${gemJP.map(j=>`<span>${j}</span>`).join('')}</div>
+        </div>`).join('')}
+      </div>
+    </div>`;
+  }
+}
+
+function switchTab(idx) {
+  document.querySelectorAll('.player-panel').forEach((el,i) => {
+    el.classList.toggle('active', i===idx);
+  });
+  document.querySelectorAll('.tab-btn').forEach((el,i) => {
+    el.classList.toggle('active', i===idx);
+  });
+}
+
+function val(id) {
+  const el = document.getElementById(id);
+  if(!el) return '';
+  return el.value || '';
+}
+
+function gemCost(prefix) {
+  return gemColors.map((c,i) => {
+    const v = val(`${prefix}_${c}`);
+    return v && v!=='0' ? `${gemJP[i]}${v}` : '';
+  }).filter(Boolean).join('・');
+}
+
+function generate() {
+  let out = '';
+  out += `【宝石の煌めき 盤面情報】\n`;
+  out += `プレイヤー数: ${numPlayers}人\n\n`;
+
+  // tokens
+  out += `■ 場の宝石トークン（残り）\n`;
+  const tnames = ['白','青','緑','赤','黒','金'];
+  const tids = ['white','blue','green','red','black','gold'];
+  tids.forEach((c,i) => {
+    const v = val(`tk_${c}`);
+    if(v) out += `  ${tnames[i]}: ${v}枚\n`;
+  });
+  out += '\n';
+
+  // cards
+  [3,2,1].forEach(tier => {
+    out += `■ Tier${tier}カード\n`;
+    for(let i=0;i<4;i++) {
+      const pts = val(`c${tier}_${i}_pts`);
+      const bonus = val(`c${tier}_${i}_bonus`);
+      const cost = gemCost(`c${tier}_${i}`);
+      if(!bonus && !cost && !pts) { out += `  [カード${i+1}] 未入力\n`; continue; }
+      out += `  [カード${i+1}] `;
+      if(pts) out += `勝利点${pts}点 `;
+      if(bonus) out += `ボーナス:${bonus} `;
+      if(cost) out += `コスト: ${cost}`;
+      out += '\n';
+    }
+    out += '\n';
+  });
+
+  // nobles
+  const nobleCount = numPlayers + 1;
+  out += `■ 貴族タイル（3点・各条件達成で自動取得）\n`;
+  for(let i=0;i<nobleCount;i++) {
+    const req = gemCost(`n${i}`);
+    if(req) out += `  [貴族${i+1}] 必要ボーナス: ${req}\n`;
+  }
+  out += '\n';
+
+  // players
+  for(let p=0;p<numPlayers;p++) {
+    const name = val(`pname_${p}`) || (p===0?'自分':`相手${p}`);
+    const vp = val(`pvp_${p}`);
+    out += `■ ${name}の状況\n`;
+    if(vp) out += `  勝利点: ${vp}点\n`;
+
+    const tkParts = tids.map((c,i)=>{
+      const v = val(`pt_${p}_${c}`);
+      return v&&v!=='0'?`${tnames[i]}${v}`:'';
+    }).filter(Boolean).join('・');
+    if(tkParts) out += `  トークン: ${tkParts}\n`;
+
+    const bonusParts = gemColors.map((c,i)=>{
+      const v = val(`pb_${p}_${c}`);
+      return v&&v!=='0'?`${gemJP[i]}${v}`:'';
+    }).filter(Boolean).join('・');
+    if(bonusParts) out += `  カードボーナス: ${bonusParts}\n`;
+
+    // reserved
+    const reserved = [];
+    for(let r=0;r<3;r++) {
+      const pts = val(`pr_${p}_${r}_pts`);
+      const bonus = val(`pr_${p}_${r}_bonus`);
+      const cost = gemCost(`pr_${p}_${r}`);
+      if(bonus||cost||pts) {
+        let rstr = '';
+        if(pts) rstr += `VP${pts} `;
+        if(bonus) rstr += `ボーナス:${bonus} `;
+        if(cost) rstr += `コスト:${cost}`;
+        reserved.push(rstr.trim());
+      }
+    }
+    if(reserved.length) out += `  予約カード: ${reserved.join(' / ')}\n`;
+    out += '\n';
+  }
+
+  out += `---\n上記の盤面で、最適な次の手を一緒に考えてください。`;
+
+  document.getElementById('outputBox').textContent = out;
+}
+
+function copyText() {
+  const text = document.getElementById('outputBox').textContent;
+  if(navigator.clipboard) {
+    navigator.clipboard.writeText(text).then(showToast);
+  } else {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast();
+  }
+}
+
+function showToast() {
+  const t = document.getElementById('copyToast');
+  t.style.display = 'block';
+  t.style.animation = 'none';
+  setTimeout(() => { t.style.animation = 'fadeout 2s forwards'; }, 10);
+  setTimeout(() => { t.style.display = 'none'; }, 2100);
+}
+
+// Init token selects
+function fillSel(id, max) {
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.innerHTML = Array.from({length:max+1},(_,i)=>`<option value="${i}">${i}</option>`).join('');
+}
+['white','blue','green','red','black'].forEach(c => fillSel(`tk_${c}`, 7));
+fillSel('tk_gold', 5);
+
+// Init cards
+for(let t=1;t<=3;t++) {
+  let h = '';
+  for(let i=0;i<4;i++) h += cardHTML(t,i);
+  document.getElementById(`tier${t}`).innerHTML = h;
+}
+renderNobles();
+renderPlayers();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  const swCode = `
+    const CACHE = 'splendor-v1';
+    self.addEventListener('install', e => {
+      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
+      self.skipWaiting();
+    });
+    self.addEventListener('fetch', e => {
+      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+    });
+  `;
+  const blob = new Blob([swCode], {type: 'application/javascript'});
+  const url = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(url);
+}
+</script>
+
+</body>
+</html>
