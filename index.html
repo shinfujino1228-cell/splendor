@@ -441,6 +441,120 @@ function showToast() {
   setTimeout(()=>{t.style.display='none';},2100);
 }
 
+// ===== 自動保存 =====
+function saveState() {
+  const state = { numPlayers };
+  // トークン
+  ['white','blue','green','red','black','gold'].forEach(c=>{
+    const el=document.getElementById('tk_'+c);
+    if(el) state['tk_'+c]=el.value;
+  });
+  // 場のカード
+  for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
+    ['pts','bonus','pick'].forEach(k=>{
+      const el=document.getElementById(`c${t}_${i}_${k}`);
+      if(el) state[`c${t}_${i}_${k}`]=el.value;
+    });
+  }
+  // 貴族
+  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{
+    const el=document.getElementById(`n${i}_${c}`);
+    if(el) state[`n${i}_${c}`]=el.value;
+  });
+  // プレイヤー
+  for(let p=0;p<numPlayers;p++){
+    const nm=document.getElementById('pname_'+p);
+    if(nm) state['pname_'+p]=nm.value;
+    const vp=document.getElementById('pvp_'+p);
+    if(vp) state['pvp_'+p]=vp.value;
+    ['white','blue','green','red','black','gold'].forEach(c=>{
+      const el=document.getElementById('pt_'+p+'_'+c);
+      if(el) state['pt_'+p+'_'+c]=el.value;
+    });
+    gemColors.forEach(c=>{
+      const el=document.getElementById('pb_'+p+'_'+c);
+      if(el) state['pb_'+p+'_'+c]=el.value;
+    });
+    for(let r=0;r<3;r++){
+      ['pts','bonus','pick'].forEach(k=>{
+        const el=document.getElementById(`pr_${p}_${r}_${k}`);
+        if(el) state[`pr_${p}_${r}_${k}`]=el.value;
+      });
+    }
+  }
+  try { localStorage.setItem('splendor_state', JSON.stringify(state)); } catch(e){}
+}
+
+function restoreState() {
+  let state;
+  try { state = JSON.parse(localStorage.getItem('splendor_state')); } catch(e){}
+  if (!state) return;
+
+  // プレイヤー人数を復元してUI再描画
+  if (state.numPlayers && state.numPlayers !== numPlayers) {
+    numPlayers = state.numPlayers;
+    document.querySelectorAll('.np-btn').forEach(b=>{
+      b.classList.toggle('active', parseInt(b.textContent)===numPlayers);
+    });
+    renderNobles();
+    renderPlayers();
+  }
+
+  // トークン
+  ['white','blue','green','red','black','gold'].forEach(c=>{
+    const el=document.getElementById('tk_'+c);
+    if(el && state['tk_'+c]!=null) el.value=state['tk_'+c];
+  });
+
+  // 場のカード（pts→bonus→updateCardSelect→pick）
+  for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
+    const pts=state[`c${t}_${i}_pts`];
+    const bonus=state[`c${t}_${i}_bonus`];
+    const pick=state[`c${t}_${i}_pick`];
+    const ptsEl=document.getElementById(`c${t}_${i}_pts`);
+    const bonusEl=document.getElementById(`c${t}_${i}_bonus`);
+    if(ptsEl&&pts!=null) ptsEl.value=pts;
+    if(bonusEl&&bonus!=null) bonusEl.value=bonus;
+    if(pts||bonus) updateCardSelect(t,i);
+    const pickEl=document.getElementById(`c${t}_${i}_pick`);
+    if(pickEl&&pick!=null){ pickEl.value=pick; showCardInfo(t,i); }
+  }
+
+  // 貴族
+  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{
+    const el=document.getElementById(`n${i}_${c}`);
+    if(el && state[`n${i}_${c}`]!=null) el.value=state[`n${i}_${c}`];
+  });
+
+  // プレイヤー
+  for(let p=0;p<numPlayers;p++){
+    const nm=document.getElementById('pname_'+p);
+    if(nm && state['pname_'+p]!=null) nm.value=state['pname_'+p];
+    const vp=document.getElementById('pvp_'+p);
+    if(vp && state['pvp_'+p]!=null) vp.value=state['pvp_'+p];
+    ['white','blue','green','red','black','gold'].forEach(c=>{
+      const el=document.getElementById('pt_'+p+'_'+c);
+      if(el && state['pt_'+p+'_'+c]!=null) el.value=state['pt_'+p+'_'+c];
+    });
+    gemColors.forEach(c=>{
+      const el=document.getElementById('pb_'+p+'_'+c);
+      if(el && state['pb_'+p+'_'+c]!=null) el.value=state['pb_'+p+'_'+c];
+    });
+    for(let r=0;r<3;r++){
+      const pts=state[`pr_${p}_${r}_pts`];
+      const bonus=state[`pr_${p}_${r}_bonus`];
+      const pick=state[`pr_${p}_${r}_pick`];
+      const ptsEl=document.getElementById(`pr_${p}_${r}_pts`);
+      const bonusEl=document.getElementById(`pr_${p}_${r}_bonus`);
+      if(ptsEl&&pts!=null) ptsEl.value=pts;
+      if(bonusEl&&bonus!=null) bonusEl.value=bonus;
+      if(pts||bonus) updateReservedSelect(p,r);
+      const pickEl=document.getElementById(`pr_${p}_${r}_pick`);
+      if(pickEl&&pick!=null){ pickEl.value=pick; showReservedInfo(p,r); }
+    }
+  }
+}
+
 // 初期化
 ['white','blue','green','red','black'].forEach(c=>fillSel('tk_'+c,7));
 fillSel('tk_gold',5);
@@ -451,6 +565,11 @@ for(let t=1;t<=3;t++){
 }
 renderNobles();
 renderPlayers();
+restoreState();
+
+// 全入力変更時に自動保存
+document.addEventListener('change', saveState);
+document.addEventListener('input', saveState);
 </script>
 
 <script>
