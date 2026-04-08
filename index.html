@@ -13,517 +13,121 @@
 <title>宝石の煌めき 盤面入力</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+JP:wght@300;400;500&display=swap');
-
-:root {
-–bg: #0e0c0a;
-–surface: #1a1712;
-–surface2: #221f1a;
-–border: #3a3228;
-–gold: #c9a84c;
-–gold2: #f0d080;
-–text: #e8dcc8;
-–text2: #9a8c78;
-–white: #f5f0e8;
-–blue: #4a7fb5;
-–green: #4a8c5c;
-–red: #b54a4a;
-–black: #2a2a2a;
-–ruby: #c0392b;
-}
-
-- { box-sizing: border-box; margin: 0; padding: 0; }
-
-body {
-background: var(–bg);
-color: var(–text);
-font-family: ‘Noto Sans JP’, sans-serif;
-font-weight: 300;
-min-height: 100vh;
-padding: 12px;
-max-width: 480px;
-margin: 0 auto;
-}
-
-h1 {
-font-family: ‘Cinzel’, serif;
-font-size: 1.3rem;
-color: var(–gold);
-text-align: center;
-letter-spacing: 0.08em;
-margin-bottom: 4px;
-}
-
-.subtitle {
-text-align: center;
-font-size: 0.72rem;
-color: var(–text2);
-margin-bottom: 20px;
-letter-spacing: 0.05em;
-}
-
-.section {
-background: var(–surface);
-border: 1px solid var(–border);
-border-radius: 10px;
-padding: 14px;
-margin-bottom: 14px;
-}
-
-.section-title {
-font-family: ‘Cinzel’, serif;
-font-size: 0.75rem;
-color: var(–gold);
-letter-spacing: 0.1em;
-margin-bottom: 12px;
-display: flex;
-align-items: center;
-gap: 8px;
-}
-
-.section-title::after {
-content: ‘’;
-flex: 1;
-height: 1px;
-background: var(–border);
-}
-
-/* GEM TOKENS */
-.gems-grid {
-display: grid;
-grid-template-columns: repeat(6, 1fr);
-gap: 8px;
-}
-
-.gem-item {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 5px;
-}
-
-.gem-icon {
-width: 36px;
-height: 36px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 1rem;
-font-weight: bold;
-border: 2px solid rgba(255,255,255,0.15);
-position: relative;
-box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-}
-
-.gem-icon.white  { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
-.gem-icon.blue   { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
-.gem-icon.green  { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
-.gem-icon.red    { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
-.gem-icon.black  { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
-.gem-icon.gold   { background: radial-gradient(circle at 35% 35%, #ffe080, #c08020); color: #5a3a00; }
-
-.gem-label {
-font-size: 0.6rem;
-color: var(–text2);
-text-align: center;
-}
-
-.gem-input {
-width: 44px;
-height: 32px;
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 6px;
-color: var(–text);
-text-align: center;
-font-size: 0.9rem;
-font-family: ‘Noto Sans JP’, sans-serif;
--webkit-appearance: none;
-appearance: none;
-padding: 0 2px;
-}
-
-.card-gem-input {
-width: 100%;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 4px;
-color: var(–text);
-text-align: center;
-font-size: 0.8rem;
-padding: 5px 0;
-font-family: ‘Noto Sans JP’, sans-serif;
--webkit-appearance: none;
-appearance: none;
-}
-
-/* CARDS */
-.cards-tier {
-margin-bottom: 12px;
-}
-
-.tier-label {
-font-size: 0.65rem;
-color: var(–text2);
-margin-bottom: 6px;
-letter-spacing: 0.05em;
-}
-
-.cards-row {
-display: grid;
-grid-template-columns: repeat(2, 1fr);
-gap: 8px;
-}
-
-.card-box {
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 8px;
-padding: 10px 8px;
-display: flex;
-flex-direction: column;
-gap: 6px;
-}
-
-.card-box select, .card-box input {
-width: 100%;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 5px;
-color: var(–text);
-font-size: 0.78rem;
-padding: 6px 7px;
-font-family: ‘Noto Sans JP’, sans-serif;
-}
-
-.card-box select option { background: #1a1712; }
-
-.card-gem-row {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 3px;
-}
-
-.gem-hint {
-font-size: 0.55rem;
-color: var(–text2);
-text-align: center;
-margin-top: 1px;
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 3px;
-}
-
-.gem-hint span { text-align: center; }
-
-.points-row {
-display: flex;
-align-items: center;
-gap: 5px;
-}
-
-.points-row label { font-size: 0.65rem; color: var(–text2); white-space: nowrap; }
-
-/* NOBLES */
-.nobles-grid {
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-gap: 8px;
-}
-
-.noble-box {
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 8px;
-padding: 8px;
-display: flex;
-flex-direction: column;
-gap: 4px;
-}
-
-.noble-box .card-gem-row { grid-template-columns: repeat(5, 1fr); }
-
-/* PLAYER */
-.player-tabs {
-display: flex;
-gap: 6px;
-margin-bottom: 12px;
-flex-wrap: wrap;
-}
-
-.tab-btn {
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 20px;
-color: var(–text2);
-font-size: 0.72rem;
-padding: 5px 12px;
-cursor: pointer;
-font-family: ‘Noto Sans JP’, sans-serif;
-transition: all 0.2s;
-}
-
-.tab-btn.active {
-background: var(–gold);
-color: var(–bg);
-border-color: var(–gold);
-font-weight: 500;
-}
-
-.player-panel { display: none; }
-.player-panel.active { display: block; }
-
-.player-row {
-display: grid;
-grid-template-columns: 1fr 1fr;
-gap: 10px;
-margin-bottom: 10px;
-}
-
-.field-label {
-font-size: 0.65rem;
-color: var(–text2);
-margin-bottom: 4px;
-}
-
-.field-input {
-width: 100%;
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 6px;
-color: var(–text);
-font-size: 0.85rem;
-padding: 6px 8px;
-font-family: ‘Noto Sans JP’, sans-serif;
-}
-
-.cards-owned {
-display: grid;
-grid-template-columns: repeat(5, 1fr);
-gap: 6px;
-margin-bottom: 10px;
-}
-
-.color-owned {
-display: flex;
-flex-direction: column;
-align-items: center;
-gap: 4px;
-}
-
-.color-dot {
-width: 28px;
-height: 28px;
-border-radius: 50%;
-display: flex;
-align-items: center;
-justify-content: center;
-font-size: 0.65rem;
-font-weight: 500;
-box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.color-dot.white  { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
-.color-dot.blue   { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
-.color-dot.green  { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
-.color-dot.red    { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
-.color-dot.black  { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
-
-/* OUTPUT */
-.output-box {
-background: var(–bg);
-border: 1px solid var(–gold);
-border-radius: 10px;
-padding: 14px;
-font-size: 0.75rem;
-line-height: 1.7;
-color: var(–text);
-white-space: pre-wrap;
-word-break: break-all;
-min-height: 80px;
-font-family: monospace;
-margin-bottom: 10px;
-}
-
-.btn {
-width: 100%;
-padding: 13px;
-border: none;
-border-radius: 10px;
-font-size: 0.9rem;
-font-family: ‘Cinzel’, serif;
-letter-spacing: 0.08em;
-cursor: pointer;
-transition: all 0.2s;
-margin-bottom: 10px;
-}
-
-.btn-generate {
-background: linear-gradient(135deg, var(–gold), var(–gold2));
-color: var(–bg);
-font-weight: 700;
-}
-
-.btn-copy {
-background: var(–surface2);
-color: var(–gold);
-border: 1px solid var(–gold);
-}
-
-.btn:active { transform: scale(0.97); }
-
-.player-name-input {
-background: var(–bg);
-border: 1px solid var(–border);
-border-radius: 6px;
-color: var(–text);
-font-size: 0.85rem;
-padding: 5px 8px;
-font-family: ‘Noto Sans JP’, sans-serif;
-width: 120px;
-}
-
-.player-header {
-display: flex;
-align-items: center;
-gap: 8px;
-margin-bottom: 10px;
-}
-
-.copy-toast {
-display: none;
-text-align: center;
-color: var(–gold);
-font-size: 0.8rem;
-padding: 6px;
-animation: fadeout 2s forwards;
-}
-
-@keyframes fadeout {
-0% { opacity: 1; }
-70% { opacity: 1; }
-100% { opacity: 0; }
-}
-
-.num-players-row {
-display: flex;
-align-items: center;
-gap: 10px;
-margin-bottom: 14px;
-justify-content: center;
-}
-
-.np-btn {
-background: var(–surface2);
-border: 1px solid var(–border);
-border-radius: 20px;
-color: var(–text2);
-font-size: 0.8rem;
-padding: 5px 14px;
-cursor: pointer;
-font-family: ‘Noto Sans JP’, sans-serif;
-transition: all 0.2s;
-}
-
-.np-btn.active {
-background: var(–gold);
-color: var(–bg);
-border-color: var(–gold);
-}
+  :root {
+    --bg: #0e0c0a; --surface: #1a1712; --surface2: #221f1a;
+    --border: #3a3228; --gold: #c9a84c; --gold2: #f0d080;
+    --text: #e8dcc8; --text2: #9a8c78;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
+    min-height: 100vh; padding: 12px; max-width: 480px; margin: 0 auto;
+  }
+  h1 { font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--gold); text-align: center; letter-spacing: 0.08em; margin-bottom: 4px; }
+  .subtitle { text-align: center; font-size: 0.72rem; color: var(--text2); margin-bottom: 20px; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
+  .section-title { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+  .gems-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .gem-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .gem-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
+  .gem-icon.white { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
+  .gem-icon.blue  { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
+  .gem-icon.green { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
+  .gem-icon.red   { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
+  .gem-icon.black { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
+  .gem-icon.gold  { background: radial-gradient(circle at 35% 35%, #ffe080, #c08020); color: #5a3a00; }
+  .gem-label { font-size: 0.6rem; color: var(--text2); text-align: center; }
+  .gem-input { width: 44px; height: 32px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); text-align: center; font-size: 0.9rem; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; padding: 0 2px; }
+  .field-label { font-size: 0.65rem; color: var(--text2); margin-bottom: 4px; }
+  .cards-tier { margin-bottom: 14px; }
+  .tier-label { font-size: 0.65rem; color: var(--text2); margin-bottom: 6px; letter-spacing: 0.05em; }
+  .cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .card-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; }
+  .card-sel { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; color: var(--text); font-size: 0.75rem; padding: 6px 5px; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; }
+  .card-sel option { background: #1a1712; }
+  .card-info { font-size: 0.62rem; color: var(--gold); padding: 4px 2px; min-height: 28px; line-height: 1.5; }
+  .nobles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .noble-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
+  .card-gem-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
+  .card-gem-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; color: var(--text); text-align: center; font-size: 0.8rem; padding: 5px 0; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; }
+  .gem-hint { font-size: 0.55rem; color: var(--text2); display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 1px; }
+  .gem-hint span { text-align: center; }
+  .player-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
+  .tab-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-size: 0.72rem; padding: 5px 12px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; }
+  .tab-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 500; }
+  .player-panel { display: none; }
+  .player-panel.active { display: block; }
+  .player-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .player-name-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.85rem; padding: 5px 8px; font-family: 'Noto Sans JP', sans-serif; width: 120px; }
+  .cards-owned { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
+  .color-owned { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .color-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
+  .color-dot.white { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
+  .color-dot.blue  { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
+  .color-dot.green { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
+  .color-dot.red   { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
+  .color-dot.black { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
+  .output-box { background: var(--bg); border: 1px solid var(--gold); border-radius: 10px; padding: 14px; font-size: 0.75rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-all; min-height: 80px; font-family: monospace; margin-bottom: 10px; }
+  .btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 0.9rem; font-family: 'Cinzel', serif; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
+  .btn-generate { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: var(--bg); font-weight: 700; }
+  .btn-copy { background: var(--surface2); color: var(--gold); border: 1px solid var(--gold); }
+  .btn:active { transform: scale(0.97); }
+  .copy-toast { display: none; text-align: center; color: var(--gold); font-size: 0.8rem; padding: 6px; animation: fadeout 2s forwards; }
+  @keyframes fadeout { 0%,70% { opacity:1; } 100% { opacity:0; } }
+  .num-players-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; justify-content: center; }
+  .np-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-size: 0.8rem; padding: 5px 14px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; }
+  .np-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+  .points-row { display: flex; align-items: center; gap: 5px; }
+  .points-row label { font-size: 0.65rem; color: var(--text2); white-space: nowrap; }
 </style>
-
 </head>
 <body>
 
 <h1>✦ SPLENDOR ✦</h1>
 <p class="subtitle">盤面情報入力フォーム</p>
 
-<!-- プレイヤー人数 -->
-
 <div class="section">
   <div class="section-title">プレイヤー人数</div>
-  <div class="num-players-row" id="npRow">
+  <div class="num-players-row">
     <button class="np-btn active" onclick="setPlayers(2,this)">2人</button>
     <button class="np-btn" onclick="setPlayers(3,this)">3人</button>
     <button class="np-btn" onclick="setPlayers(4,this)">4人</button>
   </div>
 </div>
 
-<!-- 場の宝石トークン -->
-
 <div class="section">
   <div class="section-title">場の宝石トークン（残り枚数）</div>
   <div class="gems-grid">
-    <div class="gem-item">
-      <div class="gem-icon white">♦</div>
-      <div class="gem-label">白</div>
-      <select class="gem-input" id="tk_white"></select>
-    </div>
-    <div class="gem-item">
-      <div class="gem-icon blue">♦</div>
-      <div class="gem-label">青</div>
-      <select class="gem-input" id="tk_blue"></select>
-    </div>
-    <div class="gem-item">
-      <div class="gem-icon green">♦</div>
-      <div class="gem-label">緑</div>
-      <select class="gem-input" id="tk_green"></select>
-    </div>
-    <div class="gem-item">
-      <div class="gem-icon red">♦</div>
-      <div class="gem-label">赤</div>
-      <select class="gem-input" id="tk_red"></select>
-    </div>
-    <div class="gem-item">
-      <div class="gem-icon black">♦</div>
-      <div class="gem-label">黒</div>
-      <select class="gem-input" id="tk_black"></select>
-    </div>
-    <div class="gem-item">
-      <div class="gem-icon gold">★</div>
-      <div class="gem-label">金(ワイルド)</div>
-      <select class="gem-input" id="tk_gold"></select>
-    </div>
+    <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div><select class="gem-input" id="tk_white"></select></div>
+    <div class="gem-item"><div class="gem-icon blue">♦</div><div class="gem-label">青</div><select class="gem-input" id="tk_blue"></select></div>
+    <div class="gem-item"><div class="gem-icon green">♦</div><div class="gem-label">緑</div><select class="gem-input" id="tk_green"></select></div>
+    <div class="gem-item"><div class="gem-icon red">♦</div><div class="gem-label">赤</div><select class="gem-input" id="tk_red"></select></div>
+    <div class="gem-item"><div class="gem-icon black">♦</div><div class="gem-label">黒</div><select class="gem-input" id="tk_black"></select></div>
+    <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div><select class="gem-input" id="tk_gold"></select></div>
   </div>
 </div>
-
-<!-- 場のカード -->
 
 <div class="section">
   <div class="section-title">場のカード</div>
-  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">コスト: 白・青・緑・赤・黒の順。ボーナス宝石色も選択してください。</p>
-
-  <div class="cards-tier">
-    <div class="tier-label">▶ Tier 3（高級・10点満点）</div>
-    <div class="cards-row" id="tier3"></div>
-  </div>
-  <div class="cards-tier">
-    <div class="tier-label">▶ Tier 2（中級）</div>
-    <div class="cards-row" id="tier2"></div>
-  </div>
-  <div class="cards-tier">
-    <div class="tier-label">▶ Tier 1（初級）</div>
-    <div class="cards-row" id="tier1"></div>
-  </div>
+  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">① 勝利点 ② ボーナス色 の順に選ぶとカード候補が絞られます</p>
+  <div class="cards-tier"><div class="tier-label">▶ Tier 3（高級）</div><div class="cards-row" id="tier3"></div></div>
+  <div class="cards-tier"><div class="tier-label">▶ Tier 2（中級）</div><div class="cards-row" id="tier2"></div></div>
+  <div class="cards-tier"><div class="tier-label">▶ Tier 1（初級）</div><div class="cards-row" id="tier1"></div></div>
 </div>
-
-<!-- 貴族タイル -->
 
 <div class="section">
   <div class="section-title">貴族タイル</div>
-  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">必要ボーナス数（白・青・緑・赤・黒）を入力</p>
+  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">必要ボーナス数（白・青・緑・赤・黒）</p>
   <div class="nobles-grid" id="noblesGrid"></div>
 </div>
-
-<!-- プレイヤー情報 -->
 
 <div class="section">
   <div class="section-title">プレイヤー情報</div>
   <div class="player-tabs" id="playerTabs"></div>
   <div id="playerPanels"></div>
 </div>
-
-<!-- 出力 -->
 
 <div class="section">
   <div class="section-title">クロードへ貼り付けるテキスト</div>
@@ -534,46 +138,111 @@ border-color: var(–gold);
 </div>
 
 <script>
-let numPlayers = 2;
 const gemColors = ['white','blue','green','red','black'];
 const gemJP = ['白','青','緑','赤','黒'];
+const bonusEmoji = {'白':'⬜','青':'🔵','緑':'🟢','赤':'🔴','黒':'⬛'};
+let numPlayers = 2;
 
-// 0〜max の select HTML を生成
-function sel(id, max=7, cls='gem-input', style='') {
-  const opts = Array.from({length: max+1}, (_,i) => `<option value="${i}"${i===0?' selected':''}>${i}</option>`).join('');
-  return `<select id="${id}" class="${cls}"${style?` style="${style}"`:''}>${opts}</select>`;
+// 全カードデータ [tier, bonus, pts, 白, 青, 緑, 赤, 黒]
+const ALL_CARDS = [
+  [1,'青',0,1,0,0,0,2],[1,'青',0,1,2,0,2,0],[1,'青',0,0,0,2,0,2],[1,'青',0,1,0,1,1,1],
+  [1,'青',0,1,0,1,2,1],[1,'青',0,0,1,3,1,0],[1,'青',0,0,0,0,0,3],[1,'青',1,0,0,0,4,0],
+  [1,'赤',0,2,0,1,0,2],[1,'赤',0,2,1,1,0,1],[1,'赤',0,0,2,1,0,0],[1,'赤',0,3,0,0,0,0],
+  [1,'赤',0,1,0,0,1,3],[1,'赤',0,2,0,0,2,0],[1,'赤',0,1,1,1,0,1],[1,'赤',1,4,0,0,0,0],
+  [1,'黒',0,2,2,0,1,0],[1,'黒',0,1,1,1,1,0],[1,'黒',0,2,0,2,0,0],[1,'黒',0,1,2,1,1,0],
+  [1,'黒',0,0,0,3,0,0],[1,'黒',0,0,0,1,3,1],[1,'黒',0,0,0,2,1,0],[1,'黒',1,0,4,0,0,0],
+  [1,'白',0,0,1,1,1,1],[1,'白',0,0,3,0,0,0],[1,'白',0,0,2,0,0,2],[1,'白',0,0,0,0,2,1],
+  [1,'白',0,3,1,0,0,1],[1,'白',0,0,1,2,1,1],[1,'白',0,0,2,2,0,1],[1,'白',1,0,0,4,0,0],
+  [1,'緑',0,0,2,0,1,2],[1,'緑',0,1,3,1,0,0],[1,'緑',0,0,0,0,3,0],[1,'緑',0,1,1,0,1,2],
+  [1,'緑',0,1,1,0,1,1],[1,'緑',0,0,2,0,2,0],[1,'緑',0,2,1,0,0,0],[1,'緑',1,0,0,0,0,4],
+  [2,'青',1,0,2,3,0,3],[2,'青',1,0,2,2,3,0],[2,'青',2,2,0,0,1,4],[2,'青',2,0,5,0,0,0],
+  [2,'青',2,5,3,0,0,0],[2,'青',3,0,6,0,0,0],
+  [2,'赤',1,0,3,0,2,3],[2,'赤',1,2,0,0,2,3],[2,'赤',2,1,4,2,0,0],[2,'赤',2,3,0,0,0,5],
+  [2,'赤',2,0,0,0,0,5],[2,'赤',3,0,0,0,6,0],
+  [2,'黒',1,3,2,2,0,0],[2,'黒',1,3,0,3,0,2],[2,'黒',2,0,1,4,2,0],[2,'黒',2,0,0,5,3,0],
+  [2,'黒',2,5,0,0,0,0],[2,'黒',3,0,0,0,0,6],
+  [2,'白',1,2,3,0,3,0],[2,'白',1,0,0,3,2,2],[2,'白',2,0,0,1,4,2],[2,'白',2,0,0,0,5,0],
+  [2,'白',2,0,0,0,5,3],[2,'白',3,6,0,0,0,0],
+  [2,'緑',1,2,3,0,0,2],[2,'緑',1,3,0,2,3,0],[2,'緑',2,0,0,5,0,0],[2,'緑',2,4,2,0,0,1],
+  [2,'緑',2,0,5,3,0,0],[2,'緑',3,0,0,6,0,0],
+  [3,'青',3,3,0,3,3,5],[3,'青',4,7,0,0,0,0],[3,'青',4,6,3,0,0,3],[3,'青',5,7,3,0,0,0],
+  [3,'赤',3,3,5,3,0,3],[3,'赤',4,0,3,6,3,0],[3,'赤',4,0,0,7,0,0],[3,'赤',5,0,0,7,3,0],
+  [3,'黒',3,3,3,5,3,0],[3,'黒',4,0,0,0,7,0],[3,'黒',4,0,0,3,6,3],[3,'黒',5,0,0,0,7,3],
+  [3,'白',3,0,3,3,5,3],[3,'白',4,0,0,0,0,7],[3,'白',4,3,0,0,3,6],[3,'白',5,3,0,0,0,7],
+  [3,'緑',3,5,3,0,3,3],[3,'緑',4,3,6,3,0,0],[3,'緑',4,0,7,0,0,0],[3,'緑',5,0,7,3,0,0],
+];
+
+function fillSel(id, max) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = Array.from({length:max+1},(_,i)=>`<option value="${i}">${i}</option>`).join('');
 }
 
-function setPlayers(n, btn) {
-  numPlayers = n;
-  document.querySelectorAll('.np-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderNobles();
-  renderPlayers();
+function sel(id, max, cls, style) {
+  const opts = Array.from({length:max+1},(_,i)=>`<option value="${i}">${i}</option>`).join('');
+  return `<select id="${id}" class="${cls}"${style?' style="'+style+'"':''}>${opts}</select>`;
+}
+
+function cardLabel(c) {
+  const parts = gemJP.map((j,i)=>c[3+i]?j+c[3+i]:'').filter(Boolean).join(' ');
+  return `${bonusEmoji[c[1]]}${c[1]} | ${parts||'コストなし'}`;
 }
 
 function cardHTML(tier, idx) {
+  const tierCards = ALL_CARDS.filter(c=>c[0]===tier);
+  const pts = [...new Set(tierCards.map(c=>c[2]))].sort((a,b)=>a-b);
+  const ptsOpts = '<option value="">勝利点</option>' + pts.map(p=>`<option value="${p}">${p}点</option>`).join('');
+  const bonusOpts = '<option value="">ボーナス色</option>' +
+    ['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
   return `
   <div class="card-box">
-    <div class="points-row">
-      <label>勝利点</label>
-      ${sel(`c${tier}_${idx}_pts`, 5, 'gem-input', 'width:52px')}
-    </div>
-    <select id="c${tier}_${idx}_bonus">
-      <option value="">ボーナス色</option>
-      <option value="白">⬜ 白</option>
-      <option value="青">🔵 青</option>
-      <option value="緑">🟢 緑</option>
-      <option value="赤">🔴 赤</option>
-      <option value="黒">⬛ 黒</option>
+    <div class="field-label">カード${idx+1}</div>
+    <select class="card-sel" id="c${tier}_${idx}_pts" onchange="updateCardSelect(${tier},${idx})">${ptsOpts}</select>
+    <select class="card-sel" id="c${tier}_${idx}_bonus" onchange="updateCardSelect(${tier},${idx})">${bonusOpts}</select>
+    <select class="card-sel" id="c${tier}_${idx}_pick" onchange="showCardInfo(${tier},${idx})">
+      <option value="">↑で絞り込む</option>
     </select>
-    <div class="card-gem-row">
-      ${gemColors.map((c,i) => sel(`c${tier}_${idx}_${c}`, 7, 'card-gem-input')).join('')}
-    </div>
-    <div class="gem-hint">
-      ${gemJP.map(j=>`<span>${j}</span>`).join('')}
-    </div>
+    <div class="card-info" id="c${tier}_${idx}_info"></div>
   </div>`;
+}
+
+function updateCardSelect(tier, idx) {
+  const pts = document.getElementById(`c${tier}_${idx}_pts`).value;
+  const bonus = document.getElementById(`c${tier}_${idx}_bonus`).value;
+  const pick = document.getElementById(`c${tier}_${idx}_pick`);
+  const info = document.getElementById(`c${tier}_${idx}_info`);
+  info.textContent = '';
+  pick.innerHTML = '<option value="">カードを選択</option>';
+  const filtered = ALL_CARDS.filter((c,i) =>
+    c[0]===tier &&
+    (pts==='' || String(c[2])===pts) &&
+    (bonus==='' || c[1]===bonus)
+  );
+  filtered.forEach((c,i) => {
+    const opt = document.createElement('option');
+    opt.value = ALL_CARDS.indexOf(c);
+    opt.textContent = cardLabel(c);
+    pick.appendChild(opt);
+  });
+  if (filtered.length === 1) {
+    pick.selectedIndex = 1;
+    showCardInfo(tier, idx);
+  }
+}
+
+function showCardInfo(tier, idx) {
+  const pick = document.getElementById(`c${tier}_${idx}_pick`);
+  const info = document.getElementById(`c${tier}_${idx}_info`);
+  if (!pick.value) { info.textContent = ''; return; }
+  const c = ALL_CARDS[parseInt(pick.value)];
+  const cost = gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
+  info.textContent = `${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
+}
+
+function getCardData(tier, idx) {
+  const pick = document.getElementById(`c${tier}_${idx}_pick`);
+  if (!pick || !pick.value) return null;
+  return ALL_CARDS[parseInt(pick.value)];
 }
 
 function nobleHTML(idx) {
@@ -581,11 +250,9 @@ function nobleHTML(idx) {
   <div class="noble-box">
     <div style="font-size:0.62rem;color:var(--text2);">貴族${idx+1}</div>
     <div class="card-gem-row">
-      ${gemColors.map((c,i) => sel(`n${idx}_${c}`, 7, 'card-gem-input')).join('')}
+      ${gemColors.map((c,i)=>sel(`n${idx}_${c}`,7,'card-gem-input','')).join('')}
     </div>
-    <div class="gem-hint">
-      ${gemJP.map(j=>`<span>${j}</span>`).join('')}
-    </div>
+    <div class="gem-hint">${gemJP.map(j=>`<span>${j}</span>`).join('')}</div>
   </div>`;
 }
 
@@ -593,7 +260,15 @@ function renderNobles() {
   const count = numPlayers + 1;
   const g = document.getElementById('noblesGrid');
   g.innerHTML = '';
-  for(let i=0;i<count;i++) g.innerHTML += nobleHTML(i);
+  for (let i=0;i<count;i++) g.innerHTML += nobleHTML(i);
+}
+
+function setPlayers(n, btn) {
+  numPlayers = n;
+  document.querySelectorAll('.np-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderNobles();
+  renderPlayers();
 }
 
 function renderPlayers() {
@@ -601,208 +276,178 @@ function renderPlayers() {
   const panels = document.getElementById('playerPanels');
   tabs.innerHTML = '';
   panels.innerHTML = '';
-
-  for(let p=0;p<numPlayers;p++) {
-    const isMe = p === 0;
-    const label = isMe ? '自分' : `相手${p}`;
+  for (let p=0;p<numPlayers;p++) {
+    const isMe = p===0;
+    const label = isMe?'自分':`相手${p}`;
     tabs.innerHTML += `<button class="tab-btn${p===0?' active':''}" onclick="switchTab(${p})">${label}</button>`;
-
     panels.innerHTML += `
     <div class="player-panel${p===0?' active':''}" id="panel_${p}">
       <div class="player-header">
         <span style="font-size:0.65rem;color:var(--text2);">名前:</span>
         <input class="player-name-input" id="pname_${p}" placeholder="${isMe?'自分':'相手'+p}">
         <span style="font-size:0.65rem;color:var(--text2);margin-left:auto;">勝利点:</span>
-        ${sel(`pvp_${p}`, 25, 'gem-input', 'width:56px')}
+        ${sel('pvp_'+p,25,'gem-input','width:56px')}
       </div>
-
-      <div class="field-label">持っているトークン（各色）</div>
+      <div class="field-label">持っているトークン</div>
       <div class="gems-grid" style="margin-bottom:12px;">
-        <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div>${sel(`pt_${p}_white`,7,'gem-input')}</div>
-        <div class="gem-item"><div class="gem-icon blue">♦</div><div class="gem-label">青</div>${sel(`pt_${p}_blue`,7,'gem-input')}</div>
-        <div class="gem-item"><div class="gem-icon green">♦</div><div class="gem-label">緑</div>${sel(`pt_${p}_green`,7,'gem-input')}</div>
-        <div class="gem-item"><div class="gem-icon red">♦</div><div class="gem-label">赤</div>${sel(`pt_${p}_red`,7,'gem-input')}</div>
-        <div class="gem-item"><div class="gem-icon black">♦</div><div class="gem-label">黒</div>${sel(`pt_${p}_black`,7,'gem-input')}</div>
-        <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div>${sel(`pt_${p}_gold`,5,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div>${sel('pt_'+p+'_white',7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon blue">♦</div><div class="gem-label">青</div>${sel('pt_'+p+'_blue',7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon green">♦</div><div class="gem-label">緑</div>${sel('pt_'+p+'_green',7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon red">♦</div><div class="gem-label">赤</div>${sel('pt_'+p+'_red',7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon black">♦</div><div class="gem-label">黒</div>${sel('pt_'+p+'_black',7,'gem-input')}</div>
+        <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div>${sel('pt_'+p+'_gold',5,'gem-input')}</div>
       </div>
-
-      <div class="field-label">取得済みカードのボーナス数（色別）</div>
-      <div class="cards-owned" style="margin-bottom:12px;">
-        ${gemColors.map((c,i)=>`
-        <div class="color-owned">
-          <div class="color-dot ${c}">${gemJP[i]}</div>
-          ${sel(`pb_${p}_${c}`,7,'gem-input')}
-        </div>`).join('')}
+      <div class="field-label">取得済みカードのボーナス数</div>
+      <div class="cards-owned">
+        ${gemColors.map((c,i)=>`<div class="color-owned"><div class="color-dot ${c}">${gemJP[i]}</div>${sel('pb_'+p+'_'+c,7,'gem-input')}</div>`).join('')}
       </div>
-
-      <div class="field-label">予約済みカード（最大3枚）</div>
+      <div class="field-label" style="margin-top:10px;">予約済みカード（最大3枚）</div>
+      <p style="font-size:0.62rem;color:var(--text2);margin-top:4px;margin-bottom:6px;">① 勝利点 ② ボーナス色 の順に選ぶと候補が絞られます</p>
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr);gap:6px;">
-        ${[0,1,2].map(r=>`
-        <div class="card-box">
-          <div class="points-row">
-            <label>VP</label>
-            ${sel(`pr_${p}_${r}_pts`,5,'gem-input','width:48px')}
-          </div>
-          <select id="pr_${p}_${r}_bonus">
-            <option value="">ボーナス</option>
-            <option value="白">⬜ 白</option>
-            <option value="青">🔵 青</option>
-            <option value="緑">🟢 緑</option>
-            <option value="赤">🔴 赤</option>
-            <option value="黒">⬛ 黒</option>
-          </select>
-          <div class="card-gem-row">
-            ${gemColors.map((c,i)=>sel(`pr_${p}_${r}_${c}`,7,'card-gem-input')).join('')}
-          </div>
-          <div class="gem-hint">${gemJP.map(j=>`<span>${j}</span>`).join('')}</div>
-        </div>`).join('')}
+        ${[0,1,2].map(r=>{
+          const allPts = [...new Set(ALL_CARDS.map(c=>c[2]))].sort((a,b)=>a-b);
+          const ptsOpts = '<option value="">勝利点</option>' + allPts.map(pt=>`<option value="${pt}">${pt}点</option>`).join('');
+          const bonusOpts = '<option value="">ボーナス色</option>' + ['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
+          return `
+          <div class="card-box">
+            <div class="field-label">予約${r+1}</div>
+            <select class="card-sel" id="pr_${p}_${r}_pts" onchange="updateReservedSelect(${p},${r})">${ptsOpts}</select>
+            <select class="card-sel" id="pr_${p}_${r}_bonus" onchange="updateReservedSelect(${p},${r})">${bonusOpts}</select>
+            <select class="card-sel" id="pr_${p}_${r}_pick" onchange="showReservedInfo(${p},${r})">
+              <option value="">↑で絞り込む</option>
+            </select>
+            <div class="card-info" id="pr_${p}_${r}_info"></div>
+          </div>`;
+        }).join('')}
       </div>
     </div>`;
   }
 }
 
+function updateReservedSelect(p, r) {
+  const pts = document.getElementById(`pr_${p}_${r}_pts`).value;
+  const bonus = document.getElementById(`pr_${p}_${r}_bonus`).value;
+  const pick = document.getElementById(`pr_${p}_${r}_pick`);
+  const info = document.getElementById(`pr_${p}_${r}_info`);
+  info.textContent = '';
+  pick.innerHTML = '<option value="">カードを選択</option>';
+  const filtered = ALL_CARDS.filter(c=>
+    (pts==='' || String(c[2])===pts) &&
+    (bonus==='' || c[1]===bonus)
+  );
+  filtered.forEach(c=>{
+    const opt = document.createElement('option');
+    opt.value = ALL_CARDS.indexOf(c);
+    opt.textContent = `T${c[0]} ${cardLabel(c)}`;
+    pick.appendChild(opt);
+  });
+  if (filtered.length===1) { pick.selectedIndex=1; showReservedInfo(p,r); }
+}
+
+function showReservedInfo(p, r) {
+  const pick = document.getElementById(`pr_${p}_${r}_pick`);
+  const info = document.getElementById(`pr_${p}_${r}_info`);
+  if (!pick.value) { info.textContent=''; return; }
+  const c = ALL_CARDS[parseInt(pick.value)];
+  const cost = gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
+  info.textContent = `T${c[0]} ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
+}
+
+function getReservedData(p, r) {
+  const pick = document.getElementById(`pr_${p}_${r}_pick`);
+  if (!pick || !pick.value) return null;
+  return ALL_CARDS[parseInt(pick.value)];
+}
+
 function switchTab(idx) {
-  document.querySelectorAll('.player-panel').forEach((el,i) => {
-    el.classList.toggle('active', i===idx);
-  });
-  document.querySelectorAll('.tab-btn').forEach((el,i) => {
-    el.classList.toggle('active', i===idx);
-  });
+  document.querySelectorAll('.player-panel').forEach((el,i)=>el.classList.toggle('active',i===idx));
+  document.querySelectorAll('.tab-btn').forEach((el,i)=>el.classList.toggle('active',i===idx));
 }
 
 function val(id) {
   const el = document.getElementById(id);
-  if(!el) return '';
-  return el.value || '';
+  return el ? el.value : '';
 }
 
 function gemCost(prefix) {
-  return gemColors.map((c,i) => {
-    const v = val(`${prefix}_${c}`);
-    return v && v!=='0' ? `${gemJP[i]}${v}` : '';
+  return gemColors.map((c,i)=>{
+    const v = val(prefix+'_'+c);
+    return v&&v!=='0'?gemJP[i]+v:'';
   }).filter(Boolean).join('・');
 }
 
 function generate() {
-  let out = '';
-  out += `【宝石の煌めき 盤面情報】\n`;
-  out += `プレイヤー数: ${numPlayers}人\n\n`;
-
-  // tokens
-  out += `■ 場の宝石トークン（残り）\n`;
   const tnames = ['白','青','緑','赤','黒','金'];
   const tids = ['white','blue','green','red','black','gold'];
-  tids.forEach((c,i) => {
-    const v = val(`tk_${c}`);
-    if(v) out += `  ${tnames[i]}: ${v}枚\n`;
+  let out = '【宝石の煌めき 盤面情報】\n';
+  out += `プレイヤー数: ${numPlayers}人\n\n`;
+  out += '■ 場の宝石トークン（残り）\n';
+  tids.forEach((c,i)=>{
+    const v=val('tk_'+c);
+    if(v&&v!=='0') out+=`  ${tnames[i]}: ${v}枚\n`;
   });
   out += '\n';
-
-  // cards
-  [3,2,1].forEach(tier => {
+  [3,2,1].forEach(tier=>{
     out += `■ Tier${tier}カード\n`;
-    for(let i=0;i<4;i++) {
-      const pts = val(`c${tier}_${i}_pts`);
-      const bonus = val(`c${tier}_${i}_bonus`);
-      const cost = gemCost(`c${tier}_${i}`);
-      if(!bonus && !cost && !pts) { out += `  [カード${i+1}] 未入力\n`; continue; }
-      out += `  [カード${i+1}] `;
-      if(pts) out += `勝利点${pts}点 `;
-      if(bonus) out += `ボーナス:${bonus} `;
-      if(cost) out += `コスト: ${cost}`;
-      out += '\n';
+    for(let i=0;i<4;i++){
+      const c=getCardData(tier,i);
+      if(!c){out+=`  [カード${i+1}] 未選択\n`;continue;}
+      const cost=gemJP.map((j,k)=>c[3+k]?j+c[3+k]:'').filter(Boolean).join('・');
+      out+=`  [カード${i+1}] 勝利点${c[2]}点 ボーナス:${c[1]} コスト:${cost||'なし'}\n`;
     }
-    out += '\n';
+    out+='\n';
   });
-
-  // nobles
-  const nobleCount = numPlayers + 1;
-  out += `■ 貴族タイル（3点・各条件達成で自動取得）\n`;
-  for(let i=0;i<nobleCount;i++) {
-    const req = gemCost(`n${i}`);
-    if(req) out += `  [貴族${i+1}] 必要ボーナス: ${req}\n`;
+  const nobleCount=numPlayers+1;
+  out+='■ 貴族タイル（3点）\n';
+  for(let i=0;i<nobleCount;i++){
+    const req=gemCost('n'+i);
+    if(req) out+=`  [貴族${i+1}] 必要ボーナス: ${req}\n`;
   }
-  out += '\n';
-
-  // players
-  for(let p=0;p<numPlayers;p++) {
-    const name = val(`pname_${p}`) || (p===0?'自分':`相手${p}`);
-    const vp = val(`pvp_${p}`);
-    out += `■ ${name}の状況\n`;
-    if(vp) out += `  勝利点: ${vp}点\n`;
-
-    const tkParts = tids.map((c,i)=>{
-      const v = val(`pt_${p}_${c}`);
-      return v&&v!=='0'?`${tnames[i]}${v}`:'';
-    }).filter(Boolean).join('・');
-    if(tkParts) out += `  トークン: ${tkParts}\n`;
-
-    const bonusParts = gemColors.map((c,i)=>{
-      const v = val(`pb_${p}_${c}`);
-      return v&&v!=='0'?`${gemJP[i]}${v}`:'';
-    }).filter(Boolean).join('・');
-    if(bonusParts) out += `  カードボーナス: ${bonusParts}\n`;
-
-    // reserved
-    const reserved = [];
-    for(let r=0;r<3;r++) {
-      const pts = val(`pr_${p}_${r}_pts`);
-      const bonus = val(`pr_${p}_${r}_bonus`);
-      const cost = gemCost(`pr_${p}_${r}`);
-      if(bonus||cost||pts) {
-        let rstr = '';
-        if(pts) rstr += `VP${pts} `;
-        if(bonus) rstr += `ボーナス:${bonus} `;
-        if(cost) rstr += `コスト:${cost}`;
-        reserved.push(rstr.trim());
+  out+='\n';
+  for(let p=0;p<numPlayers;p++){
+    const name=val('pname_'+p)||(p===0?'自分':'相手'+p);
+    const vp=val('pvp_'+p);
+    out+=`■ ${name}の状況\n`;
+    if(vp&&vp!=='0') out+=`  勝利点: ${vp}点\n`;
+    const tkParts=tids.map((c,i)=>{const v=val('pt_'+p+'_'+c);return v&&v!=='0'?tnames[i]+v:'';}).filter(Boolean).join('・');
+    if(tkParts) out+=`  トークン: ${tkParts}\n`;
+    const bonusParts=gemColors.map((c,i)=>{const v=val('pb_'+p+'_'+c);return v&&v!=='0'?gemJP[i]+v:'';}).filter(Boolean).join('・');
+    if(bonusParts) out+=`  カードボーナス: ${bonusParts}\n`;
+    const reserved=[];
+    for(let r=0;r<3;r++){
+      const c=getReservedData(p,r);
+      if(c){
+        const cost=gemJP.map((j,k)=>c[3+k]?j+c[3+k]:'').filter(Boolean).join('・');
+        reserved.push(`T${c[0]} ${bonusEmoji[c[1]]}${c[1]} VP${c[2]} コスト:${cost||'なし'}`);
       }
     }
-    if(reserved.length) out += `  予約カード: ${reserved.join(' / ')}\n`;
-    out += '\n';
+    if(reserved.length) out+=`  予約カード: ${reserved.join(' / ')}\n`;
+    out+='\n';
   }
-
-  out += `---\n上記の盤面で、最適な次の手を一緒に考えてください。`;
-
-  document.getElementById('outputBox').textContent = out;
+  out+='---\n上記の盤面で、最適な次の手を一緒に考えてください。';
+  document.getElementById('outputBox').textContent=out;
 }
 
 function copyText() {
-  const text = document.getElementById('outputBox').textContent;
-  if(navigator.clipboard) {
-    navigator.clipboard.writeText(text).then(showToast);
-  } else {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    showToast();
-  }
+  const text=document.getElementById('outputBox').textContent;
+  if(navigator.clipboard){navigator.clipboard.writeText(text).then(showToast);}
+  else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast();}
 }
 
 function showToast() {
-  const t = document.getElementById('copyToast');
-  t.style.display = 'block';
-  t.style.animation = 'none';
-  setTimeout(() => { t.style.animation = 'fadeout 2s forwards'; }, 10);
-  setTimeout(() => { t.style.display = 'none'; }, 2100);
+  const t=document.getElementById('copyToast');
+  t.style.display='block';t.style.animation='none';
+  setTimeout(()=>{t.style.animation='fadeout 2s forwards';},10);
+  setTimeout(()=>{t.style.display='none';},2100);
 }
 
-// Init token selects
-function fillSel(id, max) {
-  const el = document.getElementById(id);
-  if(!el) return;
-  el.innerHTML = Array.from({length:max+1},(_,i)=>`<option value="${i}">${i}</option>`).join('');
-}
-['white','blue','green','red','black'].forEach(c => fillSel(`tk_${c}`, 7));
-fillSel('tk_gold', 5);
-
-// Init cards
-for(let t=1;t<=3;t++) {
-  let h = '';
-  for(let i=0;i<4;i++) h += cardHTML(t,i);
-  document.getElementById(`tier${t}`).innerHTML = h;
+// 初期化
+['white','blue','green','red','black'].forEach(c=>fillSel('tk_'+c,7));
+fillSel('tk_gold',5);
+for(let t=1;t<=3;t++){
+  let h='';
+  for(let i=0;i<4;i++) h+=cardHTML(t,i);
+  document.getElementById('tier'+t).innerHTML=h;
 }
 renderNobles();
 renderPlayers();
