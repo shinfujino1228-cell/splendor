@@ -14,73 +14,77 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Noto+Sans+JP:wght@300;400;500&display=swap');
   :root {
-    --bg: #0e0c0a; --surface: #1a1712; --surface2: #221f1a;
-    --border: #3a3228; --gold: #c9a84c; --gold2: #f0d080;
-    --text: #e8dcc8; --text2: #9a8c78;
+    --bg:#0e0c0a;--surface:#1a1712;--surface2:#221f1a;
+    --border:#3a3228;--gold:#c9a84c;--gold2:#f0d080;
+    --text:#e8dcc8;--text2:#9a8c78;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg); color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif; font-weight: 300;
-    min-height: 100vh; padding: 12px; max-width: 480px; margin: 0 auto;
-  }
-  h1 { font-family: 'Cinzel', serif; font-size: 1.3rem; color: var(--gold); text-align: center; letter-spacing: 0.08em; margin-bottom: 4px; }
-  .subtitle { text-align: center; font-size: 0.72rem; color: var(--text2); margin-bottom: 20px; }
-  .section { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px; margin-bottom: 14px; }
-  .section-title { font-family: 'Cinzel', serif; font-size: 0.75rem; color: var(--gold); letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .section-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  .gems-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
-  .gem-item { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-  .gem-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: bold; border: 2px solid rgba(255,255,255,0.15); box-shadow: 0 2px 8px rgba(0,0,0,0.4); }
-  .gem-icon.white { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
-  .gem-icon.blue  { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
-  .gem-icon.green { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
-  .gem-icon.red   { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
-  .gem-icon.black { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
-  .gem-icon.gold  { background: radial-gradient(circle at 35% 35%, #ffe080, #c08020); color: #5a3a00; }
-  .gem-label { font-size: 0.6rem; color: var(--text2); text-align: center; }
-  .gem-input { width: 44px; height: 32px; background: var(--surface2); border: 1px solid var(--border); border-radius: 6px; color: var(--text); text-align: center; font-size: 0.9rem; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; padding: 0 2px; }
-  .field-label { font-size: 0.65rem; color: var(--text2); margin-bottom: 4px; }
-  .cards-tier { margin-bottom: 14px; }
-  .tier-label { font-size: 0.65rem; color: var(--text2); margin-bottom: 6px; letter-spacing: 0.05em; }
-  .cards-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .card-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 8px; display: flex; flex-direction: column; gap: 6px; }
-  .card-sel { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 5px; color: var(--text); font-size: 0.75rem; padding: 6px 5px; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; }
-  .card-sel option { background: #1a1712; }
-  .card-info { font-size: 0.62rem; color: var(--gold); padding: 4px 2px; min-height: 28px; line-height: 1.5; }
-  .nobles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .noble-box { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 8px; display: flex; flex-direction: column; gap: 4px; }
-  .card-gem-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; }
-  .card-gem-input { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; color: var(--text); text-align: center; font-size: 0.8rem; padding: 5px 0; font-family: 'Noto Sans JP', sans-serif; -webkit-appearance: none; appearance: none; }
-  .gem-hint { font-size: 0.55rem; color: var(--text2); display: grid; grid-template-columns: repeat(5, 1fr); gap: 3px; margin-top: 1px; }
-  .gem-hint span { text-align: center; }
-  .player-tabs { display: flex; gap: 6px; margin-bottom: 12px; flex-wrap: wrap; }
-  .tab-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-size: 0.72rem; padding: 5px 12px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; }
-  .tab-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 500; }
-  .player-panel { display: none; }
-  .player-panel.active { display: block; }
-  .player-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .player-name-input { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 0.85rem; padding: 5px 8px; font-family: 'Noto Sans JP', sans-serif; width: 120px; }
-  .cards-owned { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-bottom: 12px; }
-  .color-owned { display: flex; flex-direction: column; align-items: center; gap: 4px; }
-  .color-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 500; box-shadow: 0 2px 6px rgba(0,0,0,0.3); }
-  .color-dot.white { background: radial-gradient(circle at 35% 35%, #fff, #ccc); color: #555; }
-  .color-dot.blue  { background: radial-gradient(circle at 35% 35%, #6ab0ff, #2a5faa); color: #fff; }
-  .color-dot.green { background: radial-gradient(circle at 35% 35%, #6acf8a, #2a7a44); color: #fff; }
-  .color-dot.red   { background: radial-gradient(circle at 35% 35%, #ff7777, #aa2222); color: #fff; }
-  .color-dot.black { background: radial-gradient(circle at 35% 35%, #666, #111); color: #ccc; }
-  .output-box { background: var(--bg); border: 1px solid var(--gold); border-radius: 10px; padding: 14px; font-size: 0.75rem; line-height: 1.7; color: var(--text); white-space: pre-wrap; word-break: break-all; min-height: 80px; font-family: monospace; margin-bottom: 10px; }
-  .btn { width: 100%; padding: 13px; border: none; border-radius: 10px; font-size: 0.9rem; font-family: 'Cinzel', serif; letter-spacing: 0.08em; cursor: pointer; transition: all 0.2s; margin-bottom: 10px; }
-  .btn-generate { background: linear-gradient(135deg, var(--gold), var(--gold2)); color: var(--bg); font-weight: 700; }
-  .btn-copy { background: var(--surface2); color: var(--gold); border: 1px solid var(--gold); }
-  .btn:active { transform: scale(0.97); }
-  .copy-toast { display: none; text-align: center; color: var(--gold); font-size: 0.8rem; padding: 6px; animation: fadeout 2s forwards; }
-  @keyframes fadeout { 0%,70% { opacity:1; } 100% { opacity:0; } }
-  .num-players-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; justify-content: center; }
-  .np-btn { background: var(--surface2); border: 1px solid var(--border); border-radius: 20px; color: var(--text2); font-size: 0.8rem; padding: 5px 14px; cursor: pointer; font-family: 'Noto Sans JP', sans-serif; transition: all 0.2s; }
-  .np-btn.active { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-  .points-row { display: flex; align-items: center; gap: 5px; }
-  .points-row label { font-size: 0.65rem; color: var(--text2); white-space: nowrap; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif;font-weight:300;min-height:100vh;padding:12px;max-width:480px;margin:0 auto;}
+  h1{font-family:'Cinzel',serif;font-size:1.3rem;color:var(--gold);text-align:center;letter-spacing:0.08em;margin-bottom:4px;}
+  .subtitle{text-align:center;font-size:0.72rem;color:var(--text2);margin-bottom:20px;}
+  .section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;margin-bottom:14px;}
+  .section-title{font-family:'Cinzel',serif;font-size:0.75rem;color:var(--gold);letter-spacing:0.1em;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+  .section-title::after{content:'';flex:1;height:1px;background:var(--border);}
+  .gems-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;}
+  .gem-item{display:flex;flex-direction:column;align-items:center;gap:5px;}
+  .gem-icon{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;font-weight:bold;border:2px solid rgba(255,255,255,0.15);box-shadow:0 2px 8px rgba(0,0,0,0.4);}
+  .gem-icon.white{background:radial-gradient(circle at 35% 35%,#fff,#ccc);color:#555;}
+  .gem-icon.blue{background:radial-gradient(circle at 35% 35%,#6ab0ff,#2a5faa);color:#fff;}
+  .gem-icon.green{background:radial-gradient(circle at 35% 35%,#6acf8a,#2a7a44);color:#fff;}
+  .gem-icon.red{background:radial-gradient(circle at 35% 35%,#ff7777,#aa2222);color:#fff;}
+  .gem-icon.black{background:radial-gradient(circle at 35% 35%,#666,#111);color:#ccc;}
+  .gem-icon.gold{background:radial-gradient(circle at 35% 35%,#ffe080,#c08020);color:#5a3a00;}
+  .gem-label{font-size:0.6rem;color:var(--text2);text-align:center;}
+  .gem-input{width:44px;height:32px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);text-align:center;font-size:0.9rem;font-family:'Noto Sans JP',sans-serif;-webkit-appearance:none;appearance:none;padding:0 2px;}
+  .field-label{font-size:0.65rem;color:var(--text2);margin-bottom:4px;}
+  .cards-tier{margin-bottom:14px;}
+  .tier-label{font-size:0.65rem;color:var(--text2);margin-bottom:6px;letter-spacing:0.05em;}
+  .cards-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+  .card-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:10px 8px;display:flex;flex-direction:column;gap:6px;}
+  .card-sel{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:0.75rem;padding:6px 5px;font-family:'Noto Sans JP',sans-serif;-webkit-appearance:none;appearance:none;}
+  .card-sel option{background:#1a1712;}
+  .card-info{font-size:0.62rem;color:var(--gold);padding:4px 2px;min-height:24px;line-height:1.5;}
+  .btn-buy{width:100%;padding:7px;background:linear-gradient(135deg,#4a8c5c,#2a6a3c);border:none;border-radius:6px;color:#fff;font-size:0.75rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
+  .btn-reserve{width:100%;padding:7px;background:linear-gradient(135deg,#4a6a9c,#2a4a7c);border:none;border-radius:6px;color:#fff;font-size:0.75rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
+  .btn-end-turn{padding:8px 16px;background:linear-gradient(135deg,#7a5a2a,#c9a84c);border:none;border-radius:8px;color:#0e0c0a;font-size:0.8rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;font-weight:500;}
+  .nobles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
+  .noble-box{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:4px;}
+  .card-gem-row{display:grid;grid-template-columns:repeat(5,1fr);gap:3px;}
+  .card-gem-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:4px;color:var(--text);text-align:center;font-size:0.8rem;padding:5px 0;font-family:'Noto Sans JP',sans-serif;-webkit-appearance:none;appearance:none;}
+  .gem-hint{font-size:0.55rem;color:var(--text2);display:grid;grid-template-columns:repeat(5,1fr);gap:3px;margin-top:1px;}
+  .gem-hint span{text-align:center;}
+  .player-tabs{display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;}
+  .tab-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:0.72rem;padding:5px 12px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;}
+  .tab-btn.active{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:500;}
+  .player-panel{display:none;}
+  .player-panel.active{display:block;}
+  .player-header{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+  .player-name-input{background:var(--bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:0.85rem;padding:5px 8px;font-family:'Noto Sans JP',sans-serif;width:120px;}
+  .cards-owned{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px;}
+  .color-owned{display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .color-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:500;box-shadow:0 2px 6px rgba(0,0,0,0.3);}
+  .color-dot.white{background:radial-gradient(circle at 35% 35%,#fff,#ccc);color:#555;}
+  .color-dot.blue{background:radial-gradient(circle at 35% 35%,#6ab0ff,#2a5faa);color:#fff;}
+  .color-dot.green{background:radial-gradient(circle at 35% 35%,#6acf8a,#2a7a44);color:#fff;}
+  .color-dot.red{background:radial-gradient(circle at 35% 35%,#ff7777,#aa2222);color:#fff;}
+  .color-dot.black{background:radial-gradient(circle at 35% 35%,#666,#111);color:#ccc;}
+  .output-box{background:var(--bg);border:1px solid var(--gold);border-radius:10px;padding:14px;font-size:0.75rem;line-height:1.7;color:var(--text);white-space:pre-wrap;word-break:break-all;min-height:80px;font-family:monospace;margin-bottom:10px;}
+  .btn{width:100%;padding:13px;border:none;border-radius:10px;font-size:0.9rem;font-family:'Cinzel',serif;letter-spacing:0.08em;cursor:pointer;transition:all 0.2s;margin-bottom:10px;}
+  .btn-generate{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-weight:700;}
+  .btn-copy{background:var(--surface2);color:var(--gold);border:1px solid var(--gold);}
+  .btn-reset{background:var(--surface2);color:#c0392b;border:1px solid #c0392b;margin-bottom:0;}
+  .copy-toast{display:none;text-align:center;color:var(--gold);font-size:0.8rem;padding:6px;}
+  .num-players-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;justify-content:center;}
+  .np-btn{background:var(--surface2);border:1px solid var(--border);border-radius:20px;color:var(--text2);font-size:0.8rem;padding:5px 14px;cursor:pointer;font-family:'Noto Sans JP',sans-serif;transition:all 0.2s;}
+  .np-btn.active{background:var(--gold);color:var(--bg);border-color:var(--gold);}
+  /* モーダル */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;}
+  .modal-overlay.show{display:flex;}
+  .modal-box{background:var(--surface);border:1px solid var(--gold);border-radius:12px;padding:20px;max-width:320px;width:90%;text-align:center;}
+  .modal-msg{font-size:0.85rem;color:var(--text);line-height:1.6;margin-bottom:16px;white-space:pre-line;}
+  .modal-btns{display:flex;gap:10px;justify-content:center;}
+  .modal-ok{background:var(--gold);color:var(--bg);border:none;border-radius:8px;padding:8px 24px;font-size:0.85rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;font-weight:500;}
+  .modal-cancel{background:var(--surface2);color:var(--text2);border:1px solid var(--border);border-radius:8px;padding:8px 24px;font-size:0.85rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;}
 </style>
 </head>
 <body>
@@ -88,12 +92,34 @@
 <h1>✦ SPLENDOR ✦</h1>
 <p class="subtitle">盤面情報入力フォーム</p>
 
+<!-- モーダル -->
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-msg" id="modalMsg"></div>
+    <div class="modal-btns" id="modalBtns"></div>
+  </div>
+</div>
+
 <div class="section">
   <div class="section-title">プレイヤー人数</div>
-  <div class="num-players-row">
-    <button class="np-btn active" onclick="setPlayers(2,this)">2人</button>
-    <button class="np-btn" onclick="setPlayers(3,this)">3人</button>
-    <button class="np-btn" onclick="setPlayers(4,this)">4人</button>
+  <div class="num-players-row" id="npRow"></div>
+</div>
+
+<div class="section">
+  <div class="section-title">ターン情報</div>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
+    <div>
+      <div class="field-label">現在のターン数</div>
+      <select class="gem-input" id="turnCount" style="width:60px;"></select>
+    </div>
+    <div>
+      <div class="field-label">手番のプレイヤー</div>
+      <select class="card-sel" id="currentPlayer" style="width:120px;"></select>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn-end-turn" id="btnEndTurn">ターン終了 →</button>
+    </div>
   </div>
 </div>
 
@@ -111,7 +137,7 @@
 
 <div class="section">
   <div class="section-title">場のカード</div>
-  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">① 勝利点 ② ボーナス色 の順に選ぶとカード候補が絞られます</p>
+  <p style="font-size:0.65rem;color:var(--text2);margin-bottom:10px;">① 勝利点 ② ボーナス色 の順に選ぶと候補が絞られます</p>
   <div class="cards-tier"><div class="tier-label">▶ Tier 3（高級）</div><div class="cards-row" id="tier3"></div></div>
   <div class="cards-tier"><div class="tier-label">▶ Tier 2（中級）</div><div class="cards-row" id="tier2"></div></div>
   <div class="cards-tier"><div class="tier-label">▶ Tier 1（初級）</div><div class="cards-row" id="tier1"></div></div>
@@ -131,10 +157,14 @@
 
 <div class="section">
   <div class="section-title">クロードへ貼り付けるテキスト</div>
-  <button class="btn btn-generate" onclick="generate()">✦ テキストを生成する</button>
+  <button class="btn btn-generate" id="btnGenerate">✦ テキストを生成する</button>
   <div class="output-box" id="outputBox">← ボタンを押すと生成されます</div>
-  <button class="btn btn-copy" onclick="copyText()">コピーする</button>
+  <button class="btn btn-copy" id="btnCopy">コピーする</button>
   <div class="copy-toast" id="copyToast">✓ コピーしました！</div>
+</div>
+
+<div class="section">
+  <button class="btn btn-reset" id="btnReset">↺ 盤面をリセットする</button>
 </div>
 
 <script>
@@ -143,7 +173,6 @@ const gemJP = ['白','青','緑','赤','黒'];
 const bonusEmoji = {'白':'⬜','青':'🔵','緑':'🟢','赤':'🔴','黒':'⬛'};
 let numPlayers = 2;
 
-// 全カードデータ [tier, bonus, pts, 白, 青, 緑, 赤, 黒]
 const ALL_CARDS = [
   [1,'青',0,1,0,0,0,2],[1,'青',0,1,2,0,2,0],[1,'青',0,0,0,2,0,2],[1,'青',0,1,0,1,1,1],
   [1,'青',0,1,0,1,2,1],[1,'青',0,0,1,3,1,0],[1,'青',0,0,0,0,0,3],[1,'青',1,0,0,0,4,0],
@@ -172,6 +201,42 @@ const ALL_CARDS = [
   [3,'緑',3,5,3,0,3,3],[3,'緑',4,3,6,3,0,0],[3,'緑',4,0,7,0,0,0],[3,'緑',5,0,7,3,0,0],
 ];
 
+// ===== モーダル =====
+function showAlert(msg, cb) {
+  const overlay = document.getElementById('modalOverlay');
+  document.getElementById('modalMsg').textContent = msg;
+  const btns = document.getElementById('modalBtns');
+  btns.innerHTML = '';
+  const ok = document.createElement('button');
+  ok.className = 'modal-ok';
+  ok.textContent = 'OK';
+  ok.addEventListener('click', function() {
+    overlay.classList.remove('show');
+    if (cb) cb();
+  });
+  btns.appendChild(ok);
+  overlay.classList.add('show');
+}
+
+function showConfirm(msg, cb) {
+  const overlay = document.getElementById('modalOverlay');
+  document.getElementById('modalMsg').textContent = msg;
+  const btns = document.getElementById('modalBtns');
+  btns.innerHTML = '';
+  const cancel = document.createElement('button');
+  cancel.className = 'modal-cancel';
+  cancel.textContent = 'キャンセル';
+  cancel.addEventListener('click', function() { overlay.classList.remove('show'); });
+  const ok = document.createElement('button');
+  ok.className = 'modal-ok';
+  ok.textContent = 'OK';
+  ok.addEventListener('click', function() { overlay.classList.remove('show'); cb(); });
+  btns.appendChild(cancel);
+  btns.appendChild(ok);
+  overlay.classList.add('show');
+}
+
+// ===== ユーティリティ =====
 function fillSel(id, max) {
   const el = document.getElementById(id);
   if (!el) return;
@@ -183,105 +248,279 @@ function sel(id, max, cls, style) {
   return `<select id="${id}" class="${cls}"${style?' style="'+style+'"':''}>${opts}</select>`;
 }
 
+function val(id) {
+  const el = document.getElementById(id);
+  return el ? el.value : '';
+}
+
+function gemCost(prefix) {
+  return gemColors.map((c,i)=>{
+    const v = val(prefix+'_'+c);
+    return v&&v!=='0' ? gemJP[i]+v : '';
+  }).filter(Boolean).join('・');
+}
+
 function cardLabel(c) {
   const parts = gemJP.map((j,i)=>c[3+i]?j+c[3+i]:'').filter(Boolean).join(' ');
   return `${bonusEmoji[c[1]]}${c[1]} | ${parts||'コストなし'}`;
 }
 
+// ===== 場のカード =====
 function cardHTML(tier, idx) {
   const tierCards = ALL_CARDS.filter(c=>c[0]===tier);
-  const pts = [...new Set(tierCards.map(c=>c[2]))].sort((a,b)=>a-b);
-  const ptsOpts = '<option value="">勝利点</option>' + pts.map(p=>`<option value="${p}">${p}点</option>`).join('');
-  const bonusOpts = '<option value="">ボーナス色</option>' +
-    ['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
-  return `
-  <div class="card-box">
+  const ptsList = [...new Set(tierCards.map(c=>c[2]))].sort((a,b)=>a-b);
+  const ptsOpts = '<option value="">勝利点</option>' + ptsList.map(p=>`<option value="${p}">${p}点</option>`).join('');
+  const bonusOpts = '<option value="">ボーナス色</option>' + ['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
+  return `<div class="card-box">
     <div class="field-label">カード${idx+1}</div>
-    <select class="card-sel" id="c${tier}_${idx}_pts" onchange="updateCardSelect(${tier},${idx})">${ptsOpts}</select>
-    <select class="card-sel" id="c${tier}_${idx}_bonus" onchange="updateCardSelect(${tier},${idx})">${bonusOpts}</select>
-    <select class="card-sel" id="c${tier}_${idx}_pick" onchange="showCardInfo(${tier},${idx})">
-      <option value="">↑で絞り込む</option>
-    </select>
+    <select class="card-sel" id="c${tier}_${idx}_pts" data-tier="${tier}" data-idx="${idx}" data-role="cpts">${ptsOpts}</select>
+    <select class="card-sel" id="c${tier}_${idx}_bonus" data-tier="${tier}" data-idx="${idx}" data-role="cbonus">${bonusOpts}</select>
+    <select class="card-sel" id="c${tier}_${idx}_pick" data-tier="${tier}" data-idx="${idx}" data-role="cpick"><option value="">↑で絞り込む</option></select>
     <div class="card-info" id="c${tier}_${idx}_info"></div>
+    <button class="btn-buy" data-tier="${tier}" data-idx="${idx}" data-role="buy">購入</button>
+    <button class="btn-reserve" data-tier="${tier}" data-idx="${idx}" data-role="reserve">予約</button>
   </div>`;
 }
 
 function updateCardSelect(tier, idx) {
-  const pts = document.getElementById(`c${tier}_${idx}_pts`).value;
-  const bonus = document.getElementById(`c${tier}_${idx}_bonus`).value;
+  const pts = val(`c${tier}_${idx}_pts`);
+  const bonus = val(`c${tier}_${idx}_bonus`);
   const pick = document.getElementById(`c${tier}_${idx}_pick`);
   const info = document.getElementById(`c${tier}_${idx}_info`);
-  info.textContent = '';
+  if (info) info.textContent = '';
   pick.innerHTML = '<option value="">カードを選択</option>';
-  const filtered = ALL_CARDS.filter((c,i) =>
+  const filtered = ALL_CARDS.filter(c=>
     c[0]===tier &&
-    (pts==='' || String(c[2])===pts) &&
-    (bonus==='' || c[1]===bonus)
+    (pts===''||String(c[2])===pts) &&
+    (bonus===''||c[1]===bonus)
   );
-  filtered.forEach((c,i) => {
+  filtered.forEach(c=>{
     const opt = document.createElement('option');
     opt.value = ALL_CARDS.indexOf(c);
     opt.textContent = cardLabel(c);
     pick.appendChild(opt);
   });
-  if (filtered.length === 1) {
-    pick.selectedIndex = 1;
-    showCardInfo(tier, idx);
-  }
+  if (filtered.length===1) { pick.selectedIndex=1; showCardInfo(tier,idx); }
 }
 
 function showCardInfo(tier, idx) {
   const pick = document.getElementById(`c${tier}_${idx}_pick`);
   const info = document.getElementById(`c${tier}_${idx}_info`);
-  if (!pick.value) { info.textContent = ''; return; }
+  if (!pick||!pick.value) { if(info) info.textContent=''; return; }
   const c = ALL_CARDS[parseInt(pick.value)];
   const cost = gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
-  info.textContent = `${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
+  if (info) info.textContent = `${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
 }
 
 function getCardData(tier, idx) {
   const pick = document.getElementById(`c${tier}_${idx}_pick`);
-  if (!pick || !pick.value) return null;
+  if (!pick||!pick.value) return null;
   return ALL_CARDS[parseInt(pick.value)];
 }
 
+function resetCardSlot(tier, idx) {
+  ['pts','bonus'].forEach(k=>{ const el=document.getElementById(`c${tier}_${idx}_${k}`); if(el) el.value=''; });
+  const p = document.getElementById(`c${tier}_${idx}_pick`);
+  if (p) p.innerHTML='<option value="">↑で絞り込む</option>';
+  const i = document.getElementById(`c${tier}_${idx}_info`);
+  if (i) i.textContent='';
+}
+
+// ===== 購入 =====
+function buyCard(tier, idx) {
+  const c = getCardData(tier, idx);
+  if (!c) { showAlert('先にカードを選択してください'); return; }
+
+  const colorKeys = ['white','blue','green','red','black'];
+  const bonusKey = colorKeys[['白','青','緑','赤','黒'].indexOf(c[1])];
+  const playerTokens = {};
+  colorKeys.forEach(k=>{ playerTokens[k]=parseInt(val('pt_0_'+k)||0); });
+  let gold = parseInt(val('pt_0_gold')||0);
+  const bonusDiscount = colorKeys.map(k=>parseInt(val('pb_0_'+k)||0));
+  const actualCosts = c.slice(3).map((cost,i)=>Math.max(0,cost-bonusDiscount[i]));
+
+  let goldNeeded = 0;
+  const pay = actualCosts.map((cost,i)=>{
+    const have = playerTokens[colorKeys[i]];
+    if (have>=cost) return cost;
+    goldNeeded += cost-have;
+    return have;
+  });
+
+  if (goldNeeded>gold) { showAlert(`トークンが足りません
+（金${goldNeeded}枚必要、手持ち${gold}枚）`); return; }
+
+  const payDesc = colorKeys.map((k,i)=>pay[i]?`${gemJP[i]}${pay[i]}`:'').filter(Boolean).join('・');
+  const goldDesc = goldNeeded?`・金${goldNeeded}`:'';
+  const msg = `購入しますか？
+${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
+支払い: ${payDesc||'なし'}${goldDesc}`;
+
+  showConfirm(msg, function() {
+    colorKeys.forEach((k,i)=>{
+      const el=document.getElementById('pt_0_'+k);
+      if(el) el.value=String(playerTokens[k]-pay[i]);
+    });
+    const goldEl=document.getElementById('pt_0_gold');
+    if(goldEl) goldEl.value=String(gold-goldNeeded);
+
+    colorKeys.forEach((k,i)=>{
+      if(pay[i]>0){
+        const el=document.getElementById('tk_'+k);
+        if(el) el.value=String(Math.min(7,parseInt(el.value||0)+pay[i]));
+      }
+    });
+    if(goldNeeded>0){
+      const el=document.getElementById('tk_gold');
+      if(el) el.value=String(Math.min(5,parseInt(el.value||0)+goldNeeded));
+    }
+
+    const bonusEl=document.getElementById('pb_0_'+bonusKey);
+    if(bonusEl) bonusEl.value=String(parseInt(bonusEl.value||0)+1);
+
+    if(c[2]>0){
+      const vpEl=document.getElementById('pvp_0');
+      if(vpEl) vpEl.value=String(parseInt(vpEl.value||0)+c[2]);
+    }
+
+    resetCardSlot(tier,idx);
+    advanceTurn();
+    saveState();
+  });
+}
+
+// ===== 予約 =====
+function reserveCard(tier, idx) {
+  const c = getCardData(tier, idx);
+  if (!c) { showAlert('先にカードを選択してください'); return; }
+
+  let slot = -1;
+  for (let r=0;r<3;r++) {
+    const pick=document.getElementById(`pr_0_${r}_pick`);
+    if(pick&&!pick.value){ slot=r; break; }
+  }
+  if (slot===-1) { showAlert('予約スロットが満杯です（最大3枚）'); return; }
+
+  const msg = `予約しますか？
+${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
+※場の金トークンを1枚取得します`;
+  showConfirm(msg, function() {
+    const goldEl=document.getElementById('tk_gold');
+    const pgoldEl=document.getElementById('pt_0_gold');
+    if(goldEl&&pgoldEl&&parseInt(goldEl.value||0)>0){
+      goldEl.value=String(parseInt(goldEl.value)-1);
+      pgoldEl.value=String(Math.min(5,parseInt(pgoldEl.value||0)+1));
+    }
+
+    const cardIdx=ALL_CARDS.indexOf(c);
+    const ptsEl=document.getElementById(`pr_0_${slot}_pts`);
+    const bonusEl=document.getElementById(`pr_0_${slot}_bonus`);
+    if(ptsEl) ptsEl.value=String(c[2]);
+    if(bonusEl) bonusEl.value=c[1];
+    updateReservedSelect(0,slot);
+    const pickEl=document.getElementById(`pr_0_${slot}_pick`);
+    if(pickEl){ pickEl.value=String(cardIdx); showReservedInfo(0,slot); }
+
+    resetCardSlot(tier,idx);
+    advanceTurn();
+    saveState();
+  });
+}
+
+// ===== ターン進行 =====
+function advanceTurn() {
+  const tc=document.getElementById('turnCount');
+  if(tc) tc.value=String(Math.min(40,parseInt(tc.value||1)+1));
+  // 手番プレイヤーを次へ
+  const cp=document.getElementById('currentPlayer');
+  if(cp) cp.value=String((parseInt(cp.value||0)+1)%numPlayers);
+  saveState();
+}
+
+// ===== 予約カード絞り込み =====
+function updateReservedSelect(p, r) {
+  const pts=val(`pr_${p}_${r}_pts`);
+  const bonus=val(`pr_${p}_${r}_bonus`);
+  const pick=document.getElementById(`pr_${p}_${r}_pick`);
+  const info=document.getElementById(`pr_${p}_${r}_info`);
+  if(info) info.textContent='';
+  pick.innerHTML='<option value="">カードを選択</option>';
+  const filtered=ALL_CARDS.filter(c=>(pts===''||String(c[2])===pts)&&(bonus===''||c[1]===bonus));
+  filtered.forEach(c=>{
+    const opt=document.createElement('option');
+    opt.value=ALL_CARDS.indexOf(c);
+    opt.textContent=`T${c[0]} ${cardLabel(c)}`;
+    pick.appendChild(opt);
+  });
+  if(filtered.length===1){ pick.selectedIndex=1; showReservedInfo(p,r); }
+}
+
+function showReservedInfo(p, r) {
+  const pick=document.getElementById(`pr_${p}_${r}_pick`);
+  const info=document.getElementById(`pr_${p}_${r}_info`);
+  if(!pick||!pick.value){ if(info) info.textContent=''; return; }
+  const c=ALL_CARDS[parseInt(pick.value)];
+  const cost=gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
+  if(info) info.textContent=`T${c[0]} ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
+}
+
+function getReservedData(p, r) {
+  const pick=document.getElementById(`pr_${p}_${r}_pick`);
+  if(!pick||!pick.value) return null;
+  return ALL_CARDS[parseInt(pick.value)];
+}
+
+// ===== 貴族 =====
 function nobleHTML(idx) {
-  return `
-  <div class="noble-box">
+  return `<div class="noble-box">
     <div style="font-size:0.62rem;color:var(--text2);">貴族${idx+1}</div>
-    <div class="card-gem-row">
-      ${gemColors.map((c,i)=>sel(`n${idx}_${c}`,7,'card-gem-input','')).join('')}
-    </div>
+    <div class="card-gem-row">${gemColors.map(c=>sel(`n${idx}_${c}`,7,'card-gem-input','')).join('')}</div>
     <div class="gem-hint">${gemJP.map(j=>`<span>${j}</span>`).join('')}</div>
   </div>`;
 }
 
 function renderNobles() {
-  const count = numPlayers + 1;
-  const g = document.getElementById('noblesGrid');
-  g.innerHTML = '';
-  for (let i=0;i<count;i++) g.innerHTML += nobleHTML(i);
+  const g=document.getElementById('noblesGrid');
+  g.innerHTML='';
+  for(let i=0;i<numPlayers+1;i++) g.innerHTML+=nobleHTML(i);
 }
 
-function setPlayers(n, btn) {
-  numPlayers = n;
-  document.querySelectorAll('.np-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
+// ===== プレイヤー =====
+function setPlayers(n) {
+  numPlayers=n;
+  document.querySelectorAll('.np-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.n)===n));
+  initFieldTokens();
   renderNobles();
   renderPlayers();
+  restoreState();
 }
 
 function renderPlayers() {
-  const tabs = document.getElementById('playerTabs');
-  const panels = document.getElementById('playerPanels');
-  tabs.innerHTML = '';
-  panels.innerHTML = '';
-  for (let p=0;p<numPlayers;p++) {
-    const isMe = p===0;
-    const label = isMe?'自分':`相手${p}`;
-    tabs.innerHTML += `<button class="tab-btn${p===0?' active':''}" onclick="switchTab(${p})">${label}</button>`;
-    panels.innerHTML += `
-    <div class="player-panel${p===0?' active':''}" id="panel_${p}">
+  const tabs=document.getElementById('playerTabs');
+  const panels=document.getElementById('playerPanels');
+  tabs.innerHTML='';
+  panels.innerHTML='';
+
+  // 手番プレイヤー選択肢を更新
+  const cpEl=document.getElementById('currentPlayer');
+  if(cpEl){
+    const prev=cpEl.value;
+    cpEl.innerHTML='';
+    for(let p=0;p<numPlayers;p++){
+      const opt=document.createElement('option');
+      opt.value=p;
+      opt.textContent=p===0?'自分':'相手'+p;
+      cpEl.appendChild(opt);
+    }
+    if(prev&&parseInt(prev)<numPlayers) cpEl.value=prev;
+  }
+  for(let p=0;p<numPlayers;p++){
+    const isMe=p===0;
+    tabs.innerHTML+=`<button class="tab-btn${p===0?' active':''}" data-p="${p}" data-role="tab">${isMe?'自分':'相手'+p}</button>`;
+    const allPts=[...new Set(ALL_CARDS.map(c=>c[2]))].sort((a,b)=>a-b);
+    const ptsOpts='<option value="">勝利点</option>'+allPts.map(pt=>`<option value="${pt}">${pt}点</option>`).join('');
+    const bonusOpts='<option value="">ボーナス色</option>'+['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
+    panels.innerHTML+=`<div class="player-panel${p===0?' active':''}" id="panel_${p}">
       <div class="player-header">
         <span style="font-size:0.65rem;color:var(--text2);">名前:</span>
         <input class="player-name-input" id="pname_${p}" placeholder="${isMe?'自分':'相手'+p}">
@@ -298,65 +537,21 @@ function renderPlayers() {
         <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div>${sel('pt_'+p+'_gold',5,'gem-input')}</div>
       </div>
       <div class="field-label">取得済みカードのボーナス数</div>
-      <div class="cards-owned">
-        ${gemColors.map((c,i)=>`<div class="color-owned"><div class="color-dot ${c}">${gemJP[i]}</div>${sel('pb_'+p+'_'+c,7,'gem-input')}</div>`).join('')}
-      </div>
+      <div class="cards-owned">${gemColors.map((c,i)=>`<div class="color-owned"><div class="color-dot ${c}">${gemJP[i]}</div>${sel('pb_'+p+'_'+c,7,'gem-input')}</div>`).join('')}</div>
       <div class="field-label" style="margin-top:10px;">予約済みカード（最大3枚）</div>
-      <p style="font-size:0.62rem;color:var(--text2);margin-top:4px;margin-bottom:6px;">① 勝利点 ② ボーナス色 の順に選ぶと候補が絞られます</p>
+      <p style="font-size:0.62rem;color:var(--text2);margin-top:4px;margin-bottom:6px;">① 勝利点 ② ボーナス色 で絞り込めます</p>
       <div class="cards-row" style="grid-template-columns:repeat(3,1fr);gap:6px;">
-        ${[0,1,2].map(r=>{
-          const allPts = [...new Set(ALL_CARDS.map(c=>c[2]))].sort((a,b)=>a-b);
-          const ptsOpts = '<option value="">勝利点</option>' + allPts.map(pt=>`<option value="${pt}">${pt}点</option>`).join('');
-          const bonusOpts = '<option value="">ボーナス色</option>' + ['白','青','緑','赤','黒'].map(b=>`<option value="${b}">${bonusEmoji[b]}${b}</option>`).join('');
-          return `
-          <div class="card-box">
-            <div class="field-label">予約${r+1}</div>
-            <select class="card-sel" id="pr_${p}_${r}_pts" onchange="updateReservedSelect(${p},${r})">${ptsOpts}</select>
-            <select class="card-sel" id="pr_${p}_${r}_bonus" onchange="updateReservedSelect(${p},${r})">${bonusOpts}</select>
-            <select class="card-sel" id="pr_${p}_${r}_pick" onchange="showReservedInfo(${p},${r})">
-              <option value="">↑で絞り込む</option>
-            </select>
-            <div class="card-info" id="pr_${p}_${r}_info"></div>
-          </div>`;
-        }).join('')}
+        ${[0,1,2].map(r=>`<div class="card-box">
+          <div class="field-label">予約${r+1}</div>
+          <select class="card-sel" id="pr_${p}_${r}_pts" data-p="${p}" data-r="${r}" data-role="rpts">${ptsOpts}</select>
+          <select class="card-sel" id="pr_${p}_${r}_bonus" data-p="${p}" data-r="${r}" data-role="rbonus">${bonusOpts}</select>
+          <select class="card-sel" id="pr_${p}_${r}_pick" data-p="${p}" data-r="${r}" data-role="rpick"><option value="">↑で絞り込む</option></select>
+          <div class="card-info" id="pr_${p}_${r}_info"></div>
+          <button class="btn-buy" data-p="${p}" data-r="${r}" data-role="rbuy">購入</button>
+        </div>`).join('')}
       </div>
     </div>`;
   }
-}
-
-function updateReservedSelect(p, r) {
-  const pts = document.getElementById(`pr_${p}_${r}_pts`).value;
-  const bonus = document.getElementById(`pr_${p}_${r}_bonus`).value;
-  const pick = document.getElementById(`pr_${p}_${r}_pick`);
-  const info = document.getElementById(`pr_${p}_${r}_info`);
-  info.textContent = '';
-  pick.innerHTML = '<option value="">カードを選択</option>';
-  const filtered = ALL_CARDS.filter(c=>
-    (pts==='' || String(c[2])===pts) &&
-    (bonus==='' || c[1]===bonus)
-  );
-  filtered.forEach(c=>{
-    const opt = document.createElement('option');
-    opt.value = ALL_CARDS.indexOf(c);
-    opt.textContent = `T${c[0]} ${cardLabel(c)}`;
-    pick.appendChild(opt);
-  });
-  if (filtered.length===1) { pick.selectedIndex=1; showReservedInfo(p,r); }
-}
-
-function showReservedInfo(p, r) {
-  const pick = document.getElementById(`pr_${p}_${r}_pick`);
-  const info = document.getElementById(`pr_${p}_${r}_info`);
-  if (!pick.value) { info.textContent=''; return; }
-  const c = ALL_CARDS[parseInt(pick.value)];
-  const cost = gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
-  info.textContent = `T${c[0]} ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
-}
-
-function getReservedData(p, r) {
-  const pick = document.getElementById(`pr_${p}_${r}_pick`);
-  if (!pick || !pick.value) return null;
-  return ALL_CARDS[parseInt(pick.value)];
 }
 
 function switchTab(idx) {
@@ -364,31 +559,22 @@ function switchTab(idx) {
   document.querySelectorAll('.tab-btn').forEach((el,i)=>el.classList.toggle('active',i===idx));
 }
 
-function val(id) {
-  const el = document.getElementById(id);
-  return el ? el.value : '';
-}
-
-function gemCost(prefix) {
-  return gemColors.map((c,i)=>{
-    const v = val(prefix+'_'+c);
-    return v&&v!=='0'?gemJP[i]+v:'';
-  }).filter(Boolean).join('・');
-}
-
+// ===== テキスト生成 =====
 function generate() {
-  const tnames = ['白','青','緑','赤','黒','金'];
-  const tids = ['white','blue','green','red','black','gold'];
-  let out = '【宝石の煌めき 盤面情報】\n';
-  out += `プレイヤー数: ${numPlayers}人\n\n`;
-  out += '■ 場の宝石トークン（残り）\n';
-  tids.forEach((c,i)=>{
-    const v=val('tk_'+c);
-    if(v&&v!=='0') out+=`  ${tnames[i]}: ${v}枚\n`;
-  });
-  out += '\n';
+  const tnames=['白','青','緑','赤','黒','金'];
+  const tids=['white','blue','green','red','black','gold'];
+  let out='【宝石の煌めき 盤面情報】\n';
+  out+=`プレイヤー数: ${numPlayers}人\n`;
+  const turn=val('turnCount')||'1';
+  const cpIdx=parseInt(val('currentPlayer')||0);
+  const cpName=cpIdx===0?'自分':'相手'+cpIdx;
+  out+=`ターン数: ${turn}ターン目\n`;
+  out+=`手番: ${cpName}\n\n`;
+  out+='■ 場の宝石トークン（残り）\n';
+  tids.forEach((c,i)=>{ const v=val('tk_'+c); if(v&&v!=='0') out+=`  ${tnames[i]}: ${v}枚\n`; });
+  out+='\n';
   [3,2,1].forEach(tier=>{
-    out += `■ Tier${tier}カード\n`;
+    out+=`■ Tier${tier}カード\n`;
     for(let i=0;i<4;i++){
       const c=getCardData(tier,i);
       if(!c){out+=`  [カード${i+1}] 未選択\n`;continue;}
@@ -397,29 +583,22 @@ function generate() {
     }
     out+='\n';
   });
-  const nobleCount=numPlayers+1;
   out+='■ 貴族タイル（3点）\n';
-  for(let i=0;i<nobleCount;i++){
-    const req=gemCost('n'+i);
-    if(req) out+=`  [貴族${i+1}] 必要ボーナス: ${req}\n`;
-  }
+  for(let i=0;i<numPlayers+1;i++){ const req=gemCost('n'+i); if(req) out+=`  [貴族${i+1}] 必要ボーナス: ${req}\n`; }
   out+='\n';
   for(let p=0;p<numPlayers;p++){
     const name=val('pname_'+p)||(p===0?'自分':'相手'+p);
     const vp=val('pvp_'+p);
     out+=`■ ${name}の状況\n`;
     if(vp&&vp!=='0') out+=`  勝利点: ${vp}点\n`;
-    const tkParts=tids.map((c,i)=>{const v=val('pt_'+p+'_'+c);return v&&v!=='0'?tnames[i]+v:'';}).filter(Boolean).join('・');
+    const tkParts=tids.map((c,i)=>{ const v=val('pt_'+p+'_'+c); return v&&v!=='0'?tnames[i]+v:''; }).filter(Boolean).join('・');
     if(tkParts) out+=`  トークン: ${tkParts}\n`;
-    const bonusParts=gemColors.map((c,i)=>{const v=val('pb_'+p+'_'+c);return v&&v!=='0'?gemJP[i]+v:'';}).filter(Boolean).join('・');
-    if(bonusParts) out+=`  カードボーナス: ${bonusParts}\n`;
+    const bParts=gemColors.map((c,i)=>{ const v=val('pb_'+p+'_'+c); return v&&v!=='0'?gemJP[i]+v:''; }).filter(Boolean).join('・');
+    if(bParts) out+=`  カードボーナス: ${bParts}\n`;
     const reserved=[];
     for(let r=0;r<3;r++){
       const c=getReservedData(p,r);
-      if(c){
-        const cost=gemJP.map((j,k)=>c[3+k]?j+c[3+k]:'').filter(Boolean).join('・');
-        reserved.push(`T${c[0]} ${bonusEmoji[c[1]]}${c[1]} VP${c[2]} コスト:${cost||'なし'}`);
-      }
+      if(c){ const cost=gemJP.map((j,k)=>c[3+k]?j+c[3+k]:'').filter(Boolean).join('・'); reserved.push(`T${c[0]} ${bonusEmoji[c[1]]}${c[1]} VP${c[2]} コスト:${cost||'なし'}`); }
     }
     if(reserved.length) out+=`  予約カード: ${reserved.join(' / ')}\n`;
     out+='\n';
@@ -430,164 +609,292 @@ function generate() {
 
 function copyText() {
   const text=document.getElementById('outputBox').textContent;
-  if(navigator.clipboard){navigator.clipboard.writeText(text).then(showToast);}
-  else{const ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast();}
+  if(navigator.clipboard){ navigator.clipboard.writeText(text).then(showToast); }
+  else{ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast(); }
 }
 
 function showToast() {
   const t=document.getElementById('copyToast');
-  t.style.display='block';t.style.animation='none';
-  setTimeout(()=>{t.style.animation='fadeout 2s forwards';},10);
-  setTimeout(()=>{t.style.display='none';},2100);
+  t.style.display='block';
+  setTimeout(()=>t.style.display='none',2000);
 }
 
 // ===== 自動保存 =====
 function saveState() {
-  const state = { numPlayers };
-  // トークン
-  ['white','blue','green','red','black','gold'].forEach(c=>{
-    const el=document.getElementById('tk_'+c);
-    if(el) state['tk_'+c]=el.value;
-  });
-  // 場のカード
-  for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
-    ['pts','bonus','pick'].forEach(k=>{
-      const el=document.getElementById(`c${t}_${i}_${k}`);
-      if(el) state[`c${t}_${i}_${k}`]=el.value;
-    });
-  }
-  // 貴族
-  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{
-    const el=document.getElementById(`n${i}_${c}`);
-    if(el) state[`n${i}_${c}`]=el.value;
-  });
-  // プレイヤー
+  const state={numPlayers};
+  const tc=document.getElementById('turnCount'); if(tc) state.turnCount=tc.value;
+  const cp=document.getElementById('currentPlayer'); if(cp) state.currentPlayer=cp.value;
+  ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('tk_'+c); if(el) state['tk_'+c]=el.value; });
+  for(let t=1;t<=3;t++) for(let i=0;i<4;i++) ['pts','bonus','pick'].forEach(k=>{ const el=document.getElementById(`c${t}_${i}_${k}`); if(el) state[`c${t}_${i}_${k}`]=el.value; });
+  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{ const el=document.getElementById(`n${i}_${c}`); if(el) state[`n${i}_${c}`]=el.value; });
   for(let p=0;p<numPlayers;p++){
-    const nm=document.getElementById('pname_'+p);
-    if(nm) state['pname_'+p]=nm.value;
-    const vp=document.getElementById('pvp_'+p);
-    if(vp) state['pvp_'+p]=vp.value;
-    ['white','blue','green','red','black','gold'].forEach(c=>{
-      const el=document.getElementById('pt_'+p+'_'+c);
-      if(el) state['pt_'+p+'_'+c]=el.value;
-    });
-    gemColors.forEach(c=>{
-      const el=document.getElementById('pb_'+p+'_'+c);
-      if(el) state['pb_'+p+'_'+c]=el.value;
-    });
-    for(let r=0;r<3;r++){
-      ['pts','bonus','pick'].forEach(k=>{
-        const el=document.getElementById(`pr_${p}_${r}_${k}`);
-        if(el) state[`pr_${p}_${r}_${k}`]=el.value;
-      });
-    }
+    const nm=document.getElementById('pname_'+p); if(nm) state['pname_'+p]=nm.value;
+    const vp=document.getElementById('pvp_'+p); if(vp) state['pvp_'+p]=vp.value;
+    ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('pt_'+p+'_'+c); if(el) state['pt_'+p+'_'+c]=el.value; });
+    gemColors.forEach(c=>{ const el=document.getElementById('pb_'+p+'_'+c); if(el) state['pb_'+p+'_'+c]=el.value; });
+    for(let r=0;r<3;r++) ['pts','bonus','pick'].forEach(k=>{ const el=document.getElementById(`pr_${p}_${r}_${k}`); if(el) state[`pr_${p}_${r}_${k}`]=el.value; });
   }
-  try { localStorage.setItem('splendor_state', JSON.stringify(state)); } catch(e){}
+  try{ localStorage.setItem('splendor_state',JSON.stringify(state)); }catch(e){}
 }
 
 function restoreState() {
   let state;
-  try { state = JSON.parse(localStorage.getItem('splendor_state')); } catch(e){}
-  if (!state) return;
-
-  // プレイヤー人数を復元してUI再描画
-  if (state.numPlayers && state.numPlayers !== numPlayers) {
-    numPlayers = state.numPlayers;
-    document.querySelectorAll('.np-btn').forEach(b=>{
-      b.classList.toggle('active', parseInt(b.textContent)===numPlayers);
-    });
-    renderNobles();
-    renderPlayers();
-  }
-
-  // トークン
-  ['white','blue','green','red','black','gold'].forEach(c=>{
-    const el=document.getElementById('tk_'+c);
-    if(el && state['tk_'+c]!=null) el.value=state['tk_'+c];
-  });
-
-  // 場のカード（pts→bonus→updateCardSelect→pick）
+  try{ state=JSON.parse(localStorage.getItem('splendor_state')); }catch(e){}
+  if(!state) return;
+  const tc=document.getElementById('turnCount'); if(tc&&state.turnCount!=null) tc.value=state.turnCount;
+  const cp=document.getElementById('currentPlayer'); if(cp&&state.currentPlayer!=null) cp.value=state.currentPlayer;
+  ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('tk_'+c); if(el&&state['tk_'+c]!=null) el.value=state['tk_'+c]; });
   for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
-    const pts=state[`c${t}_${i}_pts`];
-    const bonus=state[`c${t}_${i}_bonus`];
-    const pick=state[`c${t}_${i}_pick`];
-    const ptsEl=document.getElementById(`c${t}_${i}_pts`);
-    const bonusEl=document.getElementById(`c${t}_${i}_bonus`);
-    if(ptsEl&&pts!=null) ptsEl.value=pts;
-    if(bonusEl&&bonus!=null) bonusEl.value=bonus;
+    const pts=state[`c${t}_${i}_pts`], bonus=state[`c${t}_${i}_bonus`], pick=state[`c${t}_${i}_pick`];
+    const pe=document.getElementById(`c${t}_${i}_pts`), be=document.getElementById(`c${t}_${i}_bonus`);
+    if(pe&&pts!=null) pe.value=pts;
+    if(be&&bonus!=null) be.value=bonus;
     if(pts||bonus) updateCardSelect(t,i);
-    const pickEl=document.getElementById(`c${t}_${i}_pick`);
-    if(pickEl&&pick!=null){ pickEl.value=pick; showCardInfo(t,i); }
+    const pk=document.getElementById(`c${t}_${i}_pick`);
+    if(pk&&pick!=null){ pk.value=pick; showCardInfo(t,i); }
   }
-
-  // 貴族
-  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{
-    const el=document.getElementById(`n${i}_${c}`);
-    if(el && state[`n${i}_${c}`]!=null) el.value=state[`n${i}_${c}`];
-  });
-
-  // プレイヤー
+  for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{ const el=document.getElementById(`n${i}_${c}`); if(el&&state[`n${i}_${c}`]!=null) el.value=state[`n${i}_${c}`]; });
   for(let p=0;p<numPlayers;p++){
-    const nm=document.getElementById('pname_'+p);
-    if(nm && state['pname_'+p]!=null) nm.value=state['pname_'+p];
-    const vp=document.getElementById('pvp_'+p);
-    if(vp && state['pvp_'+p]!=null) vp.value=state['pvp_'+p];
-    ['white','blue','green','red','black','gold'].forEach(c=>{
-      const el=document.getElementById('pt_'+p+'_'+c);
-      if(el && state['pt_'+p+'_'+c]!=null) el.value=state['pt_'+p+'_'+c];
-    });
-    gemColors.forEach(c=>{
-      const el=document.getElementById('pb_'+p+'_'+c);
-      if(el && state['pb_'+p+'_'+c]!=null) el.value=state['pb_'+p+'_'+c];
-    });
+    const nm=document.getElementById('pname_'+p); if(nm&&state['pname_'+p]!=null) nm.value=state['pname_'+p];
+    const vp=document.getElementById('pvp_'+p); if(vp&&state['pvp_'+p]!=null) vp.value=state['pvp_'+p];
+    ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('pt_'+p+'_'+c); if(el&&state['pt_'+p+'_'+c]!=null) el.value=state['pt_'+p+'_'+c]; });
+    gemColors.forEach(c=>{ const el=document.getElementById('pb_'+p+'_'+c); if(el&&state['pb_'+p+'_'+c]!=null) el.value=state['pb_'+p+'_'+c]; });
     for(let r=0;r<3;r++){
-      const pts=state[`pr_${p}_${r}_pts`];
-      const bonus=state[`pr_${p}_${r}_bonus`];
-      const pick=state[`pr_${p}_${r}_pick`];
-      const ptsEl=document.getElementById(`pr_${p}_${r}_pts`);
-      const bonusEl=document.getElementById(`pr_${p}_${r}_bonus`);
-      if(ptsEl&&pts!=null) ptsEl.value=pts;
-      if(bonusEl&&bonus!=null) bonusEl.value=bonus;
+      const pts=state[`pr_${p}_${r}_pts`], bonus=state[`pr_${p}_${r}_bonus`], pick=state[`pr_${p}_${r}_pick`];
+      const pe=document.getElementById(`pr_${p}_${r}_pts`), be=document.getElementById(`pr_${p}_${r}_bonus`);
+      if(pe&&pts!=null) pe.value=pts;
+      if(be&&bonus!=null) be.value=bonus;
       if(pts||bonus) updateReservedSelect(p,r);
-      const pickEl=document.getElementById(`pr_${p}_${r}_pick`);
-      if(pickEl&&pick!=null){ pickEl.value=pick; showReservedInfo(p,r); }
+      const pk=document.getElementById(`pr_${p}_${r}_pick`);
+      if(pk&&pick!=null){ pk.value=pick; showReservedInfo(p,r); }
     }
   }
 }
 
-// 初期化
-['white','blue','green','red','black'].forEach(c=>fillSel('tk_'+c,7));
-fillSel('tk_gold',5);
-for(let t=1;t<=3;t++){
-  let h='';
-  for(let i=0;i<4;i++) h+=cardHTML(t,i);
-  document.getElementById('tier'+t).innerHTML=h;
-}
-renderNobles();
-renderPlayers();
-restoreState();
+// ===== 予約カードを購入 =====
+function buyReservedCard(p, r) {
+  const c = getReservedData(p, r);
+  if (!c) { showAlert('先にカードを選択してください'); return; }
 
-// 全入力変更時に自動保存
-document.addEventListener('change', saveState);
+  const colorKeys = ['white','blue','green','red','black'];
+  const bonusKey = colorKeys[['白','青','緑','赤','黒'].indexOf(c[1])];
+  const playerTokens = {};
+  colorKeys.forEach(k=>{ playerTokens[k]=parseInt(val('pt_'+p+'_'+k)||0); });
+  let gold = parseInt(val('pt_'+p+'_gold')||0);
+  const bonusDiscount = colorKeys.map(k=>parseInt(val('pb_'+p+'_'+k)||0));
+  const actualCosts = c.slice(3).map((cost,i)=>Math.max(0,cost-bonusDiscount[i]));
+
+  let goldNeeded = 0;
+  const pay = actualCosts.map((cost,i)=>{
+    const have = playerTokens[colorKeys[i]];
+    if (have>=cost) return cost;
+    goldNeeded += cost-have;
+    return have;
+  });
+
+  if (goldNeeded>gold) { showAlert(`トークンが足りません\n（金${goldNeeded}枚必要、手持ち${gold}枚）`); return; }
+
+  const payDesc = colorKeys.map((k,i)=>pay[i]?`${gemJP[i]}${pay[i]}`:'').filter(Boolean).join('・');
+  const goldDesc = goldNeeded?`・金${goldNeeded}`:'';
+  const msg = `予約カードを購入しますか？\n${bonusEmoji[c[1]]}${c[1]} ${c[2]}点\n支払い: ${payDesc||'なし'}${goldDesc}`;
+
+  showConfirm(msg, function() {
+    colorKeys.forEach((k,i)=>{
+      const el=document.getElementById('pt_'+p+'_'+k);
+      if(el) el.value=String(playerTokens[k]-pay[i]);
+    });
+    const goldEl=document.getElementById('pt_'+p+'_gold');
+    if(goldEl) goldEl.value=String(gold-goldNeeded);
+
+    colorKeys.forEach((k,i)=>{
+      if(pay[i]>0){
+        const el=document.getElementById('tk_'+k);
+        if(el) el.value=String(Math.min(7,parseInt(el.value||0)+pay[i]));
+      }
+    });
+    if(goldNeeded>0){
+      const el=document.getElementById('tk_gold');
+      if(el) el.value=String(Math.min(5,parseInt(el.value||0)+goldNeeded));
+    }
+
+    const bonusEl=document.getElementById('pb_'+p+'_'+bonusKey);
+    if(bonusEl) bonusEl.value=String(parseInt(bonusEl.value||0)+1);
+
+    if(c[2]>0){
+      const vpEl=document.getElementById('pvp_'+p);
+      if(vpEl) vpEl.value=String(parseInt(vpEl.value||0)+c[2]);
+    }
+
+    // 予約スロットをリセット
+    ['pts','bonus'].forEach(k=>{ const el=document.getElementById(`pr_${p}_${r}_${k}`); if(el) el.value=''; });
+    const pickEl=document.getElementById(`pr_${p}_${r}_pick`);
+    if(pickEl) pickEl.innerHTML='<option value="">↑で絞り込む</option>';
+    const infoEl=document.getElementById(`pr_${p}_${r}_info`);
+    if(infoEl) infoEl.textContent='';
+
+    autoAdjustFieldTokens('pt_'+p+'_white');
+    advanceTurn();
+    saveState();
+  });
+}
+
+// ===== 初期トークン数 =====
+function getInitialTokenCount() {
+  return numPlayers === 2 ? 4 : numPlayers === 3 ? 5 : 7;
+}
+
+function initFieldTokens() {
+  const n = getInitialTokenCount();
+  ['white','blue','green','red','black'].forEach(c=>{
+    const el=document.getElementById('tk_'+c);
+    if(el) el.value=String(n);
+  });
+  const goldEl=document.getElementById('tk_gold');
+  if(goldEl) goldEl.value='5';
+}
+
+// ===== リセット =====
+function resetAll() {
+  showConfirm('盤面を全てリセットしますか？', function() {
+    // 場のトークンを初期値に
+    initFieldTokens();
+    // 場のカードをリセット
+    for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
+      ['pts','bonus'].forEach(k=>{ const el=document.getElementById(`c${t}_${i}_${k}`); if(el) el.value=''; });
+      const pk=document.getElementById(`c${t}_${i}_pick`);
+      if(pk) pk.innerHTML='<option value="">↑で絞り込む</option>';
+      const info=document.getElementById(`c${t}_${i}_info`);
+      if(info) info.textContent='';
+    }
+    // 貴族をリセット
+    for(let i=0;i<numPlayers+1;i++) gemColors.forEach(c=>{ const el=document.getElementById(`n${i}_${c}`); if(el) el.value='0'; });
+    // プレイヤーをリセット
+    for(let p=0;p<numPlayers;p++){
+      const nm=document.getElementById('pname_'+p); if(nm) nm.value='';
+      const vp=document.getElementById('pvp_'+p); if(vp) vp.value='0';
+      ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('pt_'+p+'_'+c); if(el) el.value='0'; });
+      gemColors.forEach(c=>{ const el=document.getElementById('pb_'+p+'_'+c); if(el) el.value='0'; });
+      for(let r=0;r<3;r++){
+        ['pts','bonus'].forEach(k=>{ const el=document.getElementById(`pr_${p}_${r}_${k}`); if(el) el.value=''; });
+        const pk=document.getElementById(`pr_${p}_${r}_pick`);
+        if(pk) pk.innerHTML='<option value="">↑で絞り込む</option>';
+        const info=document.getElementById(`pr_${p}_${r}_info`);
+        if(info) info.textContent='';
+      }
+    }
+    document.getElementById('outputBox').textContent='← ボタンを押すと生成されます';
+    try{ localStorage.removeItem('splendor_state'); }catch(e){}
+  });
+}
+
+// ===== トークン自動調整・上限チェック =====
+function autoAdjustFieldTokens(changedId) {
+  if (!changedId || !changedId.startsWith('pt_')) return;
+
+  const colorKeys = ['white','blue','green','red','black'];
+  const colorTotal = numPlayers === 2 ? 4 : numPlayers === 3 ? 5 : 7;
+  const goldTotal = 5;
+
+  // 変更されたIDから色を特定
+  const parts = changedId.split('_'); // pt_0_white → ['pt','0','white']
+  const changedColor = parts.slice(2).join('_'); // gold対応
+  const changedP = parseInt(parts[1]);
+
+  // 各色について上限チェック＆場の調整
+  [...colorKeys, 'gold'].forEach(c => {
+    const limit = c === 'gold' ? goldTotal : colorTotal;
+    // 全プレイヤーの合計を計算
+    let playerSum = 0;
+    for (let p=0; p<numPlayers; p++) {
+      playerSum += parseInt(val('pt_'+p+'_'+c)||0);
+    }
+    // 合計が上限を超えた場合、変更したプレイヤーの値を削る
+    if (playerSum > limit) {
+      const el = document.getElementById('pt_'+changedP+'_'+c);
+      if (el) {
+        const excess = playerSum - limit;
+        const current = parseInt(el.value||0);
+        el.value = String(Math.max(0, current - excess));
+        // 再計算
+        playerSum = 0;
+        for (let p=0; p<numPlayers; p++) {
+          playerSum += parseInt(val('pt_'+p+'_'+c)||0);
+        }
+      }
+    }
+    // 場のトークンを差し引きで設定（金は変更しない）
+    if (c !== 'gold') {
+      const fieldEl = document.getElementById('tk_'+c);
+      if (fieldEl) fieldEl.value = String(Math.max(0, limit - playerSum));
+    }
+  });
+}
+
+// ===== イベント =====
+document.addEventListener('click', function(e) {
+  // IDで直接判定するものを先に処理
+  if (e.target.id==='btnReset') { resetAll(); return; }
+  if (e.target.id==='btnGenerate') { generate(); return; }
+  if (e.target.id==='btnCopy') { copyText(); return; }
+  if (e.target.id==='btnEndTurn') { advanceTurn(); return; }
+
+  const role = e.target.dataset.role;
+  if (!role) return;
+  if (role==='tab') { switchTab(parseInt(e.target.dataset.p)); return; }
+  if (e.target.classList.contains('np-btn')) { setPlayers(parseInt(e.target.dataset.n)); return; }
+  if (role==='buy') { buyCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
+  if (role==='rbuy') { buyReservedCard(parseInt(e.target.dataset.p), parseInt(e.target.dataset.r)); return; }
+  if (role==='reserve') { reserveCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
+});
+
+document.getElementById('btnGenerate').addEventListener('click', generate);
+document.getElementById('btnCopy').addEventListener('click', copyText);
+document.querySelectorAll('.np-btn').forEach(b=>b.addEventListener('click',()=>setPlayers(parseInt(b.dataset.n))));
+
+document.addEventListener('change', function(e) {
+  const role=e.target.dataset.role;
+  if(role==='cpts'||role==='cbonus') updateCardSelect(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx));
+  if(role==='cpick') showCardInfo(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx));
+  if(role==='rpts'||role==='rbonus') updateReservedSelect(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r));
+  if(role==='rpick') showReservedInfo(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r));
+  autoAdjustFieldTokens(e.target.id);
+  saveState();
+});
 document.addEventListener('input', saveState);
-</script>
 
-<script>
-if ('serviceWorker' in navigator) {
-  const swCode = `
-    const CACHE = 'splendor-v1';
-    self.addEventListener('install', e => {
-      e.waitUntil(caches.open(CACHE).then(c => c.addAll(['/'])));
-      self.skipWaiting();
-    });
-    self.addEventListener('fetch', e => {
-      e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-    });
-  `;
-  const blob = new Blob([swCode], {type: 'application/javascript'});
-  const url = URL.createObjectURL(blob);
-  navigator.serviceWorker.register(url);
-}
+// ===== 初期化 =====
+(function init(){
+  // プレイヤー人数ボタン
+  const npRow=document.getElementById('npRow');
+  [2,3,4].forEach(n=>{
+    const b=document.createElement('button');
+    b.className='np-btn'+(n===2?' active':'');
+    b.dataset.n=n;
+    b.textContent=n+'人';
+    b.addEventListener('click',()=>setPlayers(n));
+    npRow.appendChild(b);
+  });
+  // ターン数選択肢を生成
+  const tcEl=document.getElementById('turnCount');
+  for(let i=1;i<=40;i++){
+    const opt=document.createElement('option');
+    opt.value=i; opt.textContent=i;
+    tcEl.appendChild(opt);
+  }
+  // トークン
+  ['white','blue','green','red','black'].forEach(c=>fillSel('tk_'+c,7));
+  fillSel('tk_gold',5);
+  initFieldTokens();
+  // カード
+  for(let t=1;t<=3;t++){
+    let h='';
+    for(let i=0;i<4;i++) h+=cardHTML(t,i);
+    document.getElementById('tier'+t).innerHTML=h;
+  }
+  renderNobles();
+  renderPlayers();
+  restoreState();
+})();
 </script>
 
 </body>
