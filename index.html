@@ -501,6 +501,7 @@ function reserveCard(tier, idx) {
     }
 
     const cardIdx=ALL_CARDS.indexOf(c);
+    resetCardSlot(tier,idx);
     const ptsEl=document.getElementById(`pr_${p}_${slot}_pts`);
     const bonusEl=document.getElementById(`pr_${p}_${slot}_bonus`);
     if(ptsEl) ptsEl.value=String(c[2]);
@@ -508,8 +509,6 @@ function reserveCard(tier, idx) {
     updateReservedSelect(p,slot);
     const pickEl=document.getElementById(`pr_${p}_${slot}_pick`);
     if(pickEl){ pickEl.value=String(cardIdx); showReservedInfo(p,slot); }
-
-    resetCardSlot(tier,idx);
     advanceTurn();
     saveState();
   });
