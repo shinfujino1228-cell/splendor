@@ -782,6 +782,9 @@ function resetAll() {
         if(info) info.textContent='';
       }
     }
+    // ターン数・手番プレイヤーをリセット
+    const tc=document.getElementById('turnCount'); if(tc) tc.value='1';
+    const cp=document.getElementById('currentPlayer'); if(cp) cp.value='0';
     document.getElementById('outputBox').textContent='← ボタンを押すと生成されます';
     try{ localStorage.removeItem('splendor_state'); }catch(e){}
   });
