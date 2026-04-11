@@ -312,24 +312,30 @@ function cardHTML(tier, idx) {
   </div>`;
 }
 
-function updateCardSelect(tier, idx) {
+function updateCardSelect(tier, idx, exceptPickId) {
+  const pickId = `c${tier}_${idx}_pick`;
   const pts = val(`c${tier}_${idx}_pts`);
   const bonus = val(`c${tier}_${idx}_bonus`);
-  const pick = document.getElementById(`c${tier}_${idx}_pick`);
+  const pick = document.getElementById(pickId);
   const info = document.getElementById(`c${tier}_${idx}_info`);
   if (info) info.textContent = '';
+  const prevVal = pick.value;
   pick.innerHTML = '<option value="">カードを選択</option>';
-  const filtered = ALL_CARDS.filter(c=>
+  const used = getUsedCardIndices(exceptPickId || pickId);
+  const filtered = ALL_CARDS.filter((c,ci)=>
     c[0]===tier &&
     (pts===''||String(c[2])===pts) &&
-    (bonus===''||c[1]===bonus)
+    (bonus===''||c[1]===bonus) &&
+    !used.has(ci)
   );
   filtered.forEach(c=>{
+    const ci = ALL_CARDS.indexOf(c);
     const opt = document.createElement('option');
-    opt.value = ALL_CARDS.indexOf(c);
+    opt.value = ci;
     opt.textContent = cardLabel(c);
     pick.appendChild(opt);
   });
+  if (prevVal && pick.querySelector(`option[value="${prevVal}"]`)) pick.value = prevVal;
   if (filtered.length===1) { pick.selectedIndex=1; showCardInfo(tier,idx); }
 }
 
@@ -355,6 +361,37 @@ function resetCardSlot(tier, idx) {
   if (p) p.innerHTML='<option value="">↑で絞り込む</option>';
   const i = document.getElementById(`c${tier}_${idx}_info`);
   if (i) i.textContent='';
+  refreshAllCardSelects(`c${tier}_${idx}_pick`);
+}
+
+function getUsedCardIndices(excludePickId) {
+  const used = new Set();
+  for (let t=1; t<=3; t++) for (let i=0; i<4; i++) {
+    const id=`c${t}_${i}_pick`;
+    if(id===excludePickId) continue;
+    const el=document.getElementById(id);
+    if(el&&el.value) used.add(parseInt(el.value));
+  }
+  for (let p=0; p<numPlayers; p++) for (let r=0; r<3; r++) {
+    const id=`pr_${p}_${r}_pick`;
+    if(id===excludePickId) continue;
+    const el=document.getElementById(id);
+    if(el&&el.value) used.add(parseInt(el.value));
+  }
+  return used;
+}
+
+function refreshAllCardSelects(exceptPickId) {
+  for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
+    const pickId=`c${t}_${i}_pick`;
+    if(pickId===exceptPickId) continue;
+    if(val(`c${t}_${i}_pts`)||val(`c${t}_${i}_bonus`)) updateCardSelect(t,i,exceptPickId);
+  }
+  for(let p=0;p<numPlayers;p++) for(let r=0;r<3;r++){
+    const pickId=`pr_${p}_${r}_pick`;
+    if(pickId===exceptPickId) continue;
+    if(val(`pr_${p}_${r}_pts`)||val(`pr_${p}_${r}_bonus`)) updateReservedSelect(p,r,exceptPickId);
+  }
 }
 
 // ===== 購入共通処理 =====
@@ -476,20 +513,25 @@ function advanceTurn() {
 }
 
 // ===== 予約カード絞り込み =====
-function updateReservedSelect(p, r) {
+function updateReservedSelect(p, r, exceptPickId) {
+  const pickId=`pr_${p}_${r}_pick`;
   const pts=val(`pr_${p}_${r}_pts`);
   const bonus=val(`pr_${p}_${r}_bonus`);
-  const pick=document.getElementById(`pr_${p}_${r}_pick`);
+  const pick=document.getElementById(pickId);
   const info=document.getElementById(`pr_${p}_${r}_info`);
   if(info) info.textContent='';
+  const prevVal=pick.value;
   pick.innerHTML='<option value="">カードを選択</option>';
-  const filtered=ALL_CARDS.filter(c=>(pts===''||String(c[2])===pts)&&(bonus===''||c[1]===bonus));
+  const used=getUsedCardIndices(exceptPickId || pickId);
+  const filtered=ALL_CARDS.filter((c,ci)=>(pts===''||String(c[2])===pts)&&(bonus===''||c[1]===bonus)&&!used.has(ci));
   filtered.forEach(c=>{
+    const ci=ALL_CARDS.indexOf(c);
     const opt=document.createElement('option');
-    opt.value=ALL_CARDS.indexOf(c);
+    opt.value=ci;
     opt.textContent=`T${c[0]} ${cardLabel(c)}`;
     pick.appendChild(opt);
   });
+  if(prevVal && pick.querySelector(`option[value="${prevVal}"]`)) pick.value=prevVal;
   if(filtered.length===1){ pick.selectedIndex=1; showReservedInfo(p,r); }
 }
 
@@ -954,9 +996,9 @@ document.addEventListener('click', function(e) {
 document.addEventListener('change', function(e) {
   const role=e.target.dataset.role;
   if(role==='cpts'||role==='cbonus') updateCardSelect(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx));
-  if(role==='cpick') showCardInfo(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx));
+  if(role==='cpick') { showCardInfo(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx)); refreshAllCardSelects(e.target.id); }
   if(role==='rpts'||role==='rbonus') updateReservedSelect(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r));
-  if(role==='rpick') showReservedInfo(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r));
+  if(role==='rpick') { showReservedInfo(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r)); refreshAllCardSelects(e.target.id); }
   autoAdjustFieldTokens(e.target.id);
   saveState();
 });
