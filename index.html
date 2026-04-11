@@ -471,17 +471,19 @@ function processPurchase(c, p, title, onReset) {
 function buyCard(tier, idx) {
   const c = getCardData(tier, idx);
   if (!c) { showAlert('先にカードを選択してください'); return; }
-  processPurchase(c, 0, '購入しますか？', ()=>resetCardSlot(tier,idx));
+  const p = parseInt(document.getElementById('currentPlayer')?.value||0);
+  processPurchase(c, p, '購入しますか？', ()=>resetCardSlot(tier,idx));
 }
 
 // ===== 予約 =====
 function reserveCard(tier, idx) {
   const c = getCardData(tier, idx);
   if (!c) { showAlert('先にカードを選択してください'); return; }
+  const p = parseInt(document.getElementById('currentPlayer')?.value||0);
 
   let slot = -1;
   for (let r=0;r<3;r++) {
-    const pick=document.getElementById(`pr_0_${r}_pick`);
+    const pick=document.getElementById(`pr_${p}_${r}_pick`);
     if(pick&&!pick.value){ slot=r; break; }
   }
   if (slot===-1) { showAlert('予約スロットが満杯です（最大3枚）'); return; }
@@ -492,20 +494,20 @@ function reserveCard(tier, idx) {
   saveUndo();
   showConfirm(msg, function() {
     const goldEl=document.getElementById('tk_gold');
-    const pgoldEl=document.getElementById('pt_0_gold');
+    const pgoldEl=document.getElementById(`pt_${p}_gold`);
     if(goldEl&&pgoldEl&&parseInt(goldEl.value||0)>0){
       goldEl.value=String(parseInt(goldEl.value)-1);
       pgoldEl.value=String(Math.min(5,parseInt(pgoldEl.value||0)+1));
     }
 
     const cardIdx=ALL_CARDS.indexOf(c);
-    const ptsEl=document.getElementById(`pr_0_${slot}_pts`);
-    const bonusEl=document.getElementById(`pr_0_${slot}_bonus`);
+    const ptsEl=document.getElementById(`pr_${p}_${slot}_pts`);
+    const bonusEl=document.getElementById(`pr_${p}_${slot}_bonus`);
     if(ptsEl) ptsEl.value=String(c[2]);
     if(bonusEl) bonusEl.value=c[1];
-    updateReservedSelect(0,slot);
-    const pickEl=document.getElementById(`pr_0_${slot}_pick`);
-    if(pickEl){ pickEl.value=String(cardIdx); showReservedInfo(0,slot); }
+    updateReservedSelect(p,slot);
+    const pickEl=document.getElementById(`pr_${p}_${slot}_pick`);
+    if(pickEl){ pickEl.value=String(cardIdx); showReservedInfo(p,slot); }
 
     resetCardSlot(tier,idx);
     advanceTurn();
