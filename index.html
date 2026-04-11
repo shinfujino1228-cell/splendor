@@ -238,6 +238,8 @@ function showAlert(msg, cb) {
   ok.className = 'modal-ok';
   ok.textContent = 'OK';
   ok.addEventListener('click', function() {
+    if (ok.disabled) return;
+    ok.disabled = true;
     overlay.classList.remove('show');
     if (cb) cb();
   });
@@ -260,7 +262,13 @@ function showConfirm(msg, cb) {
   const ok = document.createElement('button');
   ok.className = 'modal-ok';
   ok.textContent = 'OK';
-  ok.addEventListener('click', function() { overlay.classList.remove('show'); _confirmActive=false; cb(); });
+  ok.addEventListener('click', function() {
+    if (ok.disabled) return;
+    ok.disabled = true;
+    overlay.classList.remove('show');
+    _confirmActive = false;
+    cb();
+  });
   btns.appendChild(cancel);
   btns.appendChild(ok);
   overlay.classList.add('show');
@@ -335,7 +343,14 @@ function updateCardSelect(tier, idx, exceptPickId) {
     opt.textContent = cardLabel(c);
     pick.appendChild(opt);
   });
-  if (prevVal && pick.querySelector(`option[value="${prevVal}"]`)) pick.value = prevVal;
+  if (prevVal && pick.querySelector(`option[value="${prevVal}"]`)) {
+    pick.value = prevVal;
+    showCardInfo(tier, idx);
+  } else if (prevVal) {
+    // 選択済みカードが新しいフィルター条件を満たさなくなった
+    if (info) info.textContent = '';
+    refreshAllCardSelects(pickId);
+  }
   if (filtered.length===1) { pick.selectedIndex=1; showCardInfo(tier,idx); }
 }
 
@@ -471,9 +486,9 @@ function reserveCard(tier, idx) {
   }
   if (slot===-1) { showAlert('予約スロットが満杯です（最大3枚）'); return; }
 
-  const msg = `予約しますか？
-${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
-※場の金トークンを1枚取得します`;
+  const fieldGold = parseInt(document.getElementById('tk_gold')?.value||0);
+  const goldNote = fieldGold > 0 ? '※場の金トークンを1枚取得します' : '※場に金トークンがないため取得できません';
+  const msg = `予約しますか？\n${bonusEmoji[c[1]]}${c[1]} ${c[2]}点\n${goldNote}`;
   saveUndo();
   showConfirm(msg, function() {
     const goldEl=document.getElementById('tk_gold');
@@ -531,7 +546,14 @@ function updateReservedSelect(p, r, exceptPickId) {
     opt.textContent=`T${c[0]} ${cardLabel(c)}`;
     pick.appendChild(opt);
   });
-  if(prevVal && pick.querySelector(`option[value="${prevVal}"]`)) pick.value=prevVal;
+  if(prevVal && pick.querySelector(`option[value="${prevVal}"]`)) {
+    pick.value=prevVal;
+    showReservedInfo(p,r);
+  } else if(prevVal) {
+    // 選択済みカードが新しいフィルター条件を満たさなくなった
+    if(info) info.textContent='';
+    refreshAllCardSelects(pickId);
+  }
   if(filtered.length===1){ pick.selectedIndex=1; showReservedInfo(p,r); }
 }
 
