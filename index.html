@@ -171,6 +171,10 @@
 const gemColors = ['white','blue','green','red','black'];
 const gemJP = ['白','青','緑','赤','黒'];
 const bonusEmoji = {'白':'⬜','青':'🔵','緑':'🟢','赤':'🔴','黒':'⬛'};
+const TOKEN_LIMIT_BY_PLAYERS = {2:4, 3:5, 4:7};
+const GOLD_LIMIT = 5;
+const TURN_LIMIT = 40;
+const BONUS_TO_COLOR = {'白':'white','青':'blue','緑':'green','赤':'red','黒':'black'};
 let numPlayers = 2;
 
 const ALL_CARDS = [
@@ -218,7 +222,10 @@ function showAlert(msg, cb) {
   overlay.classList.add('show');
 }
 
+let _confirmActive = false;
 function showConfirm(msg, cb) {
+  if (_confirmActive) return;
+  _confirmActive = true;
   const overlay = document.getElementById('modalOverlay');
   document.getElementById('modalMsg').textContent = msg;
   const btns = document.getElementById('modalBtns');
@@ -226,11 +233,11 @@ function showConfirm(msg, cb) {
   const cancel = document.createElement('button');
   cancel.className = 'modal-cancel';
   cancel.textContent = 'キャンセル';
-  cancel.addEventListener('click', function() { overlay.classList.remove('show'); });
+  cancel.addEventListener('click', function() { overlay.classList.remove('show'); _confirmActive=false; });
   const ok = document.createElement('button');
   ok.className = 'modal-ok';
   ok.textContent = 'OK';
-  ok.addEventListener('click', function() { overlay.classList.remove('show'); cb(); });
+  ok.addEventListener('click', function() { overlay.classList.remove('show'); _confirmActive=false; cb(); });
   btns.appendChild(cancel);
   btns.appendChild(ok);
   overlay.classList.add('show');
@@ -308,6 +315,7 @@ function showCardInfo(tier, idx) {
   const info = document.getElementById(`c${tier}_${idx}_info`);
   if (!pick||!pick.value) { if(info) info.textContent=''; return; }
   const c = ALL_CARDS[parseInt(pick.value)];
+  if (!c) { if(info) info.textContent=''; return; }
   const cost = gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
   if (info) info.textContent = `${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
 }
@@ -326,17 +334,14 @@ function resetCardSlot(tier, idx) {
   if (i) i.textContent='';
 }
 
-// ===== 購入 =====
-function buyCard(tier, idx) {
-  const c = getCardData(tier, idx);
-  if (!c) { showAlert('先にカードを選択してください'); return; }
-
+// ===== 購入共通処理 =====
+function processPurchase(c, p, title, onReset) {
   const colorKeys = ['white','blue','green','red','black'];
-  const bonusKey = colorKeys[['白','青','緑','赤','黒'].indexOf(c[1])];
+  const bonusKey = BONUS_TO_COLOR[c[1]];
   const playerTokens = {};
-  colorKeys.forEach(k=>{ playerTokens[k]=parseInt(val('pt_0_'+k)||0); });
-  let gold = parseInt(val('pt_0_gold')||0);
-  const bonusDiscount = colorKeys.map(k=>parseInt(val('pb_0_'+k)||0));
+  colorKeys.forEach(k=>{ playerTokens[k]=parseInt(val('pt_'+p+'_'+k)||0); });
+  let gold = parseInt(val('pt_'+p+'_gold')||0);
+  const bonusDiscount = colorKeys.map(k=>parseInt(val('pb_'+p+'_'+k)||0));
   const actualCosts = c.slice(3).map((cost,i)=>Math.max(0,cost-bonusDiscount[i]));
 
   let goldNeeded = 0;
@@ -347,46 +352,50 @@ function buyCard(tier, idx) {
     return have;
   });
 
-  if (goldNeeded>gold) { showAlert(`トークンが足りません
-（金${goldNeeded}枚必要、手持ち${gold}枚）`); return; }
+  if (goldNeeded>gold) { showAlert(`トークンが足りません\n（金${goldNeeded}枚必要、手持ち${gold}枚）`); return; }
 
   const payDesc = colorKeys.map((k,i)=>pay[i]?`${gemJP[i]}${pay[i]}`:'').filter(Boolean).join('・');
   const goldDesc = goldNeeded?`・金${goldNeeded}`:'';
-  const msg = `購入しますか？
-${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
-支払い: ${payDesc||'なし'}${goldDesc}`;
+  const msg = `${title}\n${bonusEmoji[c[1]]}${c[1]} ${c[2]}点\n支払い: ${payDesc||'なし'}${goldDesc}`;
 
   showConfirm(msg, function() {
     colorKeys.forEach((k,i)=>{
-      const el=document.getElementById('pt_0_'+k);
+      const el=document.getElementById('pt_'+p+'_'+k);
       if(el) el.value=String(playerTokens[k]-pay[i]);
     });
-    const goldEl=document.getElementById('pt_0_gold');
+    const goldEl=document.getElementById('pt_'+p+'_gold');
     if(goldEl) goldEl.value=String(gold-goldNeeded);
 
     colorKeys.forEach((k,i)=>{
       if(pay[i]>0){
         const el=document.getElementById('tk_'+k);
-        if(el) el.value=String(Math.min(7,parseInt(el.value||0)+pay[i]));
+        if(el) el.value=String(Math.min(TOKEN_LIMIT_BY_PLAYERS[numPlayers],parseInt(el.value||0)+pay[i]));
       }
     });
     if(goldNeeded>0){
       const el=document.getElementById('tk_gold');
-      if(el) el.value=String(Math.min(5,parseInt(el.value||0)+goldNeeded));
+      if(el) el.value=String(Math.min(GOLD_LIMIT,parseInt(el.value||0)+goldNeeded));
     }
 
-    const bonusEl=document.getElementById('pb_0_'+bonusKey);
+    const bonusEl=document.getElementById('pb_'+p+'_'+bonusKey);
     if(bonusEl) bonusEl.value=String(parseInt(bonusEl.value||0)+1);
 
     if(c[2]>0){
-      const vpEl=document.getElementById('pvp_0');
+      const vpEl=document.getElementById('pvp_'+p);
       if(vpEl) vpEl.value=String(parseInt(vpEl.value||0)+c[2]);
     }
 
-    resetCardSlot(tier,idx);
+    onReset();
     advanceTurn();
     saveState();
   });
+}
+
+// ===== 購入 =====
+function buyCard(tier, idx) {
+  const c = getCardData(tier, idx);
+  if (!c) { showAlert('先にカードを選択してください'); return; }
+  processPurchase(c, 0, '購入しますか？', ()=>resetCardSlot(tier,idx));
 }
 
 // ===== 予約 =====
@@ -430,7 +439,7 @@ ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
 // ===== ターン進行 =====
 function advanceTurn() {
   const tc=document.getElementById('turnCount');
-  if(tc) tc.value=String(Math.min(40,parseInt(tc.value||1)+1));
+  if(tc) tc.value=String(Math.min(TURN_LIMIT,parseInt(tc.value||1)+1));
   // 手番プレイヤーを次へ
   const cp=document.getElementById('currentPlayer');
   if(cp) cp.value=String((parseInt(cp.value||0)+1)%numPlayers);
@@ -460,6 +469,7 @@ function showReservedInfo(p, r) {
   const info=document.getElementById(`pr_${p}_${r}_info`);
   if(!pick||!pick.value){ if(info) info.textContent=''; return; }
   const c=ALL_CARDS[parseInt(pick.value)];
+  if(!c){ if(info) info.textContent=''; return; }
   const cost=gemJP.map((j,i)=>c[3+i]?`${j}:${c[3+i]}`:'').filter(Boolean).join(' ');
   if(info) info.textContent=`T${c[0]} ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点 | ${cost||'コストなし'}`;
 }
@@ -587,7 +597,8 @@ function generate() {
   for(let i=0;i<numPlayers+1;i++){ const req=gemCost('n'+i); if(req) out+=`  [貴族${i+1}] 必要ボーナス: ${req}\n`; }
   out+='\n';
   for(let p=0;p<numPlayers;p++){
-    const name=val('pname_'+p)||(p===0?'自分':'相手'+p);
+    const rawName=val('pname_'+p)||(p===0?'自分':'相手'+p);
+    const name=rawName.replace(/[<>&"']/g,c=>({'<':'＜','>':'＞','&':'＆','"':'″',"'":'′'}[c]));
     const vp=val('pvp_'+p);
     out+=`■ ${name}の状況\n`;
     if(vp&&vp!=='0') out+=`  勝利点: ${vp}点\n`;
@@ -613,10 +624,12 @@ function copyText() {
   else{ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta); showToast(); }
 }
 
-function showToast() {
+function showToast(msg) {
   const t=document.getElementById('copyToast');
+  t.textContent = typeof msg==='string' ? msg : '✓ コピーしました！';
   t.style.display='block';
-  setTimeout(()=>t.style.display='none',2000);
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.style.display='none',2000);
 }
 
 // ===== 自動保存 =====
@@ -642,7 +655,7 @@ function restoreState() {
   try{ state=JSON.parse(localStorage.getItem('splendor_state')); }catch(e){}
   if(!state) return;
   const tc=document.getElementById('turnCount'); if(tc&&state.turnCount!=null) tc.value=state.turnCount;
-  const cp=document.getElementById('currentPlayer'); if(cp&&state.currentPlayer!=null) cp.value=state.currentPlayer;
+  const cp=document.getElementById('currentPlayer'); if(cp&&state.currentPlayer!=null){ const cpv=parseInt(state.currentPlayer); cp.value=String(cpv>=0&&cpv<numPlayers?cpv:0); }
   ['white','blue','green','red','black','gold'].forEach(c=>{ const el=document.getElementById('tk_'+c); if(el&&state['tk_'+c]!=null) el.value=state['tk_'+c]; });
   for(let t=1;t<=3;t++) for(let i=0;i<4;i++){
     const pts=state[`c${t}_${i}_pts`], bonus=state[`c${t}_${i}_bonus`], pick=state[`c${t}_${i}_pick`];
@@ -675,82 +688,25 @@ function restoreState() {
 function buyReservedCard(p, r) {
   const c = getReservedData(p, r);
   if (!c) { showAlert('先にカードを選択してください'); return; }
-
-  const colorKeys = ['white','blue','green','red','black'];
-  const bonusKey = colorKeys[['白','青','緑','赤','黒'].indexOf(c[1])];
-  const playerTokens = {};
-  colorKeys.forEach(k=>{ playerTokens[k]=parseInt(val('pt_'+p+'_'+k)||0); });
-  let gold = parseInt(val('pt_'+p+'_gold')||0);
-  const bonusDiscount = colorKeys.map(k=>parseInt(val('pb_'+p+'_'+k)||0));
-  const actualCosts = c.slice(3).map((cost,i)=>Math.max(0,cost-bonusDiscount[i]));
-
-  let goldNeeded = 0;
-  const pay = actualCosts.map((cost,i)=>{
-    const have = playerTokens[colorKeys[i]];
-    if (have>=cost) return cost;
-    goldNeeded += cost-have;
-    return have;
-  });
-
-  if (goldNeeded>gold) { showAlert(`トークンが足りません\n（金${goldNeeded}枚必要、手持ち${gold}枚）`); return; }
-
-  const payDesc = colorKeys.map((k,i)=>pay[i]?`${gemJP[i]}${pay[i]}`:'').filter(Boolean).join('・');
-  const goldDesc = goldNeeded?`・金${goldNeeded}`:'';
-  const msg = `予約カードを購入しますか？\n${bonusEmoji[c[1]]}${c[1]} ${c[2]}点\n支払い: ${payDesc||'なし'}${goldDesc}`;
-
-  showConfirm(msg, function() {
-    colorKeys.forEach((k,i)=>{
-      const el=document.getElementById('pt_'+p+'_'+k);
-      if(el) el.value=String(playerTokens[k]-pay[i]);
-    });
-    const goldEl=document.getElementById('pt_'+p+'_gold');
-    if(goldEl) goldEl.value=String(gold-goldNeeded);
-
-    colorKeys.forEach((k,i)=>{
-      if(pay[i]>0){
-        const el=document.getElementById('tk_'+k);
-        if(el) el.value=String(Math.min(7,parseInt(el.value||0)+pay[i]));
-      }
-    });
-    if(goldNeeded>0){
-      const el=document.getElementById('tk_gold');
-      if(el) el.value=String(Math.min(5,parseInt(el.value||0)+goldNeeded));
-    }
-
-    const bonusEl=document.getElementById('pb_'+p+'_'+bonusKey);
-    if(bonusEl) bonusEl.value=String(parseInt(bonusEl.value||0)+1);
-
-    if(c[2]>0){
-      const vpEl=document.getElementById('pvp_'+p);
-      if(vpEl) vpEl.value=String(parseInt(vpEl.value||0)+c[2]);
-    }
-
-    // 予約スロットをリセット
+  processPurchase(c, p, '予約カードを購入しますか？', function() {
     ['pts','bonus'].forEach(k=>{ const el=document.getElementById(`pr_${p}_${r}_${k}`); if(el) el.value=''; });
     const pickEl=document.getElementById(`pr_${p}_${r}_pick`);
     if(pickEl) pickEl.innerHTML='<option value="">↑で絞り込む</option>';
     const infoEl=document.getElementById(`pr_${p}_${r}_info`);
     if(infoEl) infoEl.textContent='';
-
     autoAdjustFieldTokens('pt_'+p+'_white');
-    advanceTurn();
-    saveState();
   });
 }
 
 // ===== 初期トークン数 =====
-function getInitialTokenCount() {
-  return numPlayers === 2 ? 4 : numPlayers === 3 ? 5 : 7;
-}
-
 function initFieldTokens() {
-  const n = getInitialTokenCount();
+  const n = TOKEN_LIMIT_BY_PLAYERS[numPlayers];
   ['white','blue','green','red','black'].forEach(c=>{
     const el=document.getElementById('tk_'+c);
     if(el) el.value=String(n);
   });
   const goldEl=document.getElementById('tk_gold');
-  if(goldEl) goldEl.value='5';
+  if(goldEl) goldEl.value=String(GOLD_LIMIT);
 }
 
 // ===== リセット =====
@@ -795,17 +751,16 @@ function autoAdjustFieldTokens(changedId) {
   if (!changedId || !changedId.startsWith('pt_')) return;
 
   const colorKeys = ['white','blue','green','red','black'];
-  const colorTotal = numPlayers === 2 ? 4 : numPlayers === 3 ? 5 : 7;
-  const goldTotal = 5;
+  const colorTotal = TOKEN_LIMIT_BY_PLAYERS[numPlayers];
 
-  // 変更されたIDから色を特定
+  // 変更されたIDからプレイヤーを特定
   const parts = changedId.split('_'); // pt_0_white → ['pt','0','white']
-  const changedColor = parts.slice(2).join('_'); // gold対応
   const changedP = parseInt(parts[1]);
 
+  let adjusted = false;
   // 各色について上限チェック＆場の調整
   [...colorKeys, 'gold'].forEach(c => {
-    const limit = c === 'gold' ? goldTotal : colorTotal;
+    const limit = c === 'gold' ? GOLD_LIMIT : colorTotal;
     // 全プレイヤーの合計を計算
     let playerSum = 0;
     for (let p=0; p<numPlayers; p++) {
@@ -818,6 +773,7 @@ function autoAdjustFieldTokens(changedId) {
         const excess = playerSum - limit;
         const current = parseInt(el.value||0);
         el.value = String(Math.max(0, current - excess));
+        adjusted = true;
         // 再計算
         playerSum = 0;
         for (let p=0; p<numPlayers; p++) {
@@ -825,12 +781,11 @@ function autoAdjustFieldTokens(changedId) {
         }
       }
     }
-    // 場のトークンを差し引きで設定（金は変更しない）
-    if (c !== 'gold') {
-      const fieldEl = document.getElementById('tk_'+c);
-      if (fieldEl) fieldEl.value = String(Math.max(0, limit - playerSum));
-    }
+    // 場のトークンを差し引きで設定（金も含む）
+    const fieldEl = document.getElementById('tk_'+c);
+    if (fieldEl) fieldEl.value = String(Math.max(0, limit - playerSum));
   });
+  if (adjusted) showToast('トークンを上限に合わせて調整しました');
 }
 
 // ===== イベント =====
@@ -849,10 +804,6 @@ document.addEventListener('click', function(e) {
   if (role==='rbuy') { buyReservedCard(parseInt(e.target.dataset.p), parseInt(e.target.dataset.r)); return; }
   if (role==='reserve') { reserveCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
 });
-
-document.getElementById('btnGenerate').addEventListener('click', generate);
-document.getElementById('btnCopy').addEventListener('click', copyText);
-document.querySelectorAll('.np-btn').forEach(b=>b.addEventListener('click',()=>setPlayers(parseInt(b.dataset.n))));
 
 document.addEventListener('change', function(e) {
   const role=e.target.dataset.role;
