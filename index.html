@@ -107,23 +107,6 @@
 </div>
 
 <div class="section">
-  <div class="section-title">ターン情報</div>
-  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-    <div>
-      <div class="field-label">現在のターン数</div>
-      <select class="gem-input" id="turnCount" style="width:60px;"></select>
-    </div>
-    <div>
-      <div class="field-label">手番のプレイヤー</div>
-      <select class="card-sel" id="currentPlayer" style="width:120px;"></select>
-    </div>
-    <div style="margin-top:16px;">
-      <button class="btn-end-turn" id="btnEndTurn">ターン終了 →</button>
-    </div>
-  </div>
-</div>
-
-<div class="section">
   <div class="section-title">場の宝石トークン（残り枚数）</div>
   <div class="gems-grid">
     <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div><select class="gem-input" id="tk_white"></select></div>
@@ -151,6 +134,19 @@
 
 <div class="section">
   <div class="section-title">プレイヤー情報</div>
+  <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px;">
+    <div>
+      <div class="field-label">現在のターン数</div>
+      <select class="gem-input" id="turnCount" style="width:60px;"></select>
+    </div>
+    <div>
+      <div class="field-label">手番のプレイヤー</div>
+      <select class="card-sel" id="currentPlayer" style="width:120px;"></select>
+    </div>
+    <div style="margin-top:16px;">
+      <button class="btn-end-turn" id="btnEndTurn">ターン終了 →</button>
+    </div>
+  </div>
   <div class="player-tabs" id="playerTabs"></div>
   <div id="playerPanels"></div>
 </div>
