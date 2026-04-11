@@ -436,9 +436,13 @@ ${bonusEmoji[c[1]]}${c[1]} ${c[2]}点
 function advanceTurn() {
   const tc=document.getElementById('turnCount');
   if(tc) tc.value=String(Math.min(TURN_LIMIT,parseInt(tc.value||1)+1));
-  // 手番プレイヤーを次へ
+  // 手番プレイヤーを次へ＆タブ切替
   const cp=document.getElementById('currentPlayer');
-  if(cp) cp.value=String((parseInt(cp.value||0)+1)%numPlayers);
+  if(cp) {
+    const next=(parseInt(cp.value||0)+1)%numPlayers;
+    cp.value=String(next);
+    switchTab(next);
+  }
   saveState();
 }
 
@@ -560,6 +564,15 @@ function renderPlayers() {
   }
 }
 
+function updateTabName(p) {
+  const input=document.getElementById('pname_'+p);
+  const name=(input?input.value.trim():'')||(p===0?'自分':'相手'+p);
+  const btn=document.querySelector(`.tab-btn[data-p="${p}"]`);
+  if(btn) btn.textContent=name;
+  const opt=document.querySelector(`#currentPlayer option[value="${p}"]`);
+  if(opt) opt.textContent=name;
+}
+
 function switchTab(idx) {
   document.querySelectorAll('.player-panel').forEach((el,i)=>el.classList.toggle('active',i===idx));
   document.querySelectorAll('.tab-btn').forEach((el,i)=>el.classList.toggle('active',i===idx));
@@ -573,7 +586,7 @@ function generate() {
   out+=`プレイヤー数: ${numPlayers}人\n`;
   const turn=val('turnCount')||'1';
   const cpIdx=parseInt(val('currentPlayer')||0);
-  const cpName=cpIdx===0?'自分':'相手'+cpIdx;
+  const cpName=val('pname_'+cpIdx)||(cpIdx===0?'自分':'相手'+cpIdx);
   out+=`ターン数: ${turn}ターン目\n`;
   out+=`手番: ${cpName}\n\n`;
   out+='■ 場の宝石トークン（残り）\n';
@@ -678,6 +691,8 @@ function restoreState() {
       if(pk&&pick!=null){ pk.value=pick; showReservedInfo(p,r); }
     }
   }
+  // タブ名を保存済み名前で更新
+  for(let p=0;p<numPlayers;p++) updateTabName(p);
 }
 
 // ===== 予約カードを購入 =====
@@ -737,6 +752,9 @@ function resetAll() {
     // ターン数・手番プレイヤーをリセット
     const tc=document.getElementById('turnCount'); if(tc) tc.value='1';
     const cp=document.getElementById('currentPlayer'); if(cp) cp.value='0';
+    // タブ名をデフォルトに戻す
+    for(let p=0;p<numPlayers;p++) updateTabName(p);
+    switchTab(0);
     document.getElementById('outputBox').textContent='← ボタンを押すと生成されます';
     try{ localStorage.removeItem('splendor_state'); }catch(e){}
   });
@@ -810,7 +828,10 @@ document.addEventListener('change', function(e) {
   autoAdjustFieldTokens(e.target.id);
   saveState();
 });
-document.addEventListener('input', saveState);
+document.addEventListener('input', function(e) {
+  if(e.target.id&&e.target.id.startsWith('pname_')) updateTabName(parseInt(e.target.id.split('_')[1]));
+  saveState();
+});
 
 // ===== 初期化 =====
 (function init(){
