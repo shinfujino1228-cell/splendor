@@ -95,6 +95,10 @@
   .token-pick-item.disabled{opacity:0.3;cursor:not-allowed;}
   .tpc-count{font-size:1rem;font-weight:700;color:var(--gold);min-height:1.2em;}
   .token-pick-info{font-size:0.75rem;min-height:1.4em;margin-bottom:10px;}
+  .btn-clear-slot{width:100%;padding:4px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--text2);font-size:0.68rem;cursor:pointer;margin-top:3px;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s;}
+  .btn-clear-slot:hover{border-color:#c0392b;color:#c0392b;}
+  .token-total{font-size:0.68rem;color:var(--text2);text-align:right;margin-top:-6px;margin-bottom:8px;}
+  .token-total.warn{color:#e74c3c;font-weight:600;}
 </style>
 </head>
 <body>
@@ -180,9 +184,9 @@
   <div class="section-title">クロードへ貼り付けるテキスト</div>
   <div class="field-label" style="margin-bottom:6px;">AIへの追記・質問（任意）</div>
   <textarea class="note-box" id="noteBox" placeholder="例: 相手が次のターンで15点に達する可能性があります。最善手を教えてください。"></textarea>
-  <button class="btn btn-generate" id="btnGenerate">✦ テキストを生成する</button>
+  <button class="btn btn-generate" id="btnGenerate">✦ 生成してコピー</button>
   <div class="output-box" id="outputBox">← ボタンを押すと生成されます</div>
-  <button class="btn btn-copy" id="btnCopy">コピーする</button>
+  <button class="btn btn-copy" id="btnCopy">再コピー</button>
   <div class="copy-toast" id="copyToast">✓ コピーしました！</div>
 </div>
 
@@ -317,6 +321,7 @@ function cardHTML(tier, idx) {
     <div class="card-info" id="c${tier}_${idx}_info"></div>
     <button class="btn-buy" data-tier="${tier}" data-idx="${idx}" data-role="buy">購入</button>
     <button class="btn-reserve" data-tier="${tier}" data-idx="${idx}" data-role="reserve">予約</button>
+    <button class="btn-clear-slot" data-tier="${tier}" data-idx="${idx}" data-role="clear">✕ クリア</button>
   </div>`;
 }
 
@@ -593,10 +598,10 @@ function renderNobles() {
 function setPlayers(n) {
   numPlayers=n;
   document.querySelectorAll('.np-btn').forEach(b=>b.classList.toggle('active',parseInt(b.dataset.n)===n));
-  initFieldTokens();
   renderNobles();
   renderPlayers();
   restoreState();
+  initFieldTokens(); // プレイヤー人数変更後にトークンを正しい初期値へ上書き
 }
 
 function renderPlayers() {
@@ -632,7 +637,7 @@ function renderPlayers() {
         ${sel('pvp_'+p,25,'gem-input','width:56px')}
       </div>
       <div class="field-label">持っているトークン</div>
-      <div class="gems-grid" style="margin-bottom:12px;">
+      <div class="gems-grid" style="margin-bottom:4px;">
         <div class="gem-item"><div class="gem-icon white">♦</div><div class="gem-label">白</div>${sel('pt_'+p+'_white',7,'gem-input')}</div>
         <div class="gem-item"><div class="gem-icon blue">♦</div><div class="gem-label">青</div>${sel('pt_'+p+'_blue',7,'gem-input')}</div>
         <div class="gem-item"><div class="gem-icon green">♦</div><div class="gem-label">緑</div>${sel('pt_'+p+'_green',7,'gem-input')}</div>
@@ -640,6 +645,7 @@ function renderPlayers() {
         <div class="gem-item"><div class="gem-icon black">♦</div><div class="gem-label">黒</div>${sel('pt_'+p+'_black',7,'gem-input')}</div>
         <div class="gem-item"><div class="gem-icon gold">★</div><div class="gem-label">金</div>${sel('pt_'+p+'_gold',5,'gem-input')}</div>
       </div>
+      <div class="token-total" id="pt_total_${p}">合計 0/10枚</div>
       <div class="field-label">取得済みカードのボーナス数</div>
       <div class="cards-owned">${gemColors.map((c,i)=>`<div class="color-owned"><div class="color-dot ${c}">${gemJP[i]}</div>${sel('pb_'+p+'_'+c,7,'gem-input')}</div>`).join('')}</div>
       <div class="field-label" style="margin-top:10px;">予約済みカード（最大3枚）</div>
@@ -656,6 +662,14 @@ function renderPlayers() {
       </div>
     </div>`;
   }
+}
+
+function updateTokenTotal(p) {
+  const el = document.getElementById('pt_total_'+p);
+  if (!el) return;
+  const total = ['white','blue','green','red','black','gold'].reduce((s,c)=>s+parseInt(val('pt_'+p+'_'+c)||0),0);
+  el.textContent = `合計 ${total}/10枚`;
+  el.classList.toggle('warn', total>=10);
 }
 
 function updateTabName(p) {
@@ -690,7 +704,7 @@ function generate() {
     out+=`■ Tier${tier}カード\n`;
     for(let i=0;i<4;i++){
       const c=getCardData(tier,i);
-      if(!c){out+=`  [カード${i+1}] 未選択\n`;continue;}
+      if(!c) continue;
       const cost=gemJP.map((j,k)=>c[3+k]?j+c[3+k]:'').filter(Boolean).join('・');
       out+=`  [カード${i+1}] 勝利点${c[2]}点 ボーナス:${c[1]} コスト:${cost||'なし'}\n`;
     }
@@ -792,7 +806,7 @@ function applyState(state) {
   }
   const cpv=parseInt(document.getElementById('currentPlayer')?.value||0);
   switchTab(cpv);
-  for(let p=0;p<numPlayers;p++) updateTabName(p);
+  for(let p=0;p<numPlayers;p++) { updateTabName(p); updateTokenTotal(p); }
 }
 
 function restoreState() {
@@ -995,7 +1009,7 @@ function autoAdjustFieldTokens(changedId) {
 document.addEventListener('click', function(e) {
   // IDで直接判定するものを先に処理
   if (e.target.id==='btnReset') { resetAll(); return; }
-  if (e.target.id==='btnGenerate') { generate(); return; }
+  if (e.target.id==='btnGenerate') { generate(); copyText(); return; }
   if (e.target.id==='btnCopy') { copyText(); return; }
   if (e.target.id==='btnEndTurn') { advanceTurn(); return; }
   if (e.target.id==='btnTokenTake') { showTokenPicker(); return; }
@@ -1014,6 +1028,7 @@ document.addEventListener('click', function(e) {
   if (role==='buy') { buyCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
   if (role==='rbuy') { buyReservedCard(parseInt(e.target.dataset.p), parseInt(e.target.dataset.r)); return; }
   if (role==='reserve') { reserveCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
+  if (role==='clear') { resetCardSlot(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); saveState(); return; }
 });
 
 document.addEventListener('change', function(e) {
@@ -1022,6 +1037,10 @@ document.addEventListener('change', function(e) {
   if(role==='cpick') { showCardInfo(parseInt(e.target.dataset.tier),parseInt(e.target.dataset.idx)); refreshAllCardSelects(e.target.id); }
   if(role==='rpts'||role==='rbonus') updateReservedSelect(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r));
   if(role==='rpick') { showReservedInfo(parseInt(e.target.dataset.p),parseInt(e.target.dataset.r)); refreshAllCardSelects(e.target.id); }
+  if (e.target.id && e.target.id.startsWith('pt_')) {
+    const parts = e.target.id.split('_');
+    if (parts.length >= 3) updateTokenTotal(parseInt(parts[1]));
+  }
   autoAdjustFieldTokens(e.target.id);
   saveState();
 });
