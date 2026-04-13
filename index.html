@@ -956,7 +956,7 @@ function resetAll() {
     const nb=document.getElementById('noteBox'); if(nb) nb.value='';
     _undoState=null; const undoBtn=document.getElementById('btnUndo'); if(undoBtn) undoBtn.disabled=true;
     // タブ名をデフォルトに戻す
-    for(let p=0;p<numPlayers;p++) updateTabName(p);
+    for(let p=0;p<numPlayers;p++) { updateTabName(p); updateTokenTotal(p); }
     switchTab(0);
     document.getElementById('outputBox').textContent='← ボタンを押すと生成されます';
     try{ localStorage.removeItem('splendor_state'); }catch(e){}
