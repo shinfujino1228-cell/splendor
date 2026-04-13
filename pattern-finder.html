@@ -997,7 +997,8 @@ async function computeWalkForward(prices, dates, win, stride, future, k_max, bw)
     const trainIdxs = Array.from({length: trainCount}, (_, i) => offset + i);
     const testIdxs  = Array.from({length: testCount},  (_, i) => offset + trainCount + i)
                         .filter(i => i < m);
-    if (testIdxs.length < 5) break;
+    // 定義④: 部分窓（テスト窓サイズ未満）またはサンプル不足（<5）はスキップ
+    if (testIdxs.length < testCount || testIdxs.length < 5) continue;
 
     // DTW: test × train
     const D = [];
@@ -1021,10 +1022,12 @@ async function computeWalkForward(prices, dates, win, stride, future, k_max, bw)
     let bestK = 1, bestAcc = -Infinity;
     for (let k = 1; k <= k_max; k++) {
       const preds = sortedD.map(s => s.slice(0,k).reduce((a,j) => a+trainRets[j], 0) / k);
-      const acc   = preds.filter((p,i) => Math.sign(p) === Math.sign(testActual[i])).length
+      // 定義②: 0%リターンは不正解、定義③: 同率なら最小kを採用（strict >）
+      const acc   = preds.filter((p,i) => p !== 0 && testActual[i] !== 0 && Math.sign(p) === Math.sign(testActual[i])).length
                     / testIdxs.length * 100;
       if (acc > bestAcc) { bestAcc = acc; bestK = k; }
     }
+    // 定義①: 平均リターンは算術平均（単純リターン%）
     const bestPreds = sortedD.map(s => s.slice(0,bestK).reduce((a,j) => a+trainRets[j], 0) / bestK);
     const avgRet    = bestPreds.reduce((a,b) => a+b, 0) / bestPreds.length;
 
@@ -1038,6 +1041,9 @@ async function computeWalkForward(prices, dates, win, stride, future, k_max, bw)
       avg_ret:     Math.round(avgRet  * 1000) / 1000,
     });
   }
+
+  // 定義④: 有効ステップが3未満はデータ不足エラー
+  if (steps.length < 3) throw new Error('データ不足：ウォークフォワードには最低3期間分のデータが必要です');
 
   const accs    = steps.map(s => s.dir_acc);
   const meanAcc = accs.reduce((a,b) => a+b, 0) / accs.length;
@@ -1083,7 +1089,8 @@ async function computeSimpleSplit(prices, dates, win, stride, future, k_max, bw,
   const results = [];
   for (let k = 1; k <= k_max; k++) {
     const preds = sortedD.map(s => s.slice(0,k).reduce((a,j) => a+trainRets[j], 0) / k);
-    const acc   = preds.filter((p,i) => Math.sign(p) === Math.sign(testActual[i])).length
+    // 定義②: 0%リターンは不正解、定義③: 同率なら最小kを採用（strict >）
+    const acc   = preds.filter((p,i) => p !== 0 && testActual[i] !== 0 && Math.sign(p) === Math.sign(testActual[i])).length
                   / testIdxs.length * 100;
     const corr  = pearsonCorr(preds, testActual);
     results.push({ k, dir_acc: Math.round(acc*10)/10, corr: Math.round(corr*10000)/10000,
