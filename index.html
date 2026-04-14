@@ -98,7 +98,7 @@
   .btn-clear-slot{width:100%;padding:4px;background:transparent;border:1px solid var(--border);border-radius:5px;color:var(--text2);font-size:0.68rem;cursor:pointer;margin-top:3px;font-family:'Noto Sans JP',sans-serif;transition:all 0.15s;}
   .btn-clear-slot:hover{border-color:#c0392b;color:#c0392b;}
   .token-total{font-size:0.68rem;color:var(--text2);text-align:right;margin-top:-6px;margin-bottom:8px;}
-  .token-total.warn{color:#e74c3c;font-weight:600;}
+  .btn-noble-acquire{width:100%;padding:5px;background:linear-gradient(135deg,#7a5a2a,#c9a84c);border:none;border-radius:5px;color:#0e0c0a;font-size:0.7rem;font-family:'Noto Sans JP',sans-serif;cursor:pointer;margin-top:4px;font-weight:500;}
 </style>
 </head>
 <body>
@@ -582,9 +582,13 @@ function getReservedData(p, r) {
 // ===== 貴族 =====
 function nobleHTML(idx) {
   return `<div class="noble-box">
-    <div style="font-size:0.62rem;color:var(--text2);">貴族${idx+1}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
+      <span style="font-size:0.62rem;color:var(--text2);">貴族${idx+1}</span>
+      <span style="font-size:0.68rem;color:var(--gold);font-weight:600;">★3点</span>
+    </div>
     <div class="card-gem-row">${gemColors.map(c=>sel(`n${idx}_${c}`,7,'card-gem-input','')).join('')}</div>
     <div class="gem-hint">${gemJP.map(j=>`<span>${j}</span>`).join('')}</div>
+    <button class="btn-noble-acquire" data-idx="${idx}" data-role="noble-acquire">獲得</button>
   </div>`;
 }
 
@@ -592,6 +596,29 @@ function renderNobles() {
   const g=document.getElementById('noblesGrid');
   g.innerHTML='';
   for(let i=0;i<numPlayers+1;i++) g.innerHTML+=nobleHTML(i);
+}
+
+function acquireNoble(idx) {
+  const p = parseInt(document.getElementById('currentPlayer')?.value||0);
+  const hasReqs = gemColors.some(c=>parseInt(val(`n${idx}_${c}`)||0)>0);
+  if (!hasReqs) { showAlert('貴族タイルの条件が入力されていません'); return; }
+  const missingParts = [];
+  gemColors.forEach((c,i)=>{
+    const req=parseInt(val(`n${idx}_${c}`)||0);
+    if(!req) return;
+    const have=parseInt(val(`pb_${p}_${c}`)||0);
+    if(have<req) missingParts.push(`${gemJP[i]}:あと${req-have}`);
+  });
+  if (missingParts.length>0) { showAlert(`獲得条件を満たしていません\n不足: ${missingParts.join('、')}`); return; }
+  const pName = val('pname_'+p)||(p===0?'自分':'相手'+p);
+  showConfirm(`貴族タイルを獲得しますか？\n${pName} → +3点`, function() {
+    saveUndo();
+    const vpEl=document.getElementById('pvp_'+p);
+    if(vpEl) vpEl.value=String(parseInt(vpEl.value||0)+3);
+    gemColors.forEach(c=>{ const el=document.getElementById(`n${idx}_${c}`); if(el) el.value='0'; });
+    saveState();
+    showToast('貴族タイルを獲得しました（+3点）');
+  });
 }
 
 // ===== プレイヤー =====
@@ -1029,6 +1056,7 @@ document.addEventListener('click', function(e) {
   if (role==='rbuy') { buyReservedCard(parseInt(e.target.dataset.p), parseInt(e.target.dataset.r)); return; }
   if (role==='reserve') { reserveCard(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); return; }
   if (role==='clear') { resetCardSlot(parseInt(e.target.dataset.tier), parseInt(e.target.dataset.idx)); saveState(); return; }
+  if (role==='noble-acquire') { acquireNoble(parseInt(e.target.dataset.idx)); return; }
 });
 
 document.addEventListener('change', function(e) {
