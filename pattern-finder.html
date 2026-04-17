@@ -525,36 +525,52 @@ async function runBacktest() {
 }
 
 async function backtestWalkForward(prices,qLen,fLen,kMin,kMax,bw) {
-  const trainEnd=Math.floor(prices.length*0.5);
-  const maxTestStart=prices.length-trainEnd-qLen-fLen;
-  if (maxTestStart<0) throw new Error('データ不足：テスト期間が短すぎます');
-  const numSteps=Math.min(5,Math.max(3,Math.floor(maxTestStart/Math.max(qLen,5))));
-  const stepSize=Math.floor((maxTestStart+1)/numSteps);
+  const N=prices.length;
+  const trainSize=Math.floor(N*0.5);
+  const testSize =Math.floor(N*0.2);
+  const stepSize =testSize; // 重複なし
+
+  // 有効なウィンドウを生成（テスト窓がtestSize未満になるものはスキップ）
+  const windows=[];
+  for (let s=0;;s++) {
+    const trainStart=s*stepSize;
+    const trainEnd  =trainStart+trainSize;
+    const testStart =trainEnd;
+    const testEnd   =testStart+testSize;
+    if (testEnd>N) break; // テスト窓がtestSize未満 → スキップして終了
+    windows.push({trainStart,trainEnd,testStart,testEnd});
+  }
+  if (windows.length<3)
+    throw new Error('データ不足：ウォークフォワードには最低3期間分のデータが必要です');
+
   const kRange=Array.from({length:kMax-kMin+1},(_,i)=>i+kMin);
-  const kAccs=Object.fromEntries(kRange.map(k=>[k,[]]));
+  const stepResults=[];
+  const dates=S.data.dates;
 
-  for (let step=0;step<numSteps;step++) {
-    const stepBase=trainEnd+step*stepSize;
-    const stepEnd=step===numSteps-1?prices.length-qLen-fLen:trainEnd+(step+1)*stepSize-1;
-    const testCount=Math.max(1,Math.floor(stepSize/qLen));
-    const avail=stepEnd-stepBase+1;
-    if (avail<testCount) continue;
-    const idxs=Array.from({length:testCount},(_,s)=>Math.floor(stepBase+s*avail/testCount));
-    if (idxs.length<5) continue;
+  for (const win of windows) {
+    const {trainStart,trainEnd,testStart,testEnd}=win;
+    const maxTrainS=trainEnd-qLen-fLen; // 訓練パターンの最大開始位置
+    if (maxTrainS<trainStart) { await tick(); continue; }
 
-    const maxTrainS=trainEnd-qLen-fLen;
-    if (maxTrainS<0) continue;
-    const stepCorrect=Object.fromEntries(kRange.map(k=>[k,0]));
-    const stepTotal  =Object.fromEntries(kRange.map(k=>[k,0]));
+    // テスト期間内の全クエリ位置
+    const testIdxs=[];
+    for (let i=testStart;i<=testEnd-qLen-fLen;i++) testIdxs.push(i);
 
-    for (const qStart of idxs) {
-      const query=zNorm(prices.slice(qStart,qStart+qLen));
+    const kCorrect =Object.fromEntries(kRange.map(k=>[k,0]));
+    const kTotal   =Object.fromEntries(kRange.map(k=>[k,0]));
+    const kRetSum  =Object.fromEntries(kRange.map(k=>[k,0]));
+
+    for (const qStart of testIdxs) {
+      const query =zNorm(prices.slice(qStart,qStart+qLen));
       const actual=prices[qStart+qLen+fLen-1]/prices[qStart+qLen]-1;
       if (actual===0) continue;
+
+      // 訓練データのみでDTW計算
       const dists=[];
-      for (let i=0;i<=maxTrainS;i++)
+      for (let i=trainStart;i<=maxTrainS;i++)
         dists.push({idx:i,d:dtwDist(query,zNorm(prices.slice(i,i+qLen)),bw)});
       dists.sort((a,b)=>a.d-b.d);
+
       for (const k of kRange) {
         const picked=[];
         for (const item of dists){
@@ -567,28 +583,59 @@ async function backtestWalkForward(prices,qLen,fLen,kMin,kMax,bw) {
           return s+(fut.at(-1)/fut[0]-1);
         },0)/picked.length;
         if(pred===0)continue;
-        if(Math.sign(pred)===Math.sign(actual))stepCorrect[k]++;
-        stepTotal[k]++;
+        kTotal[k]++;
+        kRetSum[k]+=actual*100; // 単純リターン%（算術平均用）
+        if(Math.sign(pred)===Math.sign(actual))kCorrect[k]++;
       }
     }
-    for (const k of kRange)
-      if(stepTotal[k]>0) kAccs[k].push(stepCorrect[k]/stepTotal[k]);
+
+    // k*選定：サンプル<5のkは除外、同率なら最小k（strict >）
+    let bestK=null, bestAcc=-1;
+    for (const k of kRange) {
+      if(kTotal[k]<5) continue;
+      const acc=kCorrect[k]/kTotal[k];
+      if(acc>bestAcc){bestAcc=acc;bestK=k;}
+    }
+    if(bestK===null){await tick();continue;}
+
+    stepResults.push({
+      step    :stepResults.length+1,
+      trainStart,trainEnd,testStart,testEnd,
+      trainPeriod:`${dates[trainStart]??''}〜${dates[trainEnd-1]??''}`,
+      testPeriod :`${dates[testStart]??''}〜${dates[testEnd-1]??''}`,
+      kstar   :bestK,
+      acc     :bestAcc,
+      avgRet  :kRetSum[bestK]/kTotal[bestK],
+      samples :kTotal[bestK],
+    });
     await tick();
   }
 
-  const validK=kRange.filter(k=>kAccs[k].length>=3).map(k=>{
-    const accs=kAccs[k];
-    const avg=accs.reduce((a,b)=>a+b,0)/accs.length;
-    const stab=accs.length>=2?1-Math.sqrt(accs.reduce((s,a)=>s+(a-avg)**2,0)/(accs.length-1)):1;
-    return{k,avgAcc:avg,stability:stab,validSteps:accs.length};
-  });
-  if(!validK.length) throw new Error('データ不足：ウォークフォワードには最低3期間分のデータが必要です');
-  let best=validK[0];
-  for(const kr of validK) if(kr.avgAcc>best.avgAcc) best=kr;
+  if(stepResults.length<3)
+    throw new Error('データ不足：ウォークフォワードには最低3期間分のデータが必要です');
+
+  // 統計サマリー（方向的中率）
+  const accs   =stepResults.map(s=>s.acc);
+  const meanAcc=accs.reduce((a,b)=>a+b,0)/accs.length;
+  const stdAcc =Math.sqrt(accs.reduce((s,a)=>s+(a-meanAcc)**2,0)/Math.max(accs.length-1,1));
+  const minAcc =Math.min(...accs);
+  const maxAcc =Math.max(...accs);
+
+  // コンセンサスk*（最頻出、同率なら最小k）
+  const kFreq={};
+  for(const s of stepResults) kFreq[s.kstar]=(kFreq[s.kstar]||0)+1;
+  const consensusK=+Object.entries(kFreq).sort((a,b)=>b[1]-a[1]||+a[0]-+b[0])[0][0];
+
+  // 警告（仕様通り）
   const warnings=[];
-  if(best.stability<0.7) warnings.push('安定性が低い（スコア < 0.7）: k* の信頼性に注意してください');
-  if(best.validSteps<4)  warnings.push('有効ステップ数が少ない: 結果の信頼性が限られます');
-  return{kstar:best.k,acc:best.avgAcc,validSteps:best.validSteps,stability:best.stability,kResults:validK,warnings,walkFwd:true};
+  const lowSteps=stepResults.filter(s=>s.acc<0.5).length;
+  if(lowSteps>stepResults.length/2)
+    warnings.push({type:'error',msg:`方向的中率が50%未満のステップが過半数（${lowSteps}/${stepResults.length}）です`});
+  const lowSampleSteps=stepResults.filter(s=>s.samples<10);
+  if(lowSampleSteps.length>0)
+    warnings.push({type:'warn',msg:`サンプル不足：${lowSampleSteps.length}ステップでテストサンプルが10件未満です`});
+
+  return{walkFwd:true,stepResults,consensusK,meanAcc,stdAcc,minAcc,maxAcc,warnings};
 }
 
 async function backtestSimple(prices,qLen,fLen,kMin,kMax,bw) {
