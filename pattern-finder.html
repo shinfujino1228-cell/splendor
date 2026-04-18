@@ -1166,7 +1166,7 @@ function renderBacktest(r) {
       const isBest=s.kstar===r.consensusK;
       if(isBest)tr.style.background='rgba(201,168,76,.10)';
       const pfStr=isFinite(s.pf)?s.pf.toFixed(2):'∞';
-      tr.innerHTML=`<td>${s.step}</td><td style="font-size:.73rem">${s.trainPeriod}</td><td style="font-size:.73rem">${s.testPeriod}</td><td><strong>${s.kstar}${isBest?' ★':''}</strong></td><td class="${s.acc>=0.5?'pos':'neg'}">${(s.acc*100).toFixed(1)}%</td><td class="${s.avgGross>=0?'pos':'neg'}">${s.avgGross>=0?'+':''}${s.avgGross.toFixed(2)}%</td><td class="${s.avgNet>=0?'pos':'neg'}">${s.avgNet>=0?'+':''}${s.avgNet.toFixed(2)}%</td><td class="${+pfStr>=1?'pos':'neg'}">${pfStr}</td><td>${s.samples}</td>`;
+      tr.innerHTML=`<td>${s.step}</td><td style="font-size:.73rem">${s.trainPeriod}</td><td style="font-size:.73rem">${s.testPeriod}</td><td><strong>${s.kstar}${isBest?' ★':''}</strong></td><td class="${s.acc>=0.5?'pos':'neg'}">${(s.acc*100).toFixed(1)}%</td><td class="${s.avgGross>=0?'pos':'neg'}">${s.avgGross>=0?'+':''}${s.avgGross.toFixed(2)}%</td><td class="${s.avgNet>=0?'pos':'neg'}">${s.avgNet>=0?'+':''}${s.avgNet.toFixed(2)}%</td><td class="${s.pf>=1?'pos':'neg'}">${pfStr}</td><td>${s.samples}</td>`;
       tbody.appendChild(tr);
     });
     document.getElementById('kValue').value=r.consensusK;
