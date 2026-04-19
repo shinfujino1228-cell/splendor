@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>Stock Pattern Finder — 取扱説明書</title>
+<style>
+/* ===== 印刷・PDF用 基本設定 ===== */
+@page { size: A4; margin: 20mm 18mm 22mm 18mm; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Hiragino Sans', 'Meiryo', sans-serif; font-size: 11pt; line-height: 1.75; color: #1a1a1a; background: #fff; }
+
+/* ===== ページ区切り ===== */
+.page-break { page-break-after: always; break-after: page; }
+.no-break { page-break-inside: avoid; break-inside: avoid; }
+
+/* ===== 表紙 ===== */
+.cover { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 250mm; text-align: center; }
+.cover h1 { font-size: 28pt; font-weight: 900; color: #1a3a5c; margin-bottom: 8px; }
+.cover .subtitle { font-size: 13pt; color: #555; margin-bottom: 40px; }
+.cover .meta { font-size: 10pt; color: #888; line-height: 2; }
+.cover .badge { display: inline-block; background: #1a3a5c; color: #fff; padding: 4px 16px; border-radius: 20px; font-size: 9pt; margin: 4px; }
+
+/* ===== 目次 ===== */
+.toc h2 { font-size: 16pt; color: #1a3a5c; border-bottom: 2px solid #1a3a5c; padding-bottom: 6px; margin-bottom: 16px; }
+.toc ol { padding-left: 20px; }
+.toc li { padding: 4px 0; font-size: 10.5pt; }
+.toc li a { color: #1a3a5c; text-decoration: none; }
+.toc .toc-sub { padding-left: 16px; font-size: 10pt; color: #555; }
+
+/* ===== 章・節 ===== */
+h2.chapter { font-size: 18pt; color: #1a3a5c; border-left: 6px solid #1a3a5c; padding-left: 12px; margin: 0 0 16px; page-break-after: avoid; }
+h3.section { font-size: 13pt; color: #2a5a8c; border-bottom: 1px solid #c5d8ea; padding-bottom: 4px; margin: 20px 0 10px; page-break-after: avoid; }
+h4.subsec { font-size: 11pt; font-weight: 700; color: #1a3a5c; margin: 14px 0 6px; }
+p { margin-bottom: 9px; }
+ul, ol { padding-left: 22px; margin-bottom: 9px; }
+li { margin-bottom: 4px; }
+
+/* ===== スクリーンショット枠 ===== */
+.screenshot { border: 2px dashed #aac; border-radius: 6px; background: #f4f7fb; padding: 12px; margin: 12px 0; text-align: center; color: #558; font-size: 9pt; min-height: 60px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
+.screenshot .label { font-size: 9.5pt; font-weight: 700; color: #336; margin-bottom: 4px; }
+
+/* ===== 強調ボックス ===== */
+.box-info { background: #eef5ff; border-left: 4px solid #4488cc; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 10.5pt; }
+.box-warn { background: #fff8e1; border-left: 4px solid #f0a030; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 10.5pt; }
+.box-tip  { background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px; padding: 10px 14px; margin: 10px 0; font-size: 10.5pt; }
+.box-title { font-weight: 700; margin-bottom: 4px; }
+
+/* ===== テーブル ===== */
+table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 10pt; }
+th { background: #1a3a5c; color: #fff; padding: 7px 10px; text-align: left; }
+td { border: 1px solid #ccd; padding: 6px 10px; }
+tr:nth-child(even) td { background: #f4f7fb; }
+
+/* ===== コード・用語 ===== */
+code { background: #f0f0f0; border: 1px solid #ddd; border-radius: 3px; padding: 1px 5px; font-size: 9.5pt; font-family: 'Courier New', monospace; }
+.term { font-weight: 700; color: #1a3a5c; }
+.green { color: #2e7d32; font-weight: 700; }
+.red { color: #c62828; font-weight: 700; }
+
+/* ===== 画面構成図（テキストベース） ===== */
+.ui-diagram { border: 1px solid #bbb; border-radius: 6px; padding: 10px; background: #fafafa; font-size: 9pt; font-family: monospace; line-height: 1.6; margin: 10px 0; }
+
+/* ===== フロー矢印 ===== */
+.flow { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; margin: 10px 0; }
+.flow-step { background: #1a3a5c; color: #fff; padding: 5px 12px; border-radius: 4px; font-size: 9.5pt; }
+.flow-arrow { color: #888; font-size: 14pt; }
+
+/* ===== セクション間スペース ===== */
+.spacer { height: 16px; }
+</style>
+</head>
+<body>
+
+<!-- ========== 表紙 ========== -->
+<div class="cover page-break">
+  <h1>Stock Pattern Finder</h1>
+  <div class="subtitle">IDTW + k*-NN パターン認識ツール<br>取扱説明書</div>
+  <div>
+    <span class="badge">ブートストラップCI</span>
+    <span class="badge">コスト控除</span>
+    <span class="badge">SL/TP</span>
+    <span class="badge">レジームフィルタ</span>
+    <span class="badge">ウォークフォワード検証</span>
+  </div>
+  <div class="meta" style="margin-top:40px;">
+    対象読者：大学生レベル（統計基礎知識があると望ましい）<br>
+    バージョン：2025年4月版
+  </div>
+</div>
+
+<!-- ========== 目次 ========== -->
+<div class="toc page-break">
+  <h2>目次</h2>
+  <ol>
+    <li>このツールでできること</li>
+    <li>起動方法と画面構成</li>
+    <li>基本パラメータの設定</li>
+    <li class="toc-sub">
+      <ol>
+        <li>モード切替（デモ / Live）</li>
+        <li>クエリ窓・将来予測期間・k・DTW帯域幅</li>
+      </ol>
+    </li>
+    <li>取引コスト設定</li>
+    <li>イグジット戦略（SL / TP / トレーリングストップ / ATR動的調整）</li>
+    <li>レジームフィルタ</li>
+    <li>データ読込とチャート操作</li>
+    <li>パターン検索の実行</li>
+    <li>検索結果の読み方
+      <ol class="toc-sub">
+        <li>サマリー統計 12項目</li>
+        <li>シグナル判定（採用 / 不採用）</li>
+        <li>パターンオーバーレイチャート</li>
+        <li>将来価格チャート</li>
+        <li>マッチング詳細テーブル</li>
+      </ol>
+    </li>
+    <li>バックテスト（k* 最適化）
+      <ol class="toc-sub">
+        <li>ウォークフォワード検証とは</li>
+        <li>Embargo期間（データリーク防止）</li>
+        <li>k*安定性（CV）の見方</li>
+        <li>ウォークフォワード詳細テーブル</li>
+      </ol>
+    </li>
+    <li>実践ガイド：結果を信頼できる条件</li>
+    <li>用語集</li>
+    <li>アルゴリズム解説</li>
+  </ol>
+</div>
+
+<!-- ========== 各章コンテンツ ========== -->
+<!-- ========== 第1章 ========== -->
+<div class="page-break">
+<h2 class="chapter">1. このツールでできること</h2>
+
+<p>Stock Pattern Finder は、過去の株価・先物価格の中から <span class="term">現在と似た値動きパターン</span>を自動で探し出し、「そのパターンの後、価格はどう動いたか」を統計的に分析するツールです。</p>
+
+<h3 class="section">1.1 基本的な考え方</h3>
+<p>株価チャートには「似た形」が繰り返し現れることがあります。このツールは次のステップで分析します。</p>
+
+<div class="flow">
+  <div class="flow-step">① 現在のパターンを選ぶ</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">② 過去の似たパターンを検索</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">③ その後の値動きを統計分析</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">④ シグナル採否を判定</div>
+</div>
+
+<h3 class="section">1.2 主な機能一覧</h3>
+<table>
+  <tr><th>機能</th><th>内容</th></tr>
+  <tr><td>パターン検索（IDTW）</td><td>DTW（動的時間伸縮法）でZ正規化された値動き形状を比較。価格水準・スケールに依存しない</td></tr>
+  <tr><td>ブートストラップ信頼区間</td><td>勝率・平均リターン・シャープレシオなどに95%信頼区間を表示</td></tr>
+  <tr><td>コスト控除</td><td>往復コスト・スリッページ・先物ロールコストを差し引いたネットリターンで評価</td></tr>
+  <tr><td>SL / TP / トレーリングストップ</td><td>損切り・利確・ATR連動の動的イグジットをシミュレーション</td></tr>
+  <tr><td>レジームフィルタ</td><td>ボラティリティ水準・トレンド方向が一致するマッチのみに絞り込み</td></tr>
+  <tr><td>ウォークフォワード・バックテスト</td><td>最適な近傍数k*をデータリーク防止しながら自動選定</td></tr>
+  <tr><td>シグナル判定</td><td>PF・CI下限・勝率CI下限の3条件を満たすか自動判定</td></tr>
+</table>
+
+<div class="box-warn">
+  <div class="box-title">⚠️ 注意</div>
+  このツールは過去データにもとづく統計分析ツールです。将来の利益を保証するものではありません。実際の売買判断は自己責任で行ってください。
+</div>
+</div>
+
+<!-- ========== 第2章 ========== -->
+<div class="page-break">
+<h2 class="chapter">2. 起動方法と画面構成</h2>
+
+<h3 class="section">2.1 起動方法</h3>
+<p><code>pattern-finder.html</code> をブラウザ（Chrome推奨）で直接開くだけで使えます。インターネット接続・サーバー不要（デモモードの場合）。</p>
+
+<div class="box-info">
+  <div class="box-title">💡 Live モードを使う場合</div>
+  Yahoo Finance からリアルデータを取得するには、ローカルサーバーが必要です。<br>
+  ① <code>python server.py</code> を実行 → ② ブラウザで <code>pattern-finder.html</code> を開く → ③「Live」タブを選択
+</div>
+
+<h3 class="section">2.2 画面全体の構成</h3>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: ページ全体のスクロール構成】</div>
+  ブラウザで pattern-finder.html を開いた全体像を貼り付けてください
+</div>
+
+<div class="ui-diagram">
+┌─────────────────────────────────────────────┐
+│  Stock Pattern Finder （タイトル）            │
+├─────────────────────────────────────────────┤
+│  【設定カード】                               │
+│   モード切替 / クエリ窓 / 将来期間 / k / 帯域幅 │
+│   ▶ 取引コスト設定（折りたたみ）              │
+│   ▶ イグジット戦略（折りたたみ）              │
+│   ▶ レジームフィルタ（折りたたみ）            │
+│   [データ読込] [パターン検索] [最新窓を使用]  │
+├─────────────────────────────────────────────┤
+│  【価格チャート】← クリックでクエリ位置を選択 │
+├─────────────────────────────────────────────┤
+│  【サマリー統計】（検索後に表示）             │
+│  【パターンオーバーレイ】【将来価格チャート】  │
+│  【マッチング詳細テーブル】                   │
+├─────────────────────────────────────────────┤
+│  【バックテスト設定＆結果】                   │
+├─────────────────────────────────────────────┤
+│  【アルゴリズム解説】                         │
+└─────────────────────────────────────────────┘
+</div>
+
+<p>画面は上から順に操作します。①設定 → ②データ読込 → ③チャートでクエリ位置選択 → ④パターン検索 → ⑤結果確認 → ⑥バックテスト、という流れです。</p>
+</div>
+
+<!-- ========== 第4章 ========== -->
+<div class="page-break">
+<h2 class="chapter">4. 取引コスト設定</h2>
+
+<p>「取引コスト設定」の折りたたみをクリックすると展開します。コスト控除後の <span class="term">ネットリターン</span> でシグナルを評価するため、現実的なコストを入力することが重要です。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: 取引コスト設定（展開後）】</div>
+  商品プリセット・往復コスト・スリッページ・ロール年率の4項目が並ぶ部分
+</div>
+
+<h3 class="section">4.1 商品プリセット</h3>
+<p>代表的な商品のコストが一括設定されます。</p>
+<table>
+  <tr><th>プリセット</th><th>往復コスト</th><th>スリッページ</th><th>ロール年率</th></tr>
+  <tr><td>個別株（デフォルト）</td><td>0.20%</td><td>0.10%</td><td>0%</td></tr>
+  <tr><td>日経225先物ミニ</td><td>0.05%</td><td>0.03%</td><td>5%</td></tr>
+  <tr><td>日経225先物ラージ</td><td>0.02%</td><td>0.02%</td><td>5%</td></tr>
+  <tr><td>WTI原油先物</td><td>0.10%</td><td>0.08%</td><td>5%</td></tr>
+  <tr><td>カスタム</td><td colspan="3">手動入力</td></tr>
+</table>
+
+<h3 class="section">4.2 各コスト項目の意味</h3>
+<table>
+  <tr><th>項目</th><th>意味</th></tr>
+  <tr><td>往復コスト（%）</td><td>売買手数料の往復合計。買いと売り両方の手数料</td></tr>
+  <tr><td>スリッページ（%）</td><td>注文値と約定値のズレ。流動性が低いほど大きい</td></tr>
+  <tr><td>ロール年率（%）</td><td>先物のロールオーバー（限月乗り換え）コスト。保有日数に応じて按分して差し引かれる</td></tr>
+</table>
+
+<div class="box-info">
+  <div class="box-title">📌 ネットリターンの計算式</div>
+  ネットリターン ＝ グロスリターン − （往復コスト + スリッページ）− ロール年率 × 保有日数÷252
+</div>
+</div>
+
+<!-- ========== 第5章 ========== -->
+<div class="page-break">
+<h2 class="chapter">5. イグジット戦略</h2>
+
+<p>「イグジット戦略（SL / TP / トレーリング）」を展開すると、ポジションの途中決済条件を設定できます。条件にヒットしない場合は将来期間の満期まで保有したとして計算されます。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: イグジット戦略（展開後）】</div>
+  損切り・利確・トレーリングストップのチェックボックスと数値入力、ATR動的調整オプション
+</div>
+
+<h3 class="section">5.1 損切り（Stop Loss）</h3>
+<p>チェックを入れると有効になります。エントリー価格から指定した%以上下落した時点で強制決済します。</p>
+<div class="box-tip">
+  <div class="box-title">例</div>
+  損切り3%に設定 → エントリー後に価格が3%下落した時点でその損失で決済
+</div>
+
+<h3 class="section">5.2 利確（Take Profit）</h3>
+<p>エントリー価格から指定した%以上上昇した時点で利確決済します。</p>
+
+<h3 class="section">5.3 トレーリングストップ</h3>
+<p>直近の高値から指定した%押し戻された時点で決済します。利益を守りながら上昇トレンドに乗り続ける効果があります。</p>
+<div class="box-info">
+  <div class="box-title">例</div>
+  トレーリング2%設定 → ピーク価格から2%下落した時点で決済。価格が上昇し続ける限り決済されない
+</div>
+
+<h3 class="section">5.4 ATRベース動的調整（オプション）</h3>
+<p>「ATRベースで動的調整」にチェックを入れると、固定%の代わりに <span class="term">ATR（Average True Range）× 倍率</span> でSL・TPを計算します。ボラティリティが高い時期は広めに、低い時期は狭めに自動調整されます。</p>
+<table>
+  <tr><th>設定項目</th><th>デフォルト</th><th>意味</th></tr>
+  <tr><td>SL倍率（×ATR）</td><td>1.5倍</td><td>ATRの1.5倍下落で損切り</td></tr>
+  <tr><td>TP倍率（×ATR）</td><td>2.5倍</td><td>ATRの2.5倍上昇で利確</td></tr>
+</table>
+<div class="box-warn">
+  <div class="box-title">注意</div>
+  ATRベースを有効にするとSL・TPの固定%設定は上書きされます。両方同時には使えません。
+</div>
+</div>
+
+<!-- ========== 第6章 ========== -->
+<div class="page-break">
+<h2 class="chapter">6. レジームフィルタ</h2>
+
+<p>「レジームフィルタ」を展開すると、クエリ（現在のパターン）と <span class="term">市場環境（レジーム）が似た時期のマッチだけ</span>に絞り込めます。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: レジームフィルタ（展開後）】</div>
+  ボラティリティフィルタとトレンドフィルタの2つのドロップダウン
+</div>
+
+<h3 class="section">6.1 ボラティリティフィルタ</h3>
+<p>20日ATRを3分位（低・中・高）に分類し、フィルタリングします。</p>
+<table>
+  <tr><th>設定</th><th>動作</th></tr>
+  <tr><td>全期間（デフォルト）</td><td>フィルタなし。全マッチを使用</td></tr>
+  <tr><td>同一ボラのみ</td><td>クエリと同じボラ水準（低/中/高）のマッチのみ</td></tr>
+  <tr><td>低ボラのみ</td><td>ボラが低い時期のマッチのみ</td></tr>
+  <tr><td>中ボラのみ</td><td>ボラが中程度の時期のみ</td></tr>
+  <tr><td>高ボラのみ</td><td>ボラが高い時期（相場急変時）のみ</td></tr>
+</table>
+
+<h3 class="section">6.2 トレンドフィルタ</h3>
+<p>MA200（200日移動平均）からの乖離率±5%でトレンドを判定します。</p>
+<table>
+  <tr><th>設定</th><th>判定条件</th></tr>
+  <tr><td>全期間（デフォルト）</td><td>フィルタなし</td></tr>
+  <tr><td>同一トレンドのみ</td><td>クエリと同じトレンド（上昇/レンジ/下降）</td></tr>
+  <tr><td>上昇のみ</td><td>MA200乖離 ＞ ＋5%</td></tr>
+  <tr><td>レンジのみ</td><td>MA200乖離 −5%〜＋5%</td></tr>
+  <tr><td>下降のみ</td><td>MA200乖離 ＜ −5%</td></tr>
+</table>
+
+<div class="box-tip">
+  <div class="box-title">💡 フィルタの自動フォールバック</div>
+  フィルタが厳しすぎてマッチ数がk件に満たない場合、自動的にフィルタなし（全データ）にフォールバックします。マッチが0件になることはありません。
+</div>
+</div>
+
+<!-- ========== 第7章 ========== -->
+<div class="page-break">
+<h2 class="chapter">7. データ読込とチャート操作</h2>
+
+<h3 class="section">7.1 データを読み込む</h3>
+<p>設定が完了したら「データ読込」ボタンをクリックします。デモモードでは約1300営業日分（約5年）の模擬データが即座に読み込まれます。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: データ読込後の価格チャート全体】</div>
+  ローソク足またはライン形式の価格チャートと、クエリ窓（黄色ハイライト）が表示された状態
+</div>
+
+<h3 class="section">7.2 クエリ窓の選択（チャートクリック）</h3>
+<p>価格チャートをクリックすると、クリックした位置を <span class="term">クエリ開始点</span> として設定できます。チャート上に黄色いハイライトでクエリ窓（指定日数分）が表示されます。</p>
+
+<div class="box-info">
+  <div class="box-title">📌 クエリ窓とは</div>
+  「現在このような形をしているパターン」として指定する期間です。この形と似た過去のパターンを検索します。
+</div>
+
+<p>チャート下部には以下の情報が表示されます：</p>
+<ul>
+  <li><strong>クエリ窓</strong>：選択した期間の開始日〜終了日と日数</li>
+  <li><strong>クエリレジーム</strong>：ボラ水準（低/中/高）とトレンド方向、MA200乖離率</li>
+</ul>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: チャートクリック後のクエリ窓ハイライト】</div>
+  チャート上の黄色いハイライト部分と、下部のクエリ窓情報・レジーム情報テキスト
+</div>
+
+<h3 class="section">7.3「最新窓を使用」ボタン</h3>
+<p>データ末尾（最新の日付）を自動的にクエリ終端に設定します。「今現在の相場がこういう形だ」として検索したい場合に便利です。</p>
+
+<div class="box-tip">
+  <div class="box-title">💡 実際の使い方</div>
+  ① まず「データ読込」でデータを取得 → ② 「最新窓を使用」で直近パターンをセット → ③ 「パターン検索」実行、が最も典型的な使い方です。
+</div>
+</div>
+
+<!-- ========== 第8章 ========== -->
+<div class="page-break">
+<h2 class="chapter">8. パターン検索の実行</h2>
+
+<h3 class="section">8.1 検索の実行</h3>
+<p>「パターン検索」ボタンをクリックすると、IDTW（Improved Dynamic Time Warping）アルゴリズムで過去データ全体をスキャンします。データ量・クエリ窓長により数秒〜数十秒かかります。プログレスバーで進捗が確認できます。</p>
+
+<div class="flow">
+  <div class="flow-step">DTW距離計算（全候補）</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">レジームフィルタ適用</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">De-overlap処理（重複除去）</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">上位k件を取得</div>
+  <div class="flow-arrow">→</div>
+  <div class="flow-step">ブートストラップCI計算</div>
+</div>
+
+<h3 class="section">8.2 De-overlapとは</h3>
+<p>パターン間の独立性を保つため、マッチ同士が時間的に重複しないよう除外処理をします。具体的には <code>|マッチAの開始 − マッチBの開始| ≥ クエリ窓 + 将来期間 + 5日</code> を満たすものだけを残します。</p>
+<p>また、マッチのfuture期間がクエリの開始日以降に重なるものも除外します（データリーク防止）。</p>
+
+<h3 class="section">8.3 ブートストラップCI計算</h3>
+<p>検索後、1000回の復元抽出を行い、各統計量の95%信頼区間（CI）を計算します。この間「ブートストラップ: XX/1000回」と表示されます。</p>
+
+<div class="box-warn">
+  <div class="box-title">⚠️ 統計的注意</div>
+  マッチは近似的に独立サンプルとして扱いますが、同一レジーム由来の相関が残る可能性があります。CIは統計的傾向の目安であり、n（マッチ数）が30未満の場合は特に信頼区間が広くなります。
+</div>
+</div>
+
+<!-- ========== 第9章 ========== -->
+<div class="page-break">
+<h2 class="chapter">9. 検索結果の読み方</h2>
+
+<h3 class="section">9.1 サマリー統計 — 12項目</h3>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: サマリー統計カード全体】</div>
+  12枚の統計カードが4列グリッドに並んでいる状態。各値に緑/赤の色付きが見える
+</div>
+
+<table>
+  <tr><th>指標</th><th>意味</th><th>見方</th></tr>
+  <tr>
+    <td>平均リターン（ネット）</td>
+    <td>コスト差引後の1マッチあたり平均損益（%）</td>
+    <td><span class="green">緑＝プラス</span> / <span class="red">赤＝マイナス</span>。下に95%CIとグロス値も表示</td>
+  </tr>
+  <tr>
+    <td>勝率</td>
+    <td>ネットリターンがプラスのマッチの割合</td>
+    <td><span class="green">緑≥50%</span>。下に95%CI表示</td>
+  </tr>
+  <tr>
+    <td>シャープレシオ（年換算）</td>
+    <td>平均リターン ÷ 標準偏差 × √(252/将来期間)</td>
+    <td><span class="green">緑≥1</span>、黄色0〜1、<span class="red">赤＜0</span></td>
+  </tr>
+  <tr>
+    <td>プロフィットファクター（PF）</td>
+    <td>総利益 ÷ 総損失。1超で利益超過</td>
+    <td><span class="green">緑≥1</span>。シグナル採用基準は＞1.3</td>
+  </tr>
+  <tr>
+    <td>期待値（ネット）</td>
+    <td>平均リターンと同値。CIと並べて確認</td>
+    <td>CIの下限がプラスかどうかが重要</td>
+  </tr>
+  <tr>
+    <td>ペイオフレシオ</td>
+    <td>平均利益 ÷ 平均損失</td>
+    <td><span class="green">緑≥1</span>（1回の利益が1回の損失より大きい）</td>
+  </tr>
+  <tr>
+    <td>最大連敗数</td>
+    <td>連続してネット損失になる最大回数</td>
+    <td>ランダム順（統計的分布）と時系列順（実際の発生順）の2値を表示</td>
+  </tr>
+  <tr>
+    <td>最大ドローダウン（平均）</td>
+    <td>各マッチのfuture期間内での最大値下がり幅の平均</td>
+    <td>赤表示。小さいほどよい</td>
+  </tr>
+  <tr>
+    <td>中央値DTW距離</td>
+    <td>マッチの類似度の中央値。小さいほど形が近い</td>
+    <td>絶対値より相対比較で使う</td>
+  </tr>
+  <tr>
+    <td>マッチ数</td>
+    <td>見つかった類似パターンの件数</td>
+    <td>k件が上限。統計的信頼性にはn≥20が望ましい</td>
+  </tr>
+  <tr>
+    <td>t検定 p値</td>
+    <td>「平均リターンが0である」帰無仮説の棄却水準</td>
+    <td>*p＜0.05、**p＜0.01、***p＜0.001</td>
+  </tr>
+  <tr>
+    <td>二項検定 p値</td>
+    <td>「勝率が50%である」帰無仮説の棄却水準（厳密計算）</td>
+    <td>*p＜0.05 で勝率が偶然50%を上回っているとは言えない</td>
+  </tr>
+</table>
+
+<h3 class="section">9.2 シグナル判定（採用 / 不採用）</h3>
+<p>統計カードの下に自動で判定結果が表示されます。以下の3条件をすべて満たした場合のみ「採用候補」と表示されます。</p>
+
+<table>
+  <tr><th>条件</th><th>基準値</th></tr>
+  <tr><td>プロフィットファクター（PF）</td><td>＞ 1.3</td></tr>
+  <tr><td>ネットリターンのCI下限</td><td>＞ 0（プラス）</td></tr>
+  <tr><td>勝率のCI下限</td><td>＞ 50%</td></tr>
+</table>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: シグナル判定ボックス（採用例）】</div>
+  緑のボックスで「✓ シグナル採用候補: PF&gt;1.3、ネットリターンCI下限&gt;0、勝率CI下限&gt;50% — 全条件クリア」と表示された状態
+</div>
+
+<div class="box-warn">
+  <div class="box-title">⚠️ 採用候補は必ずしも利益を意味しない</div>
+  3条件クリアは統計的に有望であることの目安ですが、サンプル数が少ない・レジーム変化・ブラックスワンなど、過去データに現れない要因でシグナルが失効することがあります。追加の安全マージンを設けることを推奨します。
+</div>
+</div>
+
+<!-- ========== 第9章続き ========== -->
+<div class="page-break">
+<h3 class="section">9.3 パターンオーバーレイチャート</h3>
+<p>見つかった上位k件の類似パターンを、Z正規化（平均0・標準偏差1）したうえで重ね合わせて表示します。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: パターンオーバーレイチャート】</div>
+  複数の色付きラインが重なり、太い黄色のラインがクエリパターンを示す状態
+</div>
+
+<ul>
+  <li><strong>太い黄色のライン</strong>：現在のクエリパターン（探している形）</li>
+  <li><strong>細いカラーのライン</strong>：過去の類似パターン（#1, #2, ...）</li>
+</ul>
+<p>ラインが密集して束になっているほど、クエリと過去パターンの形状が一致しています。</p>
+
+<h3 class="section">9.4 将来価格チャート（始端 = 0%）</h3>
+<p>各マッチのfuture期間の実際の値動きを、エントリー時点を0%として重ね合わせて表示します。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: 将来価格チャート】</div>
+  エントリー後の価格変動が複数のカラーラインで表示され、太い黄色の線が平均リターンを示す
+</div>
+
+<ul>
+  <li><strong>太い黄色のライン</strong>：全マッチの平均リターン推移</li>
+  <li><strong>細いカラーのライン</strong>：個別マッチの実際の値動き</li>
+  <li><strong>点線（0%）</strong>：エントリー価格の水準</li>
+</ul>
+
+<h3 class="section">9.5 マッチング詳細テーブル</h3>
+<p>上位k件の各マッチについて詳細情報を一覧表示します。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: マッチング詳細テーブル】</div>
+  #・開始日・終了日・DTW距離・グロス・ネット・最大上昇・MDD・決済理由・保有日数・ボラ・トレンドの列が並ぶテーブル
+</div>
+
+<table>
+  <tr><th>列名</th><th>内容</th></tr>
+  <tr><td>#</td><td>類似度ランク（1が最も近い）</td></tr>
+  <tr><td>開始日 / 終了日</td><td>パターン期間の開始・終了日付</td></tr>
+  <tr><td>DTW距離</td><td>クエリとの形状の近さ。小さいほど似ている</td></tr>
+  <tr><td>グロス（%）</td><td>コスト控除前のfuture期間リターン</td></tr>
+  <tr><td>ネット（%）</td><td>コスト控除後のリターン</td></tr>
+  <tr><td>最大上昇（%）</td><td>future期間中の最大上昇幅</td></tr>
+  <tr><td>MDD（%）</td><td>future期間内の最大ドローダウン</td></tr>
+  <tr><td>決済</td><td>決済理由：SL（損切り）/TP（利確）/TS（トレーリング）/EXP（満期）</td></tr>
+  <tr><td>日数</td><td>実際の保有日数（SL/TP時は短縮される）</td></tr>
+  <tr><td>ボラ</td><td>そのマッチ時点のボラ水準（低/中/高）</td></tr>
+  <tr><td>トレンド</td><td>そのマッチ時点のトレンド（上昇/レンジ/下降）</td></tr>
+</table>
+</div>
+
+<!-- ========== 第10章 ========== -->
+<div class="page-break">
+<h2 class="chapter">10. バックテスト（k* 最適化）</h2>
+
+<p>バックテストは「どのkが最も良い成績を出すか」を過去データで検証し、最適な近傍数 <span class="term">k*</span> を自動選定する機能です。パターン検索実行後に「バックテスト実行」ボタンが有効になります。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: バックテスト設定カード（実行前）】</div>
+  k最小値・k最大値・ウォークフォワードチェック・訓練窓方式・Embargo期間・バックテスト実行ボタンが並ぶ部分
+</div>
+
+<h3 class="section">10.1 ウォークフォワード検証とは</h3>
+<p>データを複数の期間に分割し、<span class="term">訓練期間</span>でkを選び、<span class="term">テスト期間</span>で性能を評価することを繰り返す手法です。「過去に有効だったkが未来でも有効か」を現実に近い形で検証できます。</p>
+
+<div class="ui-diagram">
+全データ（例：5年分）
+├─ ステップ1: [訓練: 1〜3年目] → embargo → [テスト: 3年目〜]
+├─ ステップ2: [訓練: 1〜4年目] → embargo → [テスト: 4年目〜]
+└─ ステップ3: [訓練: 1〜5年目] → embargo → [テスト: 5年目〜]
+</div>
+
+<p>デフォルトは<strong>拡張窓（Expanding Window）</strong>で、訓練期間の開始は常にデータ先頭（より多くのデータを使える）。<strong>ローリング窓（Rolling Window）</strong>は訓練期間の長さを固定してスライドさせます（最新の傾向を重視したい場合）。</p>
+
+<h3 class="section">10.2 Embargo期間（データリーク防止）</h3>
+<p>訓練データの末尾と テストデータの先頭の間に設けるギャップ期間です。デフォルト20日。</p>
+
+<div class="box-info">
+  <div class="box-title">なぜEmbargoが必要か</div>
+  将来期間が15〜20日ある場合、訓練末尾のパターンのfuture期間がテスト先頭と重複します。この重複を放置すると、テストデータに未来情報が漏れ込む「データリーク」が起き、バックテスト結果が実際より楽観的になります。
+</div>
+
+<h3 class="section">10.3 k* の選定ロジック</h3>
+<p>各ステップで以下の優先順でk*を決定します：</p>
+<ol>
+  <li><strong>主選定</strong>：k≥5かつサンプル数n≥20のkの中で、ネットリターンのブートストラップ95%CI下限が最大のkを選ぶ</li>
+  <li><strong>フォールバック1</strong>：条件緩和（k≥3、n≥10）で同様に選定</li>
+  <li><strong>フォールバック2</strong>：それでも選定できない場合は方向的中率（予測方向が正しかった割合）で選ぶ</li>
+</ol>
+<p>各ステップで使われた選定方法は「k*選定モード」としてバックテスト結果の下部に表示されます。</p>
+
+<h3 class="section">10.4 バックテスト結果の見方</h3>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: バックテスト結果カード（ウォークフォワード後）】</div>
+  コンセンサスk*・方向的中率・標準偏差・有効ステップ数・k*安定性(CV)の5カードと、ウォークフォワード詳細テーブル
+</div>
+
+<table>
+  <tr><th>表示項目</th><th>意味</th></tr>
+  <tr><td>コンセンサス k*</td><td>全ステップで最も多く選ばれたk値。パターン検索のkに自動反映される</td></tr>
+  <tr><td>方向的中率（平均）</td><td>全ステップの予測方向正解率の平均。50%超なら方向予測に価値がある</td></tr>
+  <tr><td>標準偏差</td><td>ステップ間での的中率のばらつき。10%未満なら安定</td></tr>
+  <tr><td>有効ステップ数</td><td>実際に計算されたステップ数（最低3以上必要）</td></tr>
+  <tr><td>k*安定性（CV）</td><td>採用k*の周辺±2でのCI下限変動係数。小さいほど安定（詳細は10.5節）</td></tr>
+</table>
+
+<h3 class="section">10.5 k*安定性（CV）の見方</h3>
+<p>変動係数（CV = 標準偏差/平均）でk*周辺のCI下限のばらつきを評価します。</p>
+<table>
+  <tr><th>CV値</th><th>評価</th><th>表示色</th></tr>
+  <tr><td>＜ 0.30</td><td>安定（過学習リスク低）</td><td><span class="green">緑</span></td></tr>
+  <tr><td>0.30〜0.50</td><td>要注意</td><td>黄色</td></tr>
+  <tr><td>≥ 0.50</td><td>不安定（過学習の疑い）</td><td><span class="red">赤</span></td></tr>
+</table>
+<div class="box-warn">
+  <div class="box-title">⚠️ CVが高い場合</div>
+  k*の周辺で性能が急変しており、たまたまk*だけが良く見えている可能性があります。kを変えて再検証するか、データを増やすことを検討してください。
+</div>
+
+<h3 class="section">10.6 ウォークフォワード詳細テーブル</h3>
+<p>各ステップの詳細が一覧で確認できます。コンセンサスk*に対応するステップは★マークで強調されます。</p>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: ウォークフォワード詳細テーブル】</div>
+  ステップ番号・訓練期間（→20d→）・テスト期間・最適k*・方向的中率・平均G・平均N・PF・サンプル数の列が並ぶテーブル
+</div>
+
+<table>
+  <tr><th>列</th><th>意味</th></tr>
+  <tr><td>ステップ</td><td>ウォークフォワードの分割番号</td></tr>
+  <tr><td>訓練期間</td><td>k*選定に使ったデータ期間（→20d→はEmbargo）</td></tr>
+  <tr><td>テスト期間</td><td>選定したk*を実際にテストした期間</td></tr>
+  <tr><td>最適 k*</td><td>そのステップで選ばれたk（★はコンセンサスk*）</td></tr>
+  <tr><td>方向的中率</td><td>そのステップでの予測方向の正解率</td></tr>
+  <tr><td>平均G / 平均N</td><td>グロス / ネット平均リターン</td></tr>
+  <tr><td>PF</td><td>プロフィットファクター</td></tr>
+  <tr><td>サンプル数</td><td>テスト期間のデータ点数</td></tr>
+</table>
+</div>
+
+<!-- ========== 第11章 ========== -->
+<div class="page-break">
+<h2 class="chapter">11. 実践ガイド：結果を信頼できる条件</h2>
+
+<h3 class="section">11.1 基本的な操作フロー</h3>
+<div class="flow" style="flex-direction:column;align-items:flex-start;gap:8px;">
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">① モード・パラメータ設定</div><span style="color:#888;font-size:10pt;">クエリ窓・将来期間・k・コスト・イグジット等</span></div>
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">② データ読込</div><span style="color:#888;font-size:10pt;">デモ or Live</span></div>
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">③ クエリ位置設定</div><span style="color:#888;font-size:10pt;">チャートクリック or「最新窓を使用」</span></div>
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">④ パターン検索</div><span style="color:#888;font-size:10pt;">結果・CI・シグナル判定を確認</span></div>
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">⑤ バックテスト実行</div><span style="color:#888;font-size:10pt;">k*・安定性CV・ウォークフォワード詳細を確認</span></div>
+  <div style="display:flex;align-items:center;gap:8px;"><div class="flow-step">⑥ 総合判断</div><span style="color:#888;font-size:10pt;">以下のチェックリストで評価</span></div>
+</div>
+
+<h3 class="section">11.2 信頼性チェックリスト</h3>
+<table>
+  <tr><th>チェック項目</th><th>目安</th><th>注意点</th></tr>
+  <tr><td>マッチ数（n）</td><td>n ≥ 20</td><td>n＜10では統計的意味が薄い</td></tr>
+  <tr><td>PF</td><td>＞ 1.3</td><td>シグナル採用の最低基準</td></tr>
+  <tr><td>ネットリターンCI下限</td><td>＞ 0</td><td>信頼区間がプラス圏内にあること</td></tr>
+  <tr><td>勝率CI下限</td><td>＞ 50%</td><td>50%以上の勝率が統計的に確認できること</td></tr>
+  <tr><td>t検定 / 二項検定</td><td>p ＜ 0.05（*以上）</td><td>有意水準の確認</td></tr>
+  <tr><td>k*安定性 CV</td><td>＜ 0.30</td><td>過学習していないことの確認</td></tr>
+  <tr><td>最大連敗数（時系列）</td><td>許容できる水準か</td><td>ランダム順との差が大きい場合はレジーム依存に注意</td></tr>
+  <tr><td>ウォークフォワード的中率</td><td>平均 ≥ 50%</td><td>50%未満のステップが半数以上なら要注意</td></tr>
+</table>
+
+<h3 class="section">11.3 よくある失敗パターンと対処法</h3>
+<div class="no-break">
+<div class="box-warn">
+  <div class="box-title">❌ マッチ数が少なすぎる（n＜10）</div>
+  クエリ窓を短くする、レジームフィルタを緩める（「全期間」に戻す）、またはk値を小さくしてみてください。
+</div>
+<div class="box-warn">
+  <div class="box-title">❌ ウォークフォワードが3ステップ未満エラー</div>
+  データ期間が短すぎます。Liveモードで取得期間を5年〜最大に設定するか、テストサイズが確保できるクエリ窓・将来期間の組み合わせに変えてください。
+</div>
+<div class="box-warn">
+  <div class="box-title">❌ k*安定性が「不安定（赤）」</div>
+  kRangeを広げる、データを増やす、またはクエリ位置を変えて再検索してください。
+</div>
+<div class="box-tip">
+  <div class="box-title">✅ 中期スパンで始めるのがおすすめ</div>
+  「中期スパン推奨設定」ボタンから始めると、クエリ窓60日・将来期間15日・k=10の実績ある設定でスタートできます。
+</div>
+</div>
+</div>
+
+<!-- ========== 第12章 ========== -->
+<div class="page-break">
+<h2 class="chapter">12. 用語集</h2>
+
+<table>
+  <tr><th>用語</th><th>説明</th></tr>
+  <tr><td>DTW（Dynamic Time Warping）</td><td>時系列同士の類似度を計算する手法。形が似ていても時間軸が少しズレていても対応できる</td></tr>
+  <tr><td>IDTW</td><td>Improved DTW。Z正規化 + Sakoe-Chiba帯域制約 + パス長正規化による改良版DTW</td></tr>
+  <tr><td>Z正規化</td><td>価格系列を平均0・標準偏差1に変換する処理。価格水準（例：1000円と10,000円）の違いを無視して形状だけで比較できる</td></tr>
+  <tr><td>Sakoe-Chiba帯域</td><td>DTW計算で許容する時間ズレの最大幅。帯域幅をクエリ窓の%で指定する</td></tr>
+  <tr><td>k-NN（k近傍法）</td><td>最も近い（似ている）k件の過去パターンの結果を集計して予測する手法</td></tr>
+  <tr><td>k*</td><td>バックテストで最適と判断されたkの値。コンセンサスk*は全ステップで最頻値のk</td></tr>
+  <tr><td>De-overlap</td><td>類似パターンが時間的に重複しないよう除外する処理。統計的独立性を保つ</td></tr>
+  <tr><td>ブートストラップCI</td><td>マッチをランダム復元抽出して1000回繰り返し、統計量の分布から95%信頼区間を推定する方法</td></tr>
+  <tr><td>95%信頼区間（CI）</td><td>真の値が95%の確率で含まれる範囲。[lo, hi]で表示。loがプラスなら「確率的にプラスと言える」</td></tr>
+  <tr><td>プロフィットファクター（PF）</td><td>総利益 ÷ 総損失。1.0なら損益トントン、1.3以上でシグナル採用基準クリア</td></tr>
+  <tr><td>シャープレシオ</td><td>リターン÷リスク（標準偏差）の年換算値。1以上が望ましい</td></tr>
+  <tr><td>ペイオフレシオ</td><td>平均利益 ÷ 平均損失。勝率が低くてもペイオフが高ければ採算が合う</td></tr>
+  <tr><td>MDD（最大ドローダウン）</td><td>ピーク価格からの最大下落幅（%）。リスク管理の指標</td></tr>
+  <tr><td>ATR（Average True Range）</td><td>直近N日間の真の値幅の平均。ボラティリティの代理指標</td></tr>
+  <tr><td>レジーム</td><td>市場の「状態」。ボラティリティ水準とトレンド方向の組み合わせで表現</td></tr>
+  <tr><td>ウォークフォワード検証</td><td>時系列を順に訓練・テストに分割して繰り返す検証手法。将来性能をより現実的に評価できる</td></tr>
+  <tr><td>Embargo期間</td><td>訓練末尾とテスト先頭の間に設けるギャップ。データリーク（未来情報の漏れ）を防ぐ</td></tr>
+  <tr><td>変動係数（CV）</td><td>標準偏差 ÷ 平均の絶対値。ばらつきの相対的な大きさを表す。k*安定性の評価に使用</td></tr>
+  <tr><td>p値</td><td>「帰無仮説が正しいとした場合、観測された結果が偶然起こる確率」。小さいほど統計的に有意</td></tr>
+  <tr><td>SL（Stop Loss）</td><td>損切り。指定%下落で強制決済</td></tr>
+  <tr><td>TP（Take Profit）</td><td>利確。指定%上昇で決済</td></tr>
+  <tr><td>TS（Trailing Stop）</td><td>トレーリングストップ。ピークからの%押しで決済</td></tr>
+  <tr><td>EXP（Expiry）</td><td>SL/TP/TSにかからず将来期間の満期まで保有した場合</td></tr>
+  <tr><td>グロス / ネット</td><td>グロス=コスト控除前リターン。ネット=コスト控除後リターン</td></tr>
+</table>
+</div>
+
+<!-- ========== 第13章 ========== -->
+<div class="page-break">
+<h2 class="chapter">13. アルゴリズム解説</h2>
+
+<h3 class="section">13.1 IDTWによるパターン類似度計算</h3>
+<p>2つの価格系列A（クエリ）とB（候補）の類似度をDTW距離として計算します。</p>
+<ol>
+  <li><strong>Z正規化</strong>：各系列を「平均0・標準偏差1（母標準偏差）」に変換。価格水準の違いを取り除く</li>
+  <li><strong>Sakoe-Chiba制約</strong>：時間ズレをDTW帯域幅×クエリ窓日数の範囲内に制限。計算量削減と過剰な時間伸縮を防ぐ</li>
+  <li><strong>パス長正規化</strong>：累積コストをパス長で割り、系列長の違いによる距離バイアスを除去</li>
+</ol>
+
+<h3 class="section">13.2 k*-NNによる予測</h3>
+<p>DTW距離が小さい順に上位k件を選び（De-overlap適用後）、それぞれのfuture期間の実績リターンの平均をとります。この平均の符号（プラス/マイナス）が予測方向です。</p>
+
+<h3 class="section">13.3 ブートストラップ信頼区間</h3>
+<p>n件のマッチからn件をランダムに復元抽出（同じマッチが重複して選ばれる場合もある）し、統計量を計算。これを1000回繰り返して分布を作り、2.5〜97.5パーセンタイルを95%CIとします。</p>
+
+<h3 class="section">13.4 ウォークフォワードk*選定の詳細</h3>
+<p>各ウォークフォワードステップで、kの候補ごとにテスト期間のネットリターン系列を収集し、300回のブートストラップでCI下限を算出。CI下限が最大のkをk*とします（主選定：k≥5かつn≥20）。</p>
+
+<h3 class="section">13.5 二項検定（厳密計算）</h3>
+<p>「真の勝率が50%」という帰無仮説に対し、n試行中wins勝利が観測される確率を正則不完全ベータ関数で厳密計算します。正規近似より少サンプルでも精度が高いです。</p>
+
+<div class="box-info">
+  <div class="box-title">📌 使用数式（参考）</div>
+  P値 = I<sub>p0</sub>(wins, n−wins+1) &nbsp;（p0=0.5, 正則不完全ベータ関数）
+</div>
+
+<h3 class="section">13.6 レジームの定義</h3>
+<table>
+  <tr><th>レジーム</th><th>計算方法</th><th>分類</th></tr>
+  <tr><td>ボラティリティ</td><td>20日正規化ATR（ATR ÷ 終値 × 100）の全期間3分位</td><td>低（下位1/3）・中・高（上位1/3）</td></tr>
+  <tr><td>トレンド</td><td>200日移動平均からの乖離率</td><td>上昇（＞＋5%）・レンジ（±5%）・下降（＜−5%）</td></tr>
+</table>
+</div>
+<div class="page-break">
+<h2 class="chapter">3. 基本パラメータの設定</h2>
+
+<div class="screenshot">
+  <div class="label">【スクリーンショット: 設定カード上部】</div>
+  モード切替タブ・クエリ窓・将来期間・k・帯域幅の4つのドロップダウンが並ぶ部分
+</div>
+
+<h3 class="section">3.1 モード切替</h3>
+<table>
+  <tr><th>モード</th><th>データ</th><th>用途</th></tr>
+  <tr><td><strong>デモデータ</strong></td><td>約1300日分の模擬データ（自動生成）</td><td>初めて使うとき・動作確認</td></tr>
+  <tr><td><strong>Live（Yahoo Finance）</strong></td><td>実際の株価・先物価格</td><td>実際の分析（ローカルサーバー必要）</td></tr>
+</table>
+
+<div class="box-tip">
+  <div class="box-title">💡 中期スパン推奨設定ボタン</div>
+  「中期スパン推奨設定」ボタンを押すと、クエリ窓60日・将来期間15日・k=10・DTW帯域幅10%・ローリング窓750日が一括設定されます。中期トレードの分析に最適です。
+</div>
+
+<h3 class="section">3.2 クエリ窓（日数）</h3>
+<p>「どの長さの形を類似パターンとして探すか」を指定します。</p>
+<table>
+  <tr><th>設定値</th><th>目安</th><th>向いている用途</th></tr>
+  <tr><td>20日</td><td>約1ヶ月</td><td>短期トレード、日足スイング</td></tr>
+  <tr><td>30日（デフォルト）</td><td>約1.5ヶ月</td><td>汎用</td></tr>
+  <tr><td>60日</td><td>約3ヶ月</td><td>中期トレード（推奨設定）</td></tr>
+  <tr><td>90日</td><td>約4.5ヶ月</td><td>中長期、大きなトレンド把握</td></tr>
+</table>
+
+<h3 class="section">3.3 将来予測期間（日数）</h3>
+<p>パターン終了後、何営業日先まで結果を評価するかを指定します。</p>
+<table>
+  <tr><th>設定値</th><th>目安</th><th>備考</th></tr>
+  <tr><td>5日</td><td>約1週間</td><td>短期スキャルピング向け</td></tr>
+  <tr><td>10日（デフォルト）</td><td>約2週間</td><td>スイングトレード向け</td></tr>
+  <tr><td>15日</td><td>約3週間</td><td>中期スパン推奨設定のデフォルト</td></tr>
+  <tr><td>20日</td><td>約1ヶ月</td><td>先物では限月交代に注意</td></tr>
+  <tr><td>30日</td><td>約1.5ヶ月</td><td>長期ポジション向け</td></tr>
+</table>
+<div class="box-warn">
+  <div class="box-title">⚠️ 先物の注意</div>
+  将来期間が20営業日を超えると、先物の限月交代（ロールオーバー）を伴う可能性があります。ロールコストの設定を忘れずに。
+</div>
+
+<h3 class="section">3.4 k（近傍数）</h3>
+<p>「上位何件の類似パターンを使って予測するか」の数です。kが大きいほど安定しますが、遠い（形が違う）パターンも含まれるリスクがあります。バックテストで最適なk*を自動選定できます。</p>
+
+<h3 class="section">3.5 DTW帯域幅</h3>
+<p>DTW計算における時間的なズレの許容幅をクエリ窓の比率で指定します。</p>
+<table>
+  <tr><th>設定値</th><th>効果</th></tr>
+  <tr><td>5%</td><td>時間ズレに厳格。形が正確に一致するものだけ検索</td></tr>
+  <tr><td>10%（デフォルト）</td><td>バランス。推奨</td></tr>
+  <tr><td>20%</td><td>多少のズレを許容。マッチ数が増える</td></tr>
+  <tr><td>無制約</td><td>ズレを完全に許容（計算コスト大）</td></tr>
+</table>
+</div>
+
+<!-- ========== フッター ========== -->
+<div style="text-align:center;color:#aaa;font-size:9pt;margin-top:40px;padding-top:12px;border-top:1px solid #eee;">
+  Stock Pattern Finder 取扱説明書 — 2025年4月版 — 無断転載禁止
+</div>
+
+</body>
+</html>
